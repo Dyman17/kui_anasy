@@ -6,3 +6,5 @@ dist/
 .vercel/
 .render/
 npm-debug.log*
+*.docx
+*.pdf

@@ -1,10 +1,12 @@
-import 'dotenv/config';
 import crypto from 'node:crypto';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import express from 'express';
 import pg from 'pg';
 import { z } from 'zod';
 import { defaultPages } from './defaultPages.js';
+
+dotenv.config({ path: new URL('../../.env', import.meta.url) });
 
 const { Pool } = pg;
 const { DATABASE_URL, ADMIN_TOKEN } = process.env;
@@ -26,13 +28,24 @@ const port = Number(process.env.PORT) || 4000;
 
 const contentBlockSchema = z.object({
   id: z.string().min(1).max(100),
-  type: z.enum(['text', 'feature', 'quote', 'stats', 'cards']),
+  type: z.enum(['heading', 'text', 'feature', 'quote', 'image', 'list', 'stats', 'cards', 'callout', 'qr']),
   title: z.string().max(300).default(''),
   body: z.string().max(12000).default(''),
   eyebrow: z.string().max(200).optional(),
   items: z.array(z.record(z.string(), z.unknown())).max(100).optional(),
   link: z.string().max(2000).optional(),
-}).strict();
+  linkLabel: z.string().max(200).optional(),
+}).strict().refine(
+  (block) => {
+    if (block.type !== 'qr') return true;
+    try {
+      return ['http:', 'https:'].includes(new URL(block.link).protocol);
+    } catch {
+      return false;
+    }
+  },
+  { message: 'QR кодқа жарамды HTTP немесе HTTPS сілтемесін енгізіңіз.', path: ['link'] },
+);
 const pageSchema = z.object({
   slug: z.string().min(1).max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   title: z.string().trim().min(1).max(120),
@@ -81,7 +94,7 @@ app.get('/api/health', async (_req, res) => {
 app.get('/api/pages', async (_req, res) => {
   try {
     const result = await pool.query(
-      'SELECT slug, title, description, position, blocks, updated_at FROM content_pages ORDER BY position, title',
+      'SELECT slug, title, description, position, blocks, is_custom, updated_at FROM content_pages ORDER BY position, title',
     );
     res.json(result.rows);
   } catch (error) {
@@ -93,9 +106,9 @@ app.post('/api/pages', requireAdmin, async (req, res) => {
   try {
     const page = pageSchema.parse(req.body);
     const result = await pool.query(
-      `INSERT INTO content_pages (slug, title, description, position, blocks)
-       VALUES ($1, $2, $3, $4, $5::jsonb)
-       RETURNING slug, title, description, position, blocks, updated_at`,
+      `INSERT INTO content_pages (slug, title, description, position, blocks, is_custom)
+       VALUES ($1, $2, $3, $4, $5::jsonb, TRUE)
+       RETURNING slug, title, description, position, blocks, is_custom, updated_at`,
       [page.slug, page.title, page.description, page.position, JSON.stringify(page.blocks)],
     );
     res.status(201).json(result.rows[0]);
@@ -115,7 +128,7 @@ app.put('/api/pages/:slug', requireAdmin, async (req, res) => {
       `UPDATE content_pages
        SET title = $2, description = $3, position = $4, blocks = $5::jsonb, updated_at = NOW()
        WHERE slug = $1
-       RETURNING slug, title, description, position, blocks, updated_at`,
+       RETURNING slug, title, description, position, blocks, is_custom, updated_at`,
       [page.slug, page.title, page.description, page.position, JSON.stringify(page.blocks)],
     );
     if (result.rowCount === 0) return res.status(404).json({ error: 'Бөлім табылмады.' });
@@ -138,9 +151,11 @@ async function start() {
       description text NOT NULL DEFAULT '',
       position integer NOT NULL DEFAULT 0,
       blocks jsonb NOT NULL DEFAULT '[]'::jsonb,
+      is_custom boolean NOT NULL DEFAULT false,
       updated_at timestamptz NOT NULL DEFAULT NOW()
     )
   `);
+  await pool.query('ALTER TABLE content_pages ADD COLUMN IF NOT EXISTS is_custom boolean NOT NULL DEFAULT false');
   const existing = await pool.query('SELECT COUNT(*)::int AS count FROM content_pages');
   if (existing.rows[0].count === 0) {
     for (const page of defaultPages) {
