@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight,
-  Check, Eye, FilePlus2, FolderOpen, LockKeyhole, Menu, Pencil, Plus, Save, Search, Trash2, X,
+  Check, Eye, FilePlus2, FolderOpen, LockKeyhole, Menu, Pencil, Plus, RotateCcw, Save, Search, Trash2, X,
 } from 'lucide-react';
 import QRCode from 'qrcode';
-import { createPage, getPages, savePage } from './api.js';
+import { createPage, getPages, resetLocalPages, savePage } from './api.js';
 
 const INITIAL_SLUG = 'home';
 const BLOCK_TYPES = [
@@ -445,6 +445,18 @@ function AdminPanel({ pages, token, onTokenChange, onPagesChange, onExit }) {
     }
   };
 
+  const handleResetAll = () => {
+    if (window.confirm('Барлық сақталған өзгерістер өшіріліп, бастапқы деректер қайтарылады. Жалғастырасыз ба?\n\nСбросить все локальные данные и вернуть сайт к исходному состоянию?')) {
+      const reset = resetLocalPages();
+      onPagesChange(reset);
+      setNotice('Деректер бастапқы қалпына келтірілді.');
+      setTimeout(() => {
+        window.location.hash = '';
+        window.location.reload();
+      }, 200);
+    }
+  };
+
   return (
     <div className="admin-shell">
       <header className="admin-topbar">
@@ -460,7 +472,7 @@ function AdminPanel({ pages, token, onTokenChange, onPagesChange, onExit }) {
       </header>
       {route === '#admin/pages' ? (
         <main className="pages-manager">
-          <div className="pages-manager-heading"><div><span className="block-kicker">КОНСТРУКТОРДА ЖАСАЛҒАН</span><h1>Менің беттерім</h1><p>Бетті таңдап, мазмұнын жалғастырыңыз.</p></div><button className="button button-dark" onClick={() => { window.location.hash = '#admin'; }}><FilePlus2 size={17} /> Жаңа бет жасау</button></div>
+          <div className="pages-manager-heading"><div><span className="block-kicker">КОНСТРУКТОРДА ЖАСАЛҒАН</span><h1>Менің беттерім</h1><p>Бетті таңдап, мазмұнын жалғастырыңыз.</p></div><div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}><button className="button button-outline" type="button" title="Сбросить все изменения" onClick={handleResetAll}><RotateCcw size={16} /> Бастапқы қалпына келтіру</button><button className="button button-dark" onClick={() => { window.location.hash = '#admin'; }}><FilePlus2 size={17} /> Жаңа бет жасау</button></div></div>
           {!token && <div className="editor-alert info-alert"><LockKeyhole size={17} /><span>Сақтау үшін серверге орнатылған әкімші кілтін енгізіңіз.</span></div>}
           {error && <div className="editor-alert error-alert">{error}</div>}
           {customPages.length ? <div className="page-library">{customPages.map((page) => (

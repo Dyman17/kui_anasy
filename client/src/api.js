@@ -105,3 +105,11 @@ export async function createPage(page, token) {
   saveLocalPages(current);
   return created;
 }
+
+export function resetLocalPages() {
+  try {
+    localStorage.removeItem('kui-custom-pages');
+  } catch {}
+  return defaultPages;
+}
+
