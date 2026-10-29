@@ -23,11 +23,19 @@ const NAV_ORDER = ['home', 'people', 'heritage', 'projects', 'about', 'library']
 const NAV_LABELS = {
   home: 'Басты бет',
   people: 'Тұлғалар',
-  heritage: 'Музыка',
+  heritage: 'Музыкалық мұра',
   projects: 'Жобалар',
-  about: 'Жоба туралы',
-  library: 'Кітапхана',
+  about: 'Қор туралы',
+  library: 'Цифрлық кітапхана',
 };
+
+const PARENT_SECTIONS = [
+  { slug: 'people', title: 'Тұлғалар (күйшілер, жыраулар, әншілер)' },
+  { slug: 'heritage', title: 'Музыкалық мұра (күйлер, әндер, сарындар)' },
+  { slug: 'projects', title: 'Жобалар (мәдени бастамалар, аллеялар)' },
+  { slug: 'library', title: 'Цифрлық кітапхана (кітаптар, жинақтар)' },
+  { slug: 'about', title: 'Қор туралы (ұйым, қызмет)' },
+];
 
 function App() {
   const [pages, setPages] = useState([]);
@@ -58,11 +66,13 @@ function App() {
     [pages],
   );
   const navPages = useMemo(
-    () => [...sortedPages].sort((a, b) => {
-      const aOrder = NAV_ORDER.indexOf(a.slug);
-      const bOrder = NAV_ORDER.indexOf(b.slug);
-      return (aOrder < 0 ? NAV_ORDER.length : aOrder) - (bOrder < 0 ? NAV_ORDER.length : bOrder);
-    }),
+    () => [...sortedPages]
+      .filter((page) => !page.parent_slug)
+      .sort((a, b) => {
+        const aOrder = NAV_ORDER.indexOf(a.slug);
+        const bOrder = NAV_ORDER.indexOf(b.slug);
+        return (aOrder < 0 ? NAV_ORDER.length : aOrder) - (bOrder < 0 ? NAV_ORDER.length : bOrder);
+      }),
     [sortedPages],
   );
   const searchResults = useMemo(() => {
@@ -146,7 +156,7 @@ function App() {
           {activePage.slug === 'home' ? (
             <HomePage page={activePage} onNavigate={navigate} />
           ) : (
-            <StandardPage page={activePage} onNavigate={navigate} query={query} />
+            <StandardPage page={activePage} onNavigate={navigate} query={query} allPages={pages} />
           )}
         </main>
       )}
@@ -240,18 +250,67 @@ function HomePage({ page, onNavigate }) {
   );
 }
 
-function StandardPage({ page, onNavigate, query }) {
+function StandardPage({ page, onNavigate, query, allPages = [] }) {
   const relevantBlocks = (page.blocks || []).filter((block) => !query || `${block.title} ${block.body}`.toLowerCase().includes(query.toLowerCase()));
+  const parentCategory = PARENT_SECTIONS.find((p) => p.slug === page.parent_slug);
+  const themeSlug = page.parent_slug || page.slug;
+  const subpages = allPages.filter((p) => p.parent_slug === page.slug);
+
   return (
     <>
-      <section className={`page-banner page-banner-${page.slug}`} data-section={page.slug}>
-        <SectionMotif slug={page.slug} />
-        <div className="page-banner-image"><img src={getSectionImage(page.slug)} alt="" /></div>
-        <div className="content-width page-banner-inner"><h1>{NAV_LABELS[page.slug] || page.title}</h1><p>{page.description}</p><div className="breadcrumb"><button onClick={() => onNavigate('home')}>Басты бет</button><span>/</span><span>{NAV_LABELS[page.slug] || page.title}</span></div></div>
+      <section className={`page-banner page-banner-${themeSlug}`} data-section={themeSlug}>
+        <SectionMotif slug={themeSlug} />
+        <div className="page-banner-image"><img src={getSectionImage(themeSlug)} alt="" /></div>
+        <div className="content-width page-banner-inner">
+          {page.parent_slug && (
+            <span className="block-kicker banner-parent-kicker">
+              {NAV_LABELS[page.parent_slug] || parentCategory?.title}
+            </span>
+          )}
+          <h1>{NAV_LABELS[page.slug] || page.title}</h1>
+          <p>{page.description}</p>
+          <div className="breadcrumb">
+            <button onClick={() => onNavigate('home')}>Басты бет</button>
+            <span>/</span>
+            {page.parent_slug && (
+              <>
+                <button onClick={() => onNavigate(page.parent_slug)}>
+                  {NAV_LABELS[page.parent_slug] || parentCategory?.title}
+                </button>
+                <span>/</span>
+              </>
+            )}
+            <span>{NAV_LABELS[page.slug] || page.title}</span>
+          </div>
+        </div>
       </section>
       <section className="editorial content-width">
-        {relevantBlocks.map((block, index) => <ContentBlock key={block.id || index} block={block} index={index} pageSlug={page.slug} />)}
+        {relevantBlocks.map((block, index) => <ContentBlock key={block.id || index} block={block} index={index} pageSlug={themeSlug} />)}
         {relevantBlocks.length === 0 && <p className="empty-search">Сұрауыңыз бойынша ақпарат табылмады.</p>}
+
+        {subpages.length > 0 && !query && (
+          <div className="subpages-container">
+            <div className="section-topline">
+              <div>
+                <span className="block-kicker">ОСЫ БӨЛІМДЕГІ БЕТТЕР</span>
+                <h2>Бөлім материалдары ({subpages.length})</h2>
+              </div>
+            </div>
+            <div className="subpages-grid">
+              {subpages.map((sub) => (
+                <article key={sub.slug} className="subpage-card" onClick={() => onNavigate(sub.slug)}>
+                  <div className="subpage-card-header">
+                    <span className="subpage-badge">{NAV_LABELS[page.slug] || page.title}</span>
+                    <small>{sub.blocks?.length || 0} модуль</small>
+                  </div>
+                  <h3>{sub.title}</h3>
+                  <p>{sub.description || 'Толық мазмұнын ашу үшін басыңыз.'}</p>
+                  <span className="subpage-read-link">Оқу <ArrowRight size={14} /></span>
+                </article>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
       <Callout onNavigate={onNavigate} />
     </>
@@ -426,7 +485,7 @@ function AdminPanel({ pages, token, onTokenChange, onPagesChange, onExit }) {
     }
     setSaving(true);
     try {
-      const payload = { ...draft, slug, title: draft.title.trim() };
+      const payload = { ...draft, slug, title: draft.title.trim(), parent_slug: draft.parent_slug || 'people' };
       if (draft.slug) {
         const saved = await savePage(payload, token);
         onPagesChange((current) => current.map((page) => page.slug === saved.slug ? saved : page));
@@ -477,7 +536,7 @@ function AdminPanel({ pages, token, onTokenChange, onPagesChange, onExit }) {
           {error && <div className="editor-alert error-alert">{error}</div>}
           {customPages.length ? <div className="page-library">{customPages.map((page) => (
             <article className="page-library-card" key={page.slug}>
-              <div><span className="page-library-slug">/{page.slug}</span><h2>{page.title}</h2><p>{page.description || 'Қысқаша сипаттамасы жоқ.'}</p><small>{page.blocks.length} модуль</small></div>
+              <div><span className="page-library-tag">{NAV_LABELS[page.parent_slug] || page.parent_slug || 'Тұлғалар'}</span> <span className="page-library-slug">/{page.slug}</span><h2>{page.title}</h2><p>{page.description || 'Қысқаша сипаттамасы жоқ.'}</p><small>{page.blocks.length} модуль</small></div>
               <button className="button button-outline" onClick={() => { window.location.hash = `#admin/edit/${encodeURIComponent(page.slug)}`; }}><Pencil size={15} /> Өңдеу</button>
             </article>
           ))}</div> : <div className="pages-empty"><FolderOpen size={34} /><h2>Әзірге беттер жоқ</h2><p>Конструкторда бірінші бетіңізді жасап, осы жерден кейін қайта ашыңыз.</p><button className="button button-dark" onClick={() => { window.location.hash = '#admin'; }}><Plus size={16} /> Бет құрастыру</button></div>}
@@ -501,6 +560,19 @@ function AdminPanel({ pages, token, onTokenChange, onPagesChange, onExit }) {
             {!token && !previewOpen && <div className="editor-alert info-alert"><LockKeyhole size={17} /><span>Өзгерістерді сақтау үшін әкімші кілтін енгізіңіз.</span></div>}
             {draft && previewOpen ? <div className="editor-preview"><StandardPage page={{ ...draft, slug: draft.slug || toSlug(draft.title) || 'preview' }} onNavigate={() => {}} query="" /></div> : draft && <>
               <section className="edit-card page-settings-card">
+                <label>
+                  Негізгі бөлім (Бұл бет қай бөлімнің ішінде болады?)
+                  <select
+                    value={draft.parent_slug || 'people'}
+                    onChange={(event) => updateDraft('parent_slug', event.target.value)}
+                  >
+                    {PARENT_SECTIONS.map((sec) => (
+                      <option key={sec.slug} value={sec.slug}>
+                        {NAV_LABELS[sec.slug] || sec.slug} — {sec.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
                 <label>Бет атауы<input value={draft.title} onChange={(event) => updateDraft('title', event.target.value)} placeholder="Мысалы: Ақан сері" /></label>
                 <label>Қысқаша сипаттама<textarea rows="2" value={draft.description} onChange={(event) => updateDraft('description', event.target.value)} placeholder="Беттің қысқаша кіріспесі" /></label>
                 <small className="page-slug-preview">{draft.slug ? `Сілтеме: /${draft.slug}` : toSlug(draft.title) ? `Сілтеме: /${toSlug(draft.title)}` : 'Бет сілтемесі атаудан жасалады'}</small>
@@ -534,7 +606,7 @@ function moveBlock(draft, updateDraft, index, direction) {
 }
 
 function createEmptyPage(position) {
-  return { slug: '', title: '', description: '', position, blocks: [] };
+  return { slug: '', title: '', description: '', position, parent_slug: 'people', blocks: [] };
 }
 
 function createBlock(type) {

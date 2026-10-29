@@ -51,6 +51,7 @@ const pageSchema = z.object({
   title: z.string().trim().min(1).max(120),
   description: z.string().max(1000).default(''),
   position: z.number().int().min(0).max(1000),
+  parent_slug: z.string().max(80).optional().default(''),
   blocks: z.array(contentBlockSchema).max(100),
 }).strict();
 
@@ -94,7 +95,7 @@ app.get('/api/health', async (_req, res) => {
 app.get('/api/pages', async (_req, res) => {
   try {
     const result = await pool.query(
-      'SELECT slug, title, description, position, blocks, is_custom, updated_at FROM content_pages ORDER BY position, title',
+      'SELECT slug, title, description, position, parent_slug, blocks, is_custom, updated_at FROM content_pages ORDER BY position, title',
     );
     res.json(result.rows);
   } catch (error) {
@@ -106,10 +107,10 @@ app.post('/api/pages', requireAdmin, async (req, res) => {
   try {
     const page = pageSchema.parse(req.body);
     const result = await pool.query(
-      `INSERT INTO content_pages (slug, title, description, position, blocks, is_custom)
-       VALUES ($1, $2, $3, $4, $5::jsonb, TRUE)
-       RETURNING slug, title, description, position, blocks, is_custom, updated_at`,
-      [page.slug, page.title, page.description, page.position, JSON.stringify(page.blocks)],
+      `INSERT INTO content_pages (slug, title, description, position, parent_slug, blocks, is_custom)
+       VALUES ($1, $2, $3, $4, $5, $6::jsonb, TRUE)
+       RETURNING slug, title, description, position, parent_slug, blocks, is_custom, updated_at`,
+      [page.slug, page.title, page.description, page.position, page.parent_slug || '', JSON.stringify(page.blocks)],
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -126,10 +127,10 @@ app.put('/api/pages/:slug', requireAdmin, async (req, res) => {
     }
     const result = await pool.query(
       `UPDATE content_pages
-       SET title = $2, description = $3, position = $4, blocks = $5::jsonb, updated_at = NOW()
+       SET title = $2, description = $3, position = $4, parent_slug = $5, blocks = $6::jsonb, updated_at = NOW()
        WHERE slug = $1
-       RETURNING slug, title, description, position, blocks, is_custom, updated_at`,
-      [page.slug, page.title, page.description, page.position, JSON.stringify(page.blocks)],
+       RETURNING slug, title, description, position, parent_slug, blocks, is_custom, updated_at`,
+      [page.slug, page.title, page.description, page.position, page.parent_slug || '', JSON.stringify(page.blocks)],
     );
     if (result.rowCount === 0) return res.status(404).json({ error: 'Бөлім табылмады.' });
     res.json(result.rows[0]);
@@ -150,19 +151,21 @@ async function start() {
       title text NOT NULL,
       description text NOT NULL DEFAULT '',
       position integer NOT NULL DEFAULT 0,
+      parent_slug text NOT NULL DEFAULT '',
       blocks jsonb NOT NULL DEFAULT '[]'::jsonb,
       is_custom boolean NOT NULL DEFAULT false,
       updated_at timestamptz NOT NULL DEFAULT NOW()
     )
   `);
   await pool.query('ALTER TABLE content_pages ADD COLUMN IF NOT EXISTS is_custom boolean NOT NULL DEFAULT false');
+  await pool.query('ALTER TABLE content_pages ADD COLUMN IF NOT EXISTS parent_slug text NOT NULL DEFAULT \'\'');
   const existing = await pool.query('SELECT COUNT(*)::int AS count FROM content_pages');
   if (existing.rows[0].count === 0) {
     for (const page of defaultPages) {
       await pool.query(
-        `INSERT INTO content_pages (slug, title, description, position, blocks)
-         VALUES ($1, $2, $3, $4, $5::jsonb)`,
-        [page.slug, page.title, page.description, page.position, JSON.stringify(page.blocks)],
+        `INSERT INTO content_pages (slug, title, description, position, parent_slug, blocks)
+         VALUES ($1, $2, $3, $4, $5, $6::jsonb)`,
+        [page.slug, page.title, page.description, page.position, page.parent_slug || '', JSON.stringify(page.blocks)],
       );
     }
   }
