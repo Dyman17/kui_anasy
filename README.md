@@ -57,4 +57,5 @@ Vercel-де орналастырылатын React/Vite сайты және Rend
 
 - Frontend: React, Vite, Lucide
 - Backend: Node.js, Express
-- Дерекқор: PostgreSQL (`content_pages` кестесі, JSONB контент блоктары)
+- Дерекқор: PostgreSQL (`content_pages` кестесі, JSONB контент блоктары).
+

@@ -90,3 +90,4 @@ The 21st.dev community catalog was reviewed. Its sign-in component lists an unkn
 - Inspect the home page and the people, music and library sections at desktop and 375–390 px widths.
 - Check that supplied images load, the mobile menu and search work, and `/#admin` can still edit and save content.
 - Check contrast, keyboard focus and the browser console. Confirm all fonts load from the local `fonts/` directory and no external font requests are made.
+
