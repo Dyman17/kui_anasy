@@ -1,0 +1,56 @@
+# Күй анасы — цифрлық энциклопедия
+
+Vercel-де орналастырылатын React/Vite сайты және Render-де орналастырылатын Express/PostgreSQL API. Бөлімдер мен контент блоктарын әкімші панелінен өңдеп, дерекқорда сақтауға болады.
+
+## Жергілікті іске қосу
+
+Талаптар: Node.js 20+ және PostgreSQL.
+
+1. Репозиторий түбірінде `npm install` орындаңыз.
+2. `.env.example` файлын `.env` деп көшіріп, PostgreSQL деректерін толтырыңыз:
+   - `DATABASE_URL` — дерекқорға қосылу жолы.
+   - `ADMIN_TOKEN` — кемінде 24 таңбалы құпия кілт. Оны басқа адамдарға жібермеңіз.
+   - `CLIENT_ORIGIN=http://localhost:5173`
+   - `VITE_API_URL=http://localhost:4000`
+3. `npm run dev` пәрменін орындаңыз.
+4. Сайт: `http://localhost:5173`; әкімші панелі: `http://localhost:5173/#admin`; API: `http://localhost:4000/api/health`.
+
+Алғашқы іске қосылғанда API кестені жасап, бастапқы беттерді енгізеді. PostgreSQL дерекқоры бос болуы керек; кейін мазмұнды сақтау автоматты түрде орындалады.
+
+## Render — сервер мен дерекқор
+
+1. Репозиторийді GitHub-қа жариялаңыз.
+2. Render-де PostgreSQL дерекқорын жасап, оның **Internal Database URL** мәнін көшіріңіз.
+3. Жаңа **Web Service** үүсіріп, репозиторийді таңдаңыз:
+   - Root Directory: бос қалдырыңыз
+   - Build Command: `npm install`
+   - Start Command: `npm run start`
+4. Environment Variables орнатыңыз:
+   - `DATABASE_URL` — Render PostgreSQL Internal Database URL
+   - `DATABASE_SSL` — `false` (Internal Database URL үшін)
+   - `ADMIN_TOKEN` — ұзын, кездейсоқ құпия мән
+   - `CLIENT_ORIGIN` — Vercel сайтының нақты `https://...vercel.app` мекенжайы
+5. Render сервисінің URL-ін жазып алыңыз, мысалы `https://kui-anasy-api.onrender.com`.
+
+Егер Render сыртқы database URL қолданылса және SSL талап етілсе, `DATABASE_SSL=true` орнатыңыз. Render free web service біраз уақыт сұраусыз тұрса ұйқы режиміне өтуі мүмкін.
+
+## Vercel — сайт
+
+1. GitHub репозиторийін Vercel-ге импорттаңыз.
+2. Root Directory ретінде `client` таңдаңыз. Framework: **Vite**; build command: `npm run build`; output: `dist`.
+3. `VITE_API_URL` environment variable ретінде Render API URL-ін орнатыңыз, `/` соңғы таңбасын қоспай.
+4. Deploy жасаңыз. Vercel доменін көшіріп, Render сервисіндегі `CLIENT_ORIGIN` мәніне дәл енгізіңіз. Environment өзгерткеннен кейін Render-ді қайта deploy етіңіз.
+
+Кейін жеке доменді Vercel жобасының **Domains** баптауында қосып, Vercel көрсеткен DNS жазбаларын домен тіркеушісіне енгізіңіз.
+
+## Әкімші панелі
+
+Сайттағы төменгі колонтитулдан **Әкімші панелі** сілтемесін ашып, сервердегі `ADMIN_TOKEN` мәнін енгізіңіз. Кілт браузер сессиясының жадында ғана сақталады және барлық өзгеріс серверде тексеріледі. Әкімші бөлім атауын, сипаттамасын, блоктардың ретін және мәтінін өзгерте алады немесе жаңа бет қоса алады. Құпия кілтті клиентке арналған Vercel environment variable ретінде орнатпаңыз.
+
+Қолдау көрсетілетін блок түрлері: мәтін, ерекше тақырып, дәйексөз, сандар және карточкалар. Суреттер мен медиа файлдарды кейін қосқанда оларды дерекқорға емес, объектілік файл сақтау қоймасына орналастырған жөн.
+
+## Технологиялар
+
+- Frontend: React, Vite, Lucide
+- Backend: Node.js, Express
+- Дерекқор: PostgreSQL (`content_pages` кестесі, JSONB контент блоктары)
