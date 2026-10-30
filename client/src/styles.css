@@ -2347,3 +2347,226 @@ img { display: block; max-width: 100%; height: auto; }
   color: var(--text-muted);
   margin-top: 3px;
 }
+
+/* ==========================================================================
+   HOMEPAGE SPACIOUS LAYOUT & MARGINS
+   ========================================================================== */
+.homepage-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.archive-hero {
+  margin-bottom: clamp(65px, 8vw, 110px) !important;
+}
+
+.featured-person {
+  margin: clamp(65px, 8vw, 110px) auto !important;
+  position: relative;
+}
+
+.archive-stats {
+  margin: clamp(55px, 7vw, 95px) auto !important;
+}
+
+.ornament-divider {
+  margin: clamp(40px, 6vw, 75px) auto !important;
+}
+
+.editorial-intro {
+  margin: clamp(65px, 8vw, 110px) auto !important;
+}
+
+.discover-section {
+  margin: clamp(65px, 8vw, 110px) auto !important;
+}
+
+.project-leaders-section {
+  margin: clamp(65px, 8vw, 110px) auto !important;
+  padding-block: clamp(35px, 5vw, 65px) !important;
+}
+
+.callout {
+  margin: clamp(65px, 8vw, 120px) auto clamp(40px, 6vw, 80px) !important;
+}
+
+/* ==========================================================================
+   SIDE ORNAMENTAL RIBBONS (MINI DOMBRAS & KAZAKH MOTIFS)
+   ========================================================================== */
+.homepage-side-ribbon {
+  position: absolute;
+  top: 80px;
+  bottom: 180px;
+  width: 44px;
+  pointer-events: none;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homepage-side-ribbon.ribbon-left {
+  left: clamp(10px, 2.2vw, 36px);
+}
+
+.homepage-side-ribbon.ribbon-right {
+  right: clamp(10px, 2.2vw, 36px);
+}
+
+.side-ribbon-content {
+  position: sticky;
+  top: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+}
+
+.mini-dombra-side {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.ribbon-vertical-line {
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(to bottom, transparent, var(--gold) 35%, var(--gold) 65%, transparent);
+  opacity: 0.5;
+}
+
+@media (max-width: 1140px) {
+  .homepage-side-ribbon {
+    display: none;
+  }
+}
+
+/* Corner ornaments for featured sections */
+.corner-ornament {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  line-height: 0;
+}
+
+.corner-top-left {
+  top: 12px;
+  left: 12px;
+}
+.corner-top-right {
+  top: 12px;
+  right: 12px;
+  transform: rotate(90deg);
+}
+.corner-bottom-left {
+  bottom: 12px;
+  left: 12px;
+  transform: rotate(270deg);
+}
+.corner-bottom-right {
+  bottom: 12px;
+  right: 12px;
+  transform: rotate(180deg);
+}
+
+/* ==========================================================================
+   QR CODE CONTENT BLOCK ENHANCED STYLING
+   ========================================================================== */
+.qr-block {
+  width: min(340px, 100%) !important;
+  margin: 45px auto 55px !important;
+  padding: 24px 20px !important;
+  background: var(--paper-light) !important;
+  border: 1.5px solid rgba(194, 155, 56, 0.45) !important;
+  border-radius: 14px !important;
+  text-align: center !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+[data-theme="dark"] .qr-block {
+  background: var(--surface) !important;
+  border-color: rgba(194, 155, 56, 0.4) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.qr-card-ornament {
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+.qr-image-container {
+  display: inline-block;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #e0d7cb;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 14px;
+}
+
+.qr-image-container img {
+  width: 200px;
+  height: 200px;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.qr-block figcaption {
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 6px;
+}
+
+.qr-hint {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin: 0 0 14px;
+  line-height: 1.4;
+}
+
+.qr-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.qr-link-url {
+  font-size: 12.5px;
+  color: var(--accent);
+  word-break: break-all;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: underline;
+  max-width: 220px;
+}
+
+.qr-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qr-copy-btn:hover {
+  border-color: var(--gold);
+  color: var(--accent);
+}

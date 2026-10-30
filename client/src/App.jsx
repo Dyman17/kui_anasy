@@ -62,276 +62,6 @@ const NAV_LABELS_MAP = {
 };
 
 
-const HISTORICAL_REGIONS = [
-  {
-    id: 'bokei',
-    name: 'Бөкей Ордасы — Нарын құмы',
-    regionType: 'west',
-    regionLabel: 'Батыс Қазақстан',
-    school: 'Төкпе күй дәстүрі',
-    x: 130,
-    y: 245,
-    desc: 'Төкпе күй дәстүрінің алтын бесігі. Бөкей ордасы мен Нарын құмынан қазақ күй өнерінің заңғар алыптары түлеп ұшқан.',
-    figures: [
-      {
-        name: 'Дина Нұрпейісова',
-        years: '1861 — 1955',
-        title: 'Күй анасы, Құрманғазының батасын алған дәулескер күйші',
-        initials: 'ДН',
-        works: '«Әсемқоңыр», «Бұлбұл», «16-жыл», «Науысқы»',
-        link: 'people',
-      },
-      {
-        name: 'Құрманғазы Сағырбайұлы',
-        years: '1823 — 1896',
-        title: 'Қазақ аспаптық музыкасының ұлы классигі',
-        initials: 'ҚС',
-        works: '«Сарыарқа», «Адай», «Серпер», «Кісен ашқан»',
-        link: 'people',
-      },
-      {
-        name: 'Дәулеткерей Шығайұлы',
-        years: '1820 — 1887',
-        title: 'Төре күйлерінің көшбасшысы, лирик сазгер',
-        initials: 'ДШ',
-        works: '«Жігер», «Бұлбұл», «Қоңыр», «Тартыс»',
-        link: 'people',
-      },
-      {
-        name: 'Сейтек Оразалыұлы',
-        years: '1861 — 1933',
-        title: 'Азаттық рухты күйші, төкпе шебері',
-        initials: 'СО',
-        works: '«Заман-ай», «Бес қыз», «Той бастар»',
-        link: 'people',
-      },
-    ],
-  },
-  {
-    id: 'saraishyq',
-    name: 'Сарайшық — Атырау өңірі',
-    regionType: 'west',
-    regionLabel: 'Жайық бойы',
-    school: 'Төкпе күй мектебі',
-    x: 175,
-    y: 310,
-    desc: 'Ежелгі Сарайшық қаласы мен Жайық бойындағы күйшілік өнер ордасы.',
-    figures: [
-      {
-        name: 'Құлшар Бақтыбайұлы',
-        years: 'XIX ғ.',
-        title: 'Төкпе күйдің хас шебері',
-        initials: 'ҚБ',
-        works: '«Құлшардың күйі», «Кербез Ақжелең»',
-        link: 'people',
-      },
-      {
-        name: 'Әлікей күйші',
-        years: 'XIX ғ.',
-        title: 'Жайық бойының шежірелі домбырашысы',
-        initials: 'ӘК',
-        works: '«Әлікейдің сарыны», «Жайық толқыны»',
-        link: 'people',
-      },
-    ],
-  },
-  {
-    id: 'mangystau',
-    name: 'Маңғыстау — Үстірт',
-    regionType: 'west',
-    regionLabel: 'Каспий өңірі',
-    school: 'Маңғыстаулық төкпе және жыр-күй',
-    x: 125,
-    y: 420,
-    desc: 'Қарт Каспий мен Үстірт арасындағы бірегей, екпінді жыр-күй сарындарының мекені.',
-    figures: [
-      {
-        name: 'Абыл Тарақұлы',
-        years: '1820 — 1892',
-        title: 'Маңғыстау күй мектебінің негізін қалаушы',
-        initials: 'АТ',
-        works: '«Абылдың күйі», «Нарату», «Ақжелең»',
-        link: 'people',
-      },
-      {
-        name: 'Есір Айшуақұлы',
-        years: '1837 — 1901',
-        title: 'Өршіл күйші, «Ақжарманың» авторы',
-        initials: 'ЕА',
-        works: '«Ақжарма», «Маңғыстау күйі»',
-        link: 'people',
-      },
-      {
-        name: 'Өскенбай Қалманбетұлы',
-        years: '1860 — 1925',
-        title: 'Дәулескер домбырашы әрі жыршы',
-        initials: 'ӨҚ',
-        works: '«Өскенбайдың күйі», «Жеті қайқы сарындары»',
-        link: 'people',
-      },
-    ],
-  },
-  {
-    id: 'shalkar',
-    name: 'Шалқар — Арал өңірі',
-    regionType: 'west',
-    regionLabel: 'Ақтөбе өңірі',
-    school: 'Қазанғаптың 62 Ақжелең мектебі',
-    x: 290,
-    y: 315,
-    desc: 'Арал теңізі мен Шалқар құмы арасындағы төкпе күйдің ерекше нәзік қағысты мектебі.',
-    figures: [
-      {
-        name: 'Қазанғап Тілепбергенұлы',
-        years: '1854 — 1921',
-        title: 'Қазақтың дара композиторы, 62 Ақжелеңнің авторы',
-        initials: 'ҚТ',
-        works: '«Көкіл», «Ноғайлы босқыны», «Жұртта қалған», «Ақжелең»',
-        link: 'people',
-      },
-    ],
-  },
-  {
-    id: 'turkistan',
-    name: 'Түркістан — Отырар — Созақ',
-    regionType: 'south',
-    regionLabel: 'Қаратау және Сыр бойы',
-    school: 'Қаратау шертпе күй мектебі',
-    x: 440,
-    y: 460,
-    desc: 'Көне түркі өркениетінің орталығы, Қаратау баурайындағы философиялық терең шертпе күй ордасы.',
-    figures: [
-      {
-        name: 'Сүгір Әлиұлы',
-        years: '1882 — 1961',
-        title: 'Қаратау шертпе күйінің заңғар шебері',
-        initials: 'СӘ',
-        works: '«Бозжүйрік», «Шалқыма», «Аққу», «Кертолғау»',
-        link: 'people',
-      },
-      {
-        name: 'Төлеген Момбеков',
-        years: '1918 — 1997',
-        title: 'Сүгір мұрасын жалғастырушы классик',
-        initials: 'ТМ',
-        works: '«Салтанат», «Қосбасар», «Ана зары»',
-        link: 'people',
-      },
-    ],
-  },
-  {
-    id: 'ulytau',
-    name: 'Ұлытау — Жезқазған',
-    regionType: 'central',
-    regionLabel: 'Орталық Қазақстан',
-    school: 'Көне жыраулық және қобыз сарыны',
-    x: 430,
-    y: 285,
-    desc: 'Қазақ хандығының қасиетті бесігі, аңыз күйлер мен қобыз үні тоғысқан дала жүрегі.',
-    figures: [
-      {
-        name: 'Кетбұға',
-        years: 'XIII ғ.',
-        title: 'Ұлы жырау, күйші, тарихи дастаншы',
-        initials: 'КБ',
-        works: '«Ақсақ құлан», «Жошы ханға естірту»',
-        link: 'people',
-      },
-      {
-        name: 'Ықылас Дүкенұлы',
-        years: '1843 — 1916',
-        title: 'Қазақ қобыз өнерінің қайталанбас реформаторы',
-        initials: 'ЫД',
-        works: '«Жезкиік», «Қазан», «Айрауықтың ащы күйі», «Қасқыр»',
-        link: 'people',
-      },
-    ],
-  },
-  {
-    id: 'saryarka',
-    name: 'Қарқаралы — Баянауыл',
-    regionType: 'saryarka',
-    regionLabel: 'Сарыарқа кеңістігі',
-    school: 'Шертпе күй мектебінің классикасы',
-    x: 610,
-    y: 200,
-    desc: 'Арқаның сыршыл шертпе күй өнерінің, сырбаз домбыра қағыстарының гүлденген өлкесі.',
-    figures: [
-      {
-        name: 'Тәттімбет Қазанғапұлы',
-        years: '1815 — 1862',
-        title: 'Шертпе күйдің асқар шыңы, лирик күйші',
-        initials: 'ТҚ',
-        works: '«Сылқылдақ», «Көкейкесті», «Қосбасар», «Сарыжайлау»',
-        link: 'people',
-      },
-      {
-        name: 'Жаяу Мұса Байжанұлы',
-        years: '1835 — 1918',
-        title: 'Азаттық жыршысы, композитор әрі күйші',
-        initials: 'ЖМ',
-        works: '«Ақ сиса», «Көгілдір», «Сүйіндік күйі»',
-        link: 'people',
-      },
-    ],
-  },
-  {
-    id: 'tarbagatai',
-    name: 'Тарбағатай — Алтай',
-    regionType: 'east',
-    regionLabel: 'Шығыс Қазақстан',
-    school: 'Шығыс шертпе күй дәстүрі',
-    x: 795,
-    y: 215,
-    desc: 'Абылай хан дәуірінен тамыр тартқан көне шертпе күй үлгілерінің сақталған мекені.',
-    figures: [
-      {
-        name: 'Байжігіт күйші',
-        years: 'XVIII ғ.',
-        title: 'Шертпе күй өнерінің арғы атасы',
-        initials: 'БК',
-        works: '«Ақтабан шұбырынды», «Көкбалақ», «Азат күйі»',
-        link: 'people',
-      },
-      {
-        name: 'Әміре Қашаубаев',
-        years: '1888 — 1934',
-        title: 'Парижде қазақ өнерін әлемге танытқан саңлақ',
-        initials: 'ӘҚ',
-        works: '«Балқадиша», «Ағаш аяқ», домбыра сарындары',
-        link: 'people',
-      },
-    ],
-  },
-  {
-    id: 'zhetysu',
-    name: 'Жетісу — Алатау баурайы',
-    regionType: 'east',
-    regionLabel: 'Жетісу өлкесі',
-    school: 'Академиялық күй және «Отырар сазы»',
-    x: 675,
-    y: 430,
-    desc: 'Жеті өзен мен қарлы Алатау етегіндегі дәстүрлі және симфониялық күйлердің бас қосқан ордасы.',
-    figures: [
-      {
-        name: 'Нұрғиса Тілендиев',
-        years: '1925 — 1998',
-        title: 'Халық қаһарманы, дирижер, біртуар композитор',
-        initials: 'НТ',
-        works: '«Әлқисса», «Ата толғауы», «Махамбет», «Аққу»',
-        link: 'people',
-      },
-      {
-        name: 'Мұхит Мералыұлы дәстүрі',
-        years: 'XIX — XX ғ.',
-        title: 'Батыс-Шығыс ән мен күйін тоғыстырушылар',
-        initials: 'ММ',
-        works: '«Айнамкөз», «Зәуреш» күйлік сарындары',
-        link: 'people',
-      },
-    ],
-  },
-];
 
 const UI_TRANSLATIONS = {
   kk: {
@@ -481,8 +211,6 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [qrModalOpen, setQrModalOpen] = useState(false);
-  const [qrModalUrl, setQrModalUrl] = useState('');
   const [loadError, setLoadError] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -615,7 +343,6 @@ function App() {
             </div>
 
             {/* Dark / Light theme toggle */}
-            <button className="theme-toggle-btn" onClick={() => { setQrModalUrl(window.location.href); setQrModalOpen(true); }} title="QR код генераторы"><QrCode size={17} /></button>
             <button className="theme-toggle-btn" onClick={toggleTheme} title={theme === 'dark' ? 'Жарық тақырып' : 'Қараңғы тақырып'}>
               {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
             </button>
@@ -624,8 +351,6 @@ function App() {
           <button className="icon-button" aria-label="Іздеу" onClick={() => setSearchOpen(!searchOpen)}><Search size={19} /></button>
         </div>
       </header>
-
-      <QRCodeModal isOpen={qrModalOpen} onClose={() => setQrModalOpen(false)} defaultUrl={qrModalUrl} t={t} />
 
       {searchOpen && (
         <section className="search-wrap">
@@ -650,9 +375,9 @@ function App() {
       {activePage && (
         <main>
           {activePage.slug === 'home' ? (
-            <HomePage page={activePage} onNavigate={navigate} onOpenQr={(url) => { setQrModalUrl(url); setQrModalOpen(true); }} t={t} navLabels={navLabels} />
+            <HomePage page={activePage} onNavigate={navigate} t={t} navLabels={navLabels} />
           ) : (
-            <StandardPage page={activePage} onNavigate={navigate} onOpenQr={(url) => { setQrModalUrl(url); setQrModalOpen(true); }} query={query} allPages={pages} isEditor={!!sessionUser} t={t} navLabels={navLabels} />
+            <StandardPage page={activePage} onNavigate={navigate} query={query} allPages={pages} isEditor={!!sessionUser} t={t} navLabels={navLabels} />
           )}
         </main>
       )}
@@ -693,248 +418,58 @@ function App() {
 }
 
 
+
 // -------------------------------------------------------------
-// QR CODE MODAL COMPONENT (Dynamic Real-Time Generator)
+// HOMEPAGE ORNAMENTAL ACCENTS & CORNER DECORATIONS
 // -------------------------------------------------------------
-function QRCodeModal({ isOpen, onClose, defaultUrl, t }) {
-  const [url, setUrl] = useState(defaultUrl || (typeof window !== 'undefined' ? window.location.href : 'https://kui-anasy.kz'));
-  const [dataUrl, setDataUrl] = useState('');
-  const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    if (defaultUrl) setUrl(defaultUrl);
-  }, [defaultUrl]);
-
-  useEffect(() => {
-    if (url && url.trim()) {
-      QRCode.toDataURL(url.trim(), {
-        width: 300,
-        margin: 2,
-        color: { dark: '#1f1610', light: '#fdfbf7' },
-      })
-        .then(setDataUrl)
-        .catch(() => {});
-    } else {
-      setDataUrl('');
-    }
-  }, [url]);
-
-  if (!isOpen) return null;
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
-  const handleDownload = () => {
-    if (!dataUrl) return;
-    const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = 'kui-anasy-qr-' + Date.now() + '.png';
-    a.click();
-  };
-
+function CornerOrnament({ position = 'top-left' }) {
   return (
-    <div className="qr-modal-overlay" onClick={onClose}>
-      <div className="qr-modal-card" onClick={(e) => e.stopPropagation()}>
-        <button className="qr-modal-close" onClick={onClose} aria-label="Жабу"><X size={20} /></button>
-        <span className="block-kicker">QR БӨЛІСУ МЕН ЖҮКТЕУ</span>
-        <h3>{t?.qrTitle || 'Сілтемеден QR-код жасау'}</h3>
-        <p className="drawer-desc">{t?.qrDesc || 'Сілтемені енгізген сәтте QR-код автоматты түрде дайындалады.'}</p>
-
-        <div className="qr-preview-box">
-          {dataUrl ? <img src={dataUrl} alt="Generated QR Code" /> : <p>Сілтемені жазыңыз...</p>}
-        </div>
-
-        <div className="qr-input-group">
-          <label>Сілтеме мекенжайы (URL):</label>
-          <input
-            type="url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://example.com"
-          />
-        </div>
-
-        <div className="qr-modal-actions">
-          <button className="button button-accent" onClick={handleDownload} disabled={!dataUrl}>
-            <Download size={15} /> QR жүктеп алу (PNG)
-          </button>
-          <button className="button button-muted" onClick={handleCopy}>
-            {copied ? <Check size={15} /> : <Copy size={15} />}
-            {copied ? 'Көшірілді!' : 'Сілтемені көшіру'}
-          </button>
-        </div>
-      </div>
-    </div>
+    <span className={'corner-ornament corner-' + position} aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+        <path d="M 0 0 L 18 0 L 18 3.5 L 3.5 3.5 L 3.5 18 L 0 18 Z" fill="var(--gold)" opacity="0.65" />
+        <circle cx="7" cy="7" r="2" fill="var(--gold)" opacity="0.85" />
+      </svg>
+    </span>
   );
 }
 
-// -------------------------------------------------------------
-// HISTORICAL INTERACTIVE MAP COMPONENT (Smooth Zoom & Hotspots)
-// -------------------------------------------------------------
-function HistoricalMap({ onNavigate, t }) {
-  const [selectedId, setSelectedId] = useState(null);
-  const [filter, setFilter] = useState('all');
-
-  const selectedRegion = (typeof HISTORICAL_REGIONS !== 'undefined' ? HISTORICAL_REGIONS : []).find((r) => r.id === selectedId) || null;
-
-  const filteredRegions = (typeof HISTORICAL_REGIONS !== 'undefined' ? HISTORICAL_REGIONS : []).filter((r) => {
-    if (filter === 'all') return true;
-    if (filter === 'west') return r.regionType === 'west';
-    if (filter === 'saryarka') return r.regionType === 'saryarka' || r.regionType === 'central';
-    if (filter === 'south') return r.regionType === 'south';
-    if (filter === 'east') return r.regionType === 'east';
-    return true;
-  });
-
-  const zoomLevel = selectedRegion ? 2.3 : 1;
-  const targetX = selectedRegion ? (460 - selectedRegion.x) * 1.3 : 0;
-  const targetY = selectedRegion ? (270 - selectedRegion.y) * 1.3 : 0;
-
+function SideOrnamentRibbon({ side = 'left' }) {
   return (
-    <section className="historical-map-section content-width">
-      <div className="map-header">
-        <span className="block-kicker">{t?.mapKicker || 'ҰЛЫ ДАЛА КҮЙ ШЕЖІРЕСІ'}</span>
-        <h2>{t?.mapTitle || 'Интерактивті тарихи карта: Күйшілік мектептер мен өлкелер'}</h2>
-        <p>{t?.mapDesc || 'Картадағы тарихи өңірлерді таңдаңыз: аймақты басқан кезде карта сол өлкеге жақындап, ұлы күйшілердің тізімі ашылады.'}</p>
+    <aside className={'homepage-side-ribbon ribbon-' + side} aria-hidden="true">
+      <div className="side-ribbon-content">
+        <svg viewBox="0 0 32 90" width="24" height="68" fill="none" className="mini-dombra-side">
+          <path d="M16 2 C17 8, 17 25, 16 35 C12 42, 7 55, 7 68 C7 82, 11 88, 16 88 C21 88, 25 82, 25 68 C25 55, 20 42, 16 35 C15 25, 15 8, 16 2 Z" fill="var(--gold)" opacity="0.5" />
+          <circle cx="16" cy="62" r="3" fill="#000" opacity="0.25" />
+          <line x1="16" y1="2" x2="16" y2="65" stroke="var(--gold)" strokeWidth="1" opacity="0.6" />
+        </svg>
+
+        <div className="ribbon-vertical-line" />
+
+        <svg viewBox="0 0 40 40" width="26" height="26" fill="none" className="mini-ornament-side">
+          <path d="M 20 28 C 15 17, 4 15, 2 23 C 0 30, 9 37, 17 31 C 13 29, 9 26, 10 22 C 11 18, 18 20, 20 28 Z" fill="var(--gold)" opacity="0.45" />
+          <path d="M 20 28 C 25 17, 36 15, 38 23 C 40 30, 31 37, 23 31 C 27 29, 31 26, 30 22 C 29 18, 22 20, 20 28 Z" fill="var(--gold)" opacity="0.45" />
+          <circle cx="20" cy="28" r="2.5" fill="var(--gold)" opacity="0.65" />
+        </svg>
+
+        <div className="ribbon-vertical-line" />
+
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" className="mini-diamond-side">
+          <polygon points="10,0 20,10 10,20 0,10" fill="var(--gold)" opacity="0.4" />
+          <circle cx="10" cy="10" r="3" fill="var(--bg)" />
+        </svg>
+
+        <div className="ribbon-vertical-line" />
+
+        <svg viewBox="0 0 32 90" width="24" height="68" fill="none" className="mini-dombra-side">
+          <path d="M16 2 C17 8, 17 25, 16 35 C12 42, 7 55, 7 68 C7 82, 11 88, 16 88 C21 88, 25 82, 25 68 C25 55, 20 42, 16 35 C15 25, 15 8, 16 2 Z" fill="var(--gold)" opacity="0.5" />
+          <circle cx="16" cy="62" r="3" fill="#000" opacity="0.25" />
+        </svg>
       </div>
-
-      <div className="map-filters">
-        <button className={'map-filter-pill ' + (filter === 'all' ? 'active' : '')} onClick={() => setFilter('all')}>Барлық өңірлер ({filteredRegions.length})</button>
-        <button className={'map-filter-pill ' + (filter === 'west' ? 'active' : '')} onClick={() => setFilter('west')}>Батыс (Төкпе мектебі)</button>
-        <button className={'map-filter-pill ' + (filter === 'saryarka' ? 'active' : '')} onClick={() => setFilter('saryarka')}>Сарыарқа мен Ұлытау (Шертпе)</button>
-        <button className={'map-filter-pill ' + (filter === 'south' ? 'active' : '')} onClick={() => setFilter('south')}>Қаратау мен Сыр (Сүгір мектебі)</button>
-        <button className={'map-filter-pill ' + (filter === 'east' ? 'active' : '')} onClick={() => setFilter('east')}>Шығыс пен Жетісу</button>
-      </div>
-
-      <div className="map-stage-wrapper">
-        <div className="map-controls-floating">
-          {selectedRegion && (
-            <button className="map-btn-floating" onClick={() => setSelectedId(null)}>
-              <Minimize2 size={15} /> Картаны толық көру
-            </button>
-          )}
-        </div>
-
-        <div
-          className="map-viewport"
-          style={{
-            transform: 'translate(' + targetX + 'px, ' + targetY + 'px) scale(' + zoomLevel + ')',
-          }}
-        >
-          <svg className="map-svg" viewBox="0 0 920 540" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#c29b38" stopOpacity="0.18" />
-                <stop offset="100%" stopColor="#c29b38" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-
-            {/* Kazakhstan / Steppe Main Geographic Contour */}
-            <path
-              className="kz-land"
-              d="M 110 200 C 85 220, 60 250, 75 285 C 80 320, 65 370, 75 420 C 85 450, 115 470, 145 440 C 180 430, 230 420, 260 410 C 300 420, 360 460, 410 490 C 440 520, 485 520, 520 490 C 550 470, 590 460, 620 450 C 670 470, 720 460, 760 420 C 790 380, 830 330, 860 280 C 885 240, 905 190, 880 160 C 830 150, 760 145, 700 135 C 640 120, 570 90, 500 80 C 430 75, 360 90, 300 110 C 240 125, 180 150, 140 175 Z"
-            />
-
-            {/* Caspian Sea Coastline Marker */}
-            <path d="M 60 270 Q 75 350 70 440" stroke="#6fa8dc" strokeWidth="2" strokeDasharray="3 3" opacity="0.6" />
-            <text x="50" y="360" fill="#6fa8dc" fontSize="11" opacity="0.7">Каспий теңізі</text>
-
-            {/* Aral Sea Outline */}
-            <path className="map-lake" d="M 245 330 C 265 320, 280 340, 275 365 C 260 375, 240 360, 245 330 Z" />
-            <text x="250" y="380" fill="#6fa8dc" fontSize="10" opacity="0.8">Арал</text>
-
-            {/* Lake Balkhash Outline */}
-            <path className="map-lake" d="M 580 370 C 630 360, 680 375, 710 395 C 690 405, 630 385, 580 370 Z" />
-            <text x="635" y="390" fill="#6fa8dc" fontSize="10" opacity="0.8">Балқаш</text>
-
-            {/* Ancient Rivers: Zhaiyq, Syrdariya, Ertis, Ili */}
-            <path className="map-river" d="M 130 175 Q 155 240 165 315" />
-            <text x="145" y="195" fill="#6fa8dc" fontSize="9" opacity="0.7">Жайық өзені</text>
-
-            <path className="map-river" d="M 510 495 Q 430 450 310 370 Q 275 350 265 345" />
-            <text x="350" y="420" fill="#6fa8dc" fontSize="9" opacity="0.7">Сырдария</text>
-
-            <path className="map-river" d="M 870 170 Q 750 150 630 110" />
-            <text x="730" y="145" fill="#6fa8dc" fontSize="9" opacity="0.7">Ертіс өзені</text>
-
-            {/* Ancient Silk Road & Trade Caravans */}
-            <path className="map-trade-route" d="M 175 310 Q 300 350 440 460 Q 560 460 675 430" />
-
-            {/* Antique Compass Rose */}
-            <g transform="translate(850, 70)" opacity="0.75">
-              <circle r="22" stroke="var(--gold)" strokeWidth="1" fill="none" strokeDasharray="2 2" />
-              <path d="M 0 -20 L 4 0 L 0 20 L -4 0 Z" fill="var(--gold)" />
-              <path d="M -20 0 L 0 4 L 20 0 L 0 -4 Z" fill="var(--accent)" />
-              <text x="-4" y="-24" fill="var(--gold)" fontSize="10" fontWeight="700">С</text>
-              <text x="-4" y="32" fill="var(--gold)" fontSize="10" fontWeight="700">О</text>
-            </g>
-
-            {/* Hotspots: Interactive Towns & Regions */}
-            {filteredRegions.map((region) => {
-              const isSelected = selectedId === region.id;
-              return (
-                <g
-                  key={region.id}
-                  className={'map-hotspot ' + (isSelected ? 'is-active' : '')}
-                  onClick={() => setSelectedId(isSelected ? null : region.id)}
-                  transform={'translate(' + region.x + ', ' + region.y + ')'}
-                >
-                  <circle className="map-pin-pulse" r="14" fill="url(#mapGlow)" />
-                  <circle className="map-pin-circle" r={isSelected ? 16 : 12} />
-                  <text className="map-pin-badge">{region.figures.length}</text>
-                  <text className="map-pin-label" y={isSelected ? 28 : 24}>
-                    {region.name.split('—')[0].trim()}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-        </div>
-      </div>
-
-      {/* Selected Town Detail Panel & Figures Drawer */}
-      {selectedRegion && (
-        <div className="map-selected-drawer">
-          <div className="drawer-header">
-            <div className="drawer-title-wrap">
-              <span className="block-kicker">{selectedRegion.regionLabel}</span>
-              <h3>{selectedRegion.name}</h3>
-              <div className="drawer-tags">
-                <span className="drawer-tag">{selectedRegion.school}</span>
-                <span className="drawer-tag">{selectedRegion.figures.length} ұлы күйші шыққан құтты мекен</span>
-              </div>
-            </div>
-            <button className="button button-muted" onClick={() => setSelectedId(null)}>
-              <X size={15} /> Жабу
-            </button>
-          </div>
-
-          <p className="drawer-desc">{selectedRegion.desc}</p>
-
-          <div className="drawer-figures-grid">
-            {selectedRegion.figures.map((fig) => (
-              <div key={fig.name} className="drawer-figure-card">
-                <div className="drawer-figure-avatar">{fig.initials}</div>
-                <div className="drawer-figure-content">
-                  <h4>{fig.name}</h4>
-                  <span className="figure-years">{fig.years}</span>
-                  <p className="figure-bio">{fig.title}</p>
-                  <span className="figure-works">{fig.works}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </section>
+    </aside>
   );
 }
 
-function HomePage({ page, onNavigate, onOpenQr, t, navLabels }) {
+function HomePage({ page, onNavigate, t, navLabels }) {
   const blocks = page.blocks || [];
   const intro = blocks.find((block) => block.type === 'quote');
   const stats = blocks.find((block) => block.type === 'stats');
@@ -942,14 +477,16 @@ function HomePage({ page, onNavigate, onOpenQr, t, navLabels }) {
   const latest = blocks.find((block) => block.type === 'cards');
 
   return (
-    <>
+    <div className="homepage-wrapper">
+      <SideOrnamentRibbon side="left" />
+      <SideOrnamentRibbon side="right" />
+
       <section className="archive-hero content-width">
         <DombraSilhouette className="dombra-watermark dombra-watermark-hero" />
         <div className="archive-hero-copy">
           <p className="hero-kicker">{t.heroKicker}</p>
           <h1>{t.heroTitle}<br /><em>{t.heroTitleEm}</em></h1>
           <p>{page.description}</p>
-          <button className="banner-qr-btn" onClick={() => onOpenQr ? onOpenQr(window.location.origin + '#' + page.slug) : null}><QrCode size={14} /> <span>{t?.qrBtn || 'Беттің QR-кодын көрсету'}</span></button>
           <p className="hero-english">Kazakh music, its people and living traditions.</p>
           <div className="hero-actions">
             <button className="button button-dark" onClick={() => onNavigate('people')}>{t.peopleBtn} <ArrowRight size={17} /></button>
@@ -965,6 +502,10 @@ function HomePage({ page, onNavigate, onOpenQr, t, navLabels }) {
       {/* Дина Нұрпейісова блогы */}
       {feature && (
         <section className="featured-person">
+          <CornerOrnament position="top-left" />
+          <CornerOrnament position="top-right" />
+          <CornerOrnament position="bottom-left" />
+          <CornerOrnament position="bottom-right" />
           <figure className="featured-person-image"><img src="/images/dina-monument.jpg" alt="Дина Нұрпейісова ескерткіші" /><figcaption>Дина Нұрпейісова ескерткіші · Астана</figcaption></figure>
           <div className="featured-person-copy"><span className="hero-kicker">ТҰЛҒА · {feature.eyebrow || '1861 — 1955'}</span><h2>{feature.title}</h2><p>{feature.body}</p><button className="underlined-link" onClick={() => onNavigate('people')}>Тұлғалар каталогы <ArrowRight size={15} /></button></div>
           <span className="featured-person-pattern" aria-hidden="true" />
@@ -972,11 +513,6 @@ function HomePage({ page, onNavigate, onOpenQr, t, navLabels }) {
       )}
 
       {stats && <section className="archive-stats content-width"><h2>Бір мұра.<br /><strong>Үш дәстүр.</strong></h2>{stats.items?.map((item) => <div className="archive-stat-row" key={item.label}><strong>{item.value}</strong><p>{item.label}</p></div>)}</section>}
-
-      <OrnamentDivider />
-
-      {/* Интерактивті тарихи карта */}
-      <HistoricalMap onNavigate={onNavigate} t={t} />
 
       <OrnamentDivider />
 
@@ -1037,11 +573,11 @@ function HomePage({ page, onNavigate, onOpenQr, t, navLabels }) {
       </section>
 
       <Callout onNavigate={onNavigate} t={t} />
-    </>
+    </div>
   );
 }
 
-function StandardPage({ page, onNavigate, onOpenQr, query, allPages = [], isEditor = false, t, navLabels }) {
+function StandardPage({ page, onNavigate, query, allPages = [], isEditor = false, t, navLabels }) {
   const relevantBlocks = (page.blocks || []).filter((block) => !query || `${block.title} ${block.body}`.toLowerCase().includes(query.toLowerCase()));
   const parentCategory = PARENT_SECTIONS.find((p) => p.slug === page.parent_slug);
   const themeSlug = page.parent_slug || page.slug;
@@ -1211,16 +747,54 @@ function ContentBlock({ block, index, pageSlug }) {
 
 function QRBlock({ block }) {
   const [dataUrl, setDataUrl] = useState('');
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
-    if (block.link) {
-      QRCode.toDataURL(block.link, { width: 256, margin: 2 }).then(setDataUrl).catch(() => {});
+    if (block.link && block.link.trim()) {
+      QRCode.toDataURL(block.link.trim(), {
+        width: 256,
+        margin: 2,
+        color: { dark: '#1f1610', light: '#ffffff' },
+      })
+        .then(setDataUrl)
+        .catch(() => {});
+    } else {
+      setDataUrl('');
     }
   }, [block.link]);
+
+  const handleCopy = () => {
+    if (block.link) {
+      navigator.clipboard.writeText(block.link).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+    }
+  };
+
   return (
     <div className="qr-block">
-      {dataUrl ? <img src={dataUrl} alt="QR Code" /> : <div className="qr-placeholder">QR код дайындалуда…</div>}
-      <figcaption>{block.title || 'Сілтеме QR коды'}</figcaption>
-      {block.link && <a href={block.link} target="_blank" rel="noreferrer">{block.link}</a>}
+      <div className="qr-card-ornament" aria-hidden="true">❖ ── ◈ ── ❖</div>
+      <div className="qr-image-container">
+        {dataUrl ? (
+          <img src={dataUrl} alt={block.title || 'QR Code'} />
+        ) : (
+          <div className="qr-placeholder">{block.link ? 'QR код дайындалуда…' : 'Сілтеме көрсетілмеген'}</div>
+        )}
+      </div>
+      <figcaption>{block.title || 'Сілтеме QR-коды'}</figcaption>
+      <p className="qr-hint">Телефон камерасымен сканерлеп, сілтемеге жылдам өтіңіз</p>
+      {block.link && (
+        <div className="qr-link-row">
+          <a href={block.link} target="_blank" rel="noreferrer" className="qr-link-url">
+            {block.link} <ArrowUpRight size={14} />
+          </a>
+          <button type="button" className="qr-copy-btn" onClick={handleCopy}>
+            {copied ? <Check size={13} /> : <Copy size={13} />}
+            <span>{copied ? 'Көшірілді!' : 'Көшіру'}</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
