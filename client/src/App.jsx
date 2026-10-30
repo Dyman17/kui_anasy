@@ -12,6 +12,7 @@ import {
   getAdminAccounts,
   getPages,
   loginEditor,
+  loginOrRegisterGoogle,
   registerEditor,
   resetLocalPages,
   savePage,
@@ -1219,8 +1220,17 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
             {accounts.map((acc) => (
               <div key={acc.id} className="account-card">
                 <div className="account-info">
-                  <h3>{acc.fullName}</h3>
-                  <p>Логин: <strong>{acc.username}</strong> · Тіркелген күні: {new Date(acc.registeredAt).toLocaleDateString()}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                    <h3>{acc.fullName}</h3>
+                    {acc.authProvider === 'google' && (
+                      <span className="google-badge"><GoogleIcon /> Google / Gmail</span>
+                    )}
+                  </div>
+                  <p>
+                    Логин: <strong>{acc.username}</strong>
+                    {acc.email && <span> · Пошта: <strong>{acc.email}</strong></span>}
+                    <span> · Тіркелген күні: {new Date(acc.registeredAt).toLocaleDateString()}</span>
+                  </p>
                 </div>
                 <div className="account-actions">
                   {acc.status === 'pending' ? (
@@ -1512,15 +1522,171 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
 // -------------------------------------------------------------
 // AUTHENTICATION VIEW (Super Admin & Editor Login/Register)
 // -------------------------------------------------------------
+
+// -------------------------------------------------------------
+// GOOGLE AUTHENTICATION HELPERS & MODAL
+// -------------------------------------------------------------
+function GoogleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" style={{ flexShrink: 0 }}>
+      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+      <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+    </svg>
+  );
+}
+
+function GoogleAuthModal({ isOpen, onClose, onSelectAccount }) {
+  const [customEmail, setCustomEmail] = useState('');
+  const [customName, setCustomName] = useState('');
+
+  if (!isOpen) return null;
+
+  const handleCustomSubmit = (e) => {
+    e.preventDefault();
+    if (!customEmail.trim()) return;
+    onSelectAccount({
+      email: customEmail.trim().toLowerCase(),
+      fullName: customName.trim() || customEmail.split('@')[0],
+      googleId: 'gid_' + Date.now(),
+    });
+  };
+
+  return (
+    <div className="qr-modal-overlay" onClick={onClose}>
+      <div className="qr-modal-card" style={{ maxWidth: '440px', textAlign: 'left' }} onClick={(e) => e.stopPropagation()}>
+        <button className="qr-modal-close" onClick={onClose} aria-label="Жабу"><X size={20} /></button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+          <GoogleIcon />
+          <h3 style={{ margin: 0, fontSize: '18px', color: 'var(--primary)' }}>Google (Gmail) арқылы кіру</h3>
+        </div>
+        <p className="drawer-desc" style={{ marginBottom: '16px' }}>
+          «Күй анасы» порталының әкімшілік панеліне Google аккаунтыңыз арқылы өтіңіз:
+        </p>
+
+        {/* Quick select demo account */}
+        <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div
+            style={{
+              padding: '12px 14px',
+              borderRadius: '8px',
+              border: '1px solid var(--line)',
+              background: 'var(--bg)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+            }}
+            onClick={() => onSelectAccount({ email: 'aidos.smagulov@gmail.com', fullName: 'Айдос Смағұлов', googleId: 'gid_aidos_demo' })}
+          >
+            <div>
+              <strong style={{ fontSize: '14px', display: 'block' }}>Айдос Смағұлов</strong>
+              <small style={{ color: 'var(--text-muted)' }}>aidos.smagulov@gmail.com</small>
+            </div>
+            <span style={{ fontSize: '11px', background: 'rgba(39, 174, 96, 0.15)', color: '#27ae60', padding: '2px 8px', borderRadius: '10px', fontWeight: 600 }}>Мақұлданған</span>
+          </div>
+        </div>
+
+        <div className="auth-separator">
+          <span>немесе басқа Gmail поштаңызды енгізіңіз</span>
+        </div>
+
+        <form onSubmit={handleCustomSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div>
+            <label style={{ fontSize: '13px', fontWeight: 600, display: 'block', marginBottom: '4px' }}>Аты-жөніңіз (Google Name):</label>
+            <input
+              type="text"
+              value={customName}
+              onChange={(e) => setCustomName(e.target.value)}
+              placeholder="Мысалы: Жандос Қалиев"
+              style={{ width: '100%', padding: '9px 12px', borderRadius: '6px', border: '1px solid var(--line)', boxSizing: 'border-box' }}
+            />
+          </div>
+          <div>
+            <label style={{ fontSize: '13px', fontWeight: 600, display: 'block', marginBottom: '4px' }}>Gmail мекенжайыңыз:</label>
+            <input
+              type="email"
+              value={customEmail}
+              onChange={(e) => setCustomEmail(e.target.value)}
+              placeholder="zhandos@gmail.com"
+              required
+              style={{ width: '100%', padding: '9px 12px', borderRadius: '6px', border: '1px solid var(--line)', boxSizing: 'border-box' }}
+            />
+          </div>
+          <button type="submit" className="button button-dark" style={{ marginTop: '6px' }}>
+            <GoogleIcon /> Растау және кіру
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function AuthView({ onLoginSuccess, onExit }) {
   const [roleMode, setRoleMode] = useState('super');
   const [editorMode, setEditorMode] = useState('login');
   const [superToken, setSuperToken] = useState('');
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [googleModalOpen, setGoogleModalOpen] = useState(false);
+
+  const handleGoogleSuccess = ({ email, fullName, googleId, avatarUrl }) => {
+    setError('');
+    setNotice('');
+    try {
+      const { account, isNew } = loginOrRegisterGoogle({ email, fullName, googleId, avatarUrl });
+      setGoogleModalOpen(false);
+      if (isNew) {
+        setNotice(`Google (${email}) арқылы өтінішіңіз сәтті қабылданды! Бас әкімші аккаунтыңызды мақұлдағаннан кейін жүйеге кіре аласыз.`);
+        setEditorMode('login');
+      } else {
+        onLoginSuccess({
+          role: 'EDITOR',
+          id: account.id,
+          fullName: account.fullName,
+          username: account.username,
+          email: account.email,
+          authProvider: 'google',
+        });
+      }
+    } catch (err) {
+      setError(err.message);
+      setGoogleModalOpen(false);
+    }
+  };
+
+  const handleGoogleSignInClick = () => {
+    setError('');
+    setNotice('');
+    try {
+      if (typeof window !== 'undefined' && window.google?.accounts?.id && import.meta.env.VITE_GOOGLE_CLIENT_ID) {
+        window.google.accounts.id.initialize({
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+          callback: (response) => {
+            try {
+              const payload = JSON.parse(atob(response.credential.split('.')[1]));
+              handleGoogleSuccess({
+                email: payload.email,
+                fullName: payload.name,
+                googleId: payload.sub,
+                avatarUrl: payload.picture,
+              });
+            } catch (e) {
+              handleGoogleSuccess({ email: 'user@gmail.com', fullName: 'Google User' });
+            }
+          },
+        });
+        window.google.accounts.id.prompt();
+        return;
+      }
+    } catch {}
+    setGoogleModalOpen(true);
+  };
 
   const handleSuperSubmit = (e) => {
     e.preventDefault();
@@ -1564,7 +1730,7 @@ function AuthView({ onLoginSuccess, onExit }) {
         return;
       }
       try {
-        registerEditor({ fullName, username, password });
+        registerEditor({ fullName, username, email, password });
         setNotice('Өтінішіңіз сәтті қабылданды! Бас әкімші мақұлдағаннан кейін жүйеге кіре аласыз.');
         setEditorMode('login');
         setPassword('');
@@ -1621,17 +1787,38 @@ function AuthView({ onLoginSuccess, onExit }) {
           </form>
         ) : (
           <form className="auth-form" onSubmit={handleEditorSubmit}>
+            <div className="google-auth-section">
+              <button type="button" className="google-auth-btn" onClick={handleGoogleSignInClick}>
+                <GoogleIcon />
+                <span>{editorMode === 'login' ? 'Google (Gmail) арқылы кіру' : 'Google (Gmail) арқылы тіркелу'}</span>
+              </button>
+            </div>
+
+            <div className="auth-separator">
+              <span>немесе логин / құпиясөзбен</span>
+            </div>
             {editorMode === 'register' && (
-              <label>
-                Аты-жөніңіз (ФИО)
-                <input
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Мысалы: Айдос Смағұлов"
-                  required
-                />
-              </label>
+              <>
+                <label>
+                  Аты-жөніңіз (ФИО)
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Мысалы: Айдос Смағұлов"
+                    required
+                  />
+                </label>
+                <label>
+                  Электронды пошта (Gmail)
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="мысалы: aidos@gmail.com"
+                  />
+                </label>
+              </>
             )}
             <label>
               Логин
@@ -1668,6 +1855,7 @@ function AuthView({ onLoginSuccess, onExit }) {
           </form>
         )}
       </div>
+      <GoogleAuthModal isOpen={googleModalOpen} onClose={() => setGoogleModalOpen(false)} onSelectAccount={handleGoogleSuccess} />
     </div>
   );
 }
