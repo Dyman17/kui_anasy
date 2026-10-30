@@ -650,9 +650,9 @@ function App() {
       {activePage && (
         <main>
           {activePage.slug === 'home' ? (
-            <HomePage page={activePage} onNavigate={navigate} t={t} navLabels={navLabels} />
+            <HomePage page={activePage} onNavigate={navigate} onOpenQr={(url) => { setQrModalUrl(url); setQrModalOpen(true); }} t={t} navLabels={navLabels} />
           ) : (
-            <StandardPage page={activePage} onNavigate={navigate} query={query} allPages={pages} isEditor={!!sessionUser} t={t} navLabels={navLabels} />
+            <StandardPage page={activePage} onNavigate={navigate} onOpenQr={(url) => { setQrModalUrl(url); setQrModalOpen(true); }} query={query} allPages={pages} isEditor={!!sessionUser} t={t} navLabels={navLabels} />
           )}
         </main>
       )}
@@ -692,7 +692,249 @@ function App() {
   );
 }
 
-function HomePage({ page, onNavigate, t, navLabels }) {
+
+// -------------------------------------------------------------
+// QR CODE MODAL COMPONENT (Dynamic Real-Time Generator)
+// -------------------------------------------------------------
+function QRCodeModal({ isOpen, onClose, defaultUrl, t }) {
+  const [url, setUrl] = useState(defaultUrl || (typeof window !== 'undefined' ? window.location.href : 'https://kui-anasy.kz'));
+  const [dataUrl, setDataUrl] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (defaultUrl) setUrl(defaultUrl);
+  }, [defaultUrl]);
+
+  useEffect(() => {
+    if (url && url.trim()) {
+      QRCode.toDataURL(url.trim(), {
+        width: 300,
+        margin: 2,
+        color: { dark: '#1f1610', light: '#fdfbf7' },
+      })
+        .then(setDataUrl)
+        .catch(() => {});
+    } else {
+      setDataUrl('');
+    }
+  }, [url]);
+
+  if (!isOpen) return null;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const handleDownload = () => {
+    if (!dataUrl) return;
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = 'kui-anasy-qr-' + Date.now() + '.png';
+    a.click();
+  };
+
+  return (
+    <div className="qr-modal-overlay" onClick={onClose}>
+      <div className="qr-modal-card" onClick={(e) => e.stopPropagation()}>
+        <button className="qr-modal-close" onClick={onClose} aria-label="Жабу"><X size={20} /></button>
+        <span className="block-kicker">QR БӨЛІСУ МЕН ЖҮКТЕУ</span>
+        <h3>{t?.qrTitle || 'Сілтемеден QR-код жасау'}</h3>
+        <p className="drawer-desc">{t?.qrDesc || 'Сілтемені енгізген сәтте QR-код автоматты түрде дайындалады.'}</p>
+
+        <div className="qr-preview-box">
+          {dataUrl ? <img src={dataUrl} alt="Generated QR Code" /> : <p>Сілтемені жазыңыз...</p>}
+        </div>
+
+        <div className="qr-input-group">
+          <label>Сілтеме мекенжайы (URL):</label>
+          <input
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://example.com"
+          />
+        </div>
+
+        <div className="qr-modal-actions">
+          <button className="button button-accent" onClick={handleDownload} disabled={!dataUrl}>
+            <Download size={15} /> QR жүктеп алу (PNG)
+          </button>
+          <button className="button button-muted" onClick={handleCopy}>
+            {copied ? <Check size={15} /> : <Copy size={15} />}
+            {copied ? 'Көшірілді!' : 'Сілтемені көшіру'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------------
+// HISTORICAL INTERACTIVE MAP COMPONENT (Smooth Zoom & Hotspots)
+// -------------------------------------------------------------
+function HistoricalMap({ onNavigate, t }) {
+  const [selectedId, setSelectedId] = useState(null);
+  const [filter, setFilter] = useState('all');
+
+  const selectedRegion = (typeof HISTORICAL_REGIONS !== 'undefined' ? HISTORICAL_REGIONS : []).find((r) => r.id === selectedId) || null;
+
+  const filteredRegions = (typeof HISTORICAL_REGIONS !== 'undefined' ? HISTORICAL_REGIONS : []).filter((r) => {
+    if (filter === 'all') return true;
+    if (filter === 'west') return r.regionType === 'west';
+    if (filter === 'saryarka') return r.regionType === 'saryarka' || r.regionType === 'central';
+    if (filter === 'south') return r.regionType === 'south';
+    if (filter === 'east') return r.regionType === 'east';
+    return true;
+  });
+
+  const zoomLevel = selectedRegion ? 2.3 : 1;
+  const targetX = selectedRegion ? (460 - selectedRegion.x) * 1.3 : 0;
+  const targetY = selectedRegion ? (270 - selectedRegion.y) * 1.3 : 0;
+
+  return (
+    <section className="historical-map-section content-width">
+      <div className="map-header">
+        <span className="block-kicker">{t?.mapKicker || 'ҰЛЫ ДАЛА КҮЙ ШЕЖІРЕСІ'}</span>
+        <h2>{t?.mapTitle || 'Интерактивті тарихи карта: Күйшілік мектептер мен өлкелер'}</h2>
+        <p>{t?.mapDesc || 'Картадағы тарихи өңірлерді таңдаңыз: аймақты басқан кезде карта сол өлкеге жақындап, ұлы күйшілердің тізімі ашылады.'}</p>
+      </div>
+
+      <div className="map-filters">
+        <button className={'map-filter-pill ' + (filter === 'all' ? 'active' : '')} onClick={() => setFilter('all')}>Барлық өңірлер ({filteredRegions.length})</button>
+        <button className={'map-filter-pill ' + (filter === 'west' ? 'active' : '')} onClick={() => setFilter('west')}>Батыс (Төкпе мектебі)</button>
+        <button className={'map-filter-pill ' + (filter === 'saryarka' ? 'active' : '')} onClick={() => setFilter('saryarka')}>Сарыарқа мен Ұлытау (Шертпе)</button>
+        <button className={'map-filter-pill ' + (filter === 'south' ? 'active' : '')} onClick={() => setFilter('south')}>Қаратау мен Сыр (Сүгір мектебі)</button>
+        <button className={'map-filter-pill ' + (filter === 'east' ? 'active' : '')} onClick={() => setFilter('east')}>Шығыс пен Жетісу</button>
+      </div>
+
+      <div className="map-stage-wrapper">
+        <div className="map-controls-floating">
+          {selectedRegion && (
+            <button className="map-btn-floating" onClick={() => setSelectedId(null)}>
+              <Minimize2 size={15} /> Картаны толық көру
+            </button>
+          )}
+        </div>
+
+        <div
+          className="map-viewport"
+          style={{
+            transform: 'translate(' + targetX + 'px, ' + targetY + 'px) scale(' + zoomLevel + ')',
+          }}
+        >
+          <svg className="map-svg" viewBox="0 0 920 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#c29b38" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#c29b38" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+
+            {/* Kazakhstan / Steppe Main Geographic Contour */}
+            <path
+              className="kz-land"
+              d="M 110 200 C 85 220, 60 250, 75 285 C 80 320, 65 370, 75 420 C 85 450, 115 470, 145 440 C 180 430, 230 420, 260 410 C 300 420, 360 460, 410 490 C 440 520, 485 520, 520 490 C 550 470, 590 460, 620 450 C 670 470, 720 460, 760 420 C 790 380, 830 330, 860 280 C 885 240, 905 190, 880 160 C 830 150, 760 145, 700 135 C 640 120, 570 90, 500 80 C 430 75, 360 90, 300 110 C 240 125, 180 150, 140 175 Z"
+            />
+
+            {/* Caspian Sea Coastline Marker */}
+            <path d="M 60 270 Q 75 350 70 440" stroke="#6fa8dc" strokeWidth="2" strokeDasharray="3 3" opacity="0.6" />
+            <text x="50" y="360" fill="#6fa8dc" fontSize="11" opacity="0.7">Каспий теңізі</text>
+
+            {/* Aral Sea Outline */}
+            <path className="map-lake" d="M 245 330 C 265 320, 280 340, 275 365 C 260 375, 240 360, 245 330 Z" />
+            <text x="250" y="380" fill="#6fa8dc" fontSize="10" opacity="0.8">Арал</text>
+
+            {/* Lake Balkhash Outline */}
+            <path className="map-lake" d="M 580 370 C 630 360, 680 375, 710 395 C 690 405, 630 385, 580 370 Z" />
+            <text x="635" y="390" fill="#6fa8dc" fontSize="10" opacity="0.8">Балқаш</text>
+
+            {/* Ancient Rivers: Zhaiyq, Syrdariya, Ertis, Ili */}
+            <path className="map-river" d="M 130 175 Q 155 240 165 315" />
+            <text x="145" y="195" fill="#6fa8dc" fontSize="9" opacity="0.7">Жайық өзені</text>
+
+            <path className="map-river" d="M 510 495 Q 430 450 310 370 Q 275 350 265 345" />
+            <text x="350" y="420" fill="#6fa8dc" fontSize="9" opacity="0.7">Сырдария</text>
+
+            <path className="map-river" d="M 870 170 Q 750 150 630 110" />
+            <text x="730" y="145" fill="#6fa8dc" fontSize="9" opacity="0.7">Ертіс өзені</text>
+
+            {/* Ancient Silk Road & Trade Caravans */}
+            <path className="map-trade-route" d="M 175 310 Q 300 350 440 460 Q 560 460 675 430" />
+
+            {/* Antique Compass Rose */}
+            <g transform="translate(850, 70)" opacity="0.75">
+              <circle r="22" stroke="var(--gold)" strokeWidth="1" fill="none" strokeDasharray="2 2" />
+              <path d="M 0 -20 L 4 0 L 0 20 L -4 0 Z" fill="var(--gold)" />
+              <path d="M -20 0 L 0 4 L 20 0 L 0 -4 Z" fill="var(--accent)" />
+              <text x="-4" y="-24" fill="var(--gold)" fontSize="10" fontWeight="700">С</text>
+              <text x="-4" y="32" fill="var(--gold)" fontSize="10" fontWeight="700">О</text>
+            </g>
+
+            {/* Hotspots: Interactive Towns & Regions */}
+            {filteredRegions.map((region) => {
+              const isSelected = selectedId === region.id;
+              return (
+                <g
+                  key={region.id}
+                  className={'map-hotspot ' + (isSelected ? 'is-active' : '')}
+                  onClick={() => setSelectedId(isSelected ? null : region.id)}
+                  transform={'translate(' + region.x + ', ' + region.y + ')'}
+                >
+                  <circle className="map-pin-pulse" r="14" fill="url(#mapGlow)" />
+                  <circle className="map-pin-circle" r={isSelected ? 16 : 12} />
+                  <text className="map-pin-badge">{region.figures.length}</text>
+                  <text className="map-pin-label" y={isSelected ? 28 : 24}>
+                    {region.name.split('—')[0].trim()}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      </div>
+
+      {/* Selected Town Detail Panel & Figures Drawer */}
+      {selectedRegion && (
+        <div className="map-selected-drawer">
+          <div className="drawer-header">
+            <div className="drawer-title-wrap">
+              <span className="block-kicker">{selectedRegion.regionLabel}</span>
+              <h3>{selectedRegion.name}</h3>
+              <div className="drawer-tags">
+                <span className="drawer-tag">{selectedRegion.school}</span>
+                <span className="drawer-tag">{selectedRegion.figures.length} ұлы күйші шыққан құтты мекен</span>
+              </div>
+            </div>
+            <button className="button button-muted" onClick={() => setSelectedId(null)}>
+              <X size={15} /> Жабу
+            </button>
+          </div>
+
+          <p className="drawer-desc">{selectedRegion.desc}</p>
+
+          <div className="drawer-figures-grid">
+            {selectedRegion.figures.map((fig) => (
+              <div key={fig.name} className="drawer-figure-card">
+                <div className="drawer-figure-avatar">{fig.initials}</div>
+                <div className="drawer-figure-content">
+                  <h4>{fig.name}</h4>
+                  <span className="figure-years">{fig.years}</span>
+                  <p className="figure-bio">{fig.title}</p>
+                  <span className="figure-works">{fig.works}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function HomePage({ page, onNavigate, onOpenQr, t, navLabels }) {
   const blocks = page.blocks || [];
   const intro = blocks.find((block) => block.type === 'quote');
   const stats = blocks.find((block) => block.type === 'stats');
@@ -707,7 +949,7 @@ function HomePage({ page, onNavigate, t, navLabels }) {
           <p className="hero-kicker">{t.heroKicker}</p>
           <h1>{t.heroTitle}<br /><em>{t.heroTitleEm}</em></h1>
           <p>{page.description}</p>
-          <button className="banner-qr-btn" onClick={() => { setQrModalUrl(window.location.origin + '#' + page.slug); setQrModalOpen(true); }}><QrCode size={14} /> <span>{t?.qrBtn || 'Беттің QR-кодын көрсету'}</span></button>
+          <button className="banner-qr-btn" onClick={() => onOpenQr ? onOpenQr(window.location.origin + '#' + page.slug) : null}><QrCode size={14} /> <span>{t?.qrBtn || 'Беттің QR-кодын көрсету'}</span></button>
           <p className="hero-english">Kazakh music, its people and living traditions.</p>
           <div className="hero-actions">
             <button className="button button-dark" onClick={() => onNavigate('people')}>{t.peopleBtn} <ArrowRight size={17} /></button>
@@ -799,7 +1041,7 @@ function HomePage({ page, onNavigate, t, navLabels }) {
   );
 }
 
-function StandardPage({ page, onNavigate, query, allPages = [], isEditor = false, t, navLabels }) {
+function StandardPage({ page, onNavigate, onOpenQr, query, allPages = [], isEditor = false, t, navLabels }) {
   const relevantBlocks = (page.blocks || []).filter((block) => !query || `${block.title} ${block.body}`.toLowerCase().includes(query.toLowerCase()));
   const parentCategory = PARENT_SECTIONS.find((p) => p.slug === page.parent_slug);
   const themeSlug = page.parent_slug || page.slug;
@@ -818,6 +1060,9 @@ function StandardPage({ page, onNavigate, query, allPages = [], isEditor = false
           )}
           <h1>{navLabels[page.slug] || page.title}</h1>
           <p>{page.description}</p>
+          <button className="banner-qr-btn" onClick={() => onOpenQr ? onOpenQr(window.location.origin + '#' + page.slug) : null}>
+            <QrCode size={14} /> <span>{t?.qrBtn || 'Беттің QR-кодын көрсету'}</span>
+          </button>
           <div className="breadcrumb">
             <button onClick={() => onNavigate('home')}>{t.backHome}</button>
             <span>/</span>
