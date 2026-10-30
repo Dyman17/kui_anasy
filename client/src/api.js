@@ -42,8 +42,6 @@ export function getAdminAccounts() {
       id: 'editor-1',
       fullName: 'Айдос Смағұлов',
       username: 'aidos',
-      email: 'aidos.smagulov@gmail.com',
-      authProvider: 'local',
       password: 'password123',
       status: 'approved',
       registeredAt: '2026-10-29T12:00:00.000Z',
@@ -57,68 +55,23 @@ export function saveAdminAccounts(accounts) {
   } catch {}
 }
 
-export function registerEditor({ fullName, username, email, password, authProvider = 'local', avatarUrl = '' }) {
+export function registerEditor({ fullName, username, password }) {
   const accounts = getAdminAccounts();
-  const cleanUsername = username ? username.trim().toLowerCase() : (email ? email.split('@')[0].toLowerCase() : '');
-  const cleanEmail = email ? email.trim().toLowerCase() : '';
-
-  if (cleanUsername && accounts.some((a) => a.username && a.username.toLowerCase() === cleanUsername)) {
+  const cleanUsername = username.trim().toLowerCase();
+  if (accounts.some((a) => a.username.toLowerCase() === cleanUsername)) {
     throw new Error('Бұл логинмен әкімші тіркелген. Басқа логин таңдаңыз.');
   }
-  if (cleanEmail && accounts.some((a) => a.email && a.email.toLowerCase() === cleanEmail)) {
-    throw new Error('Бұл электронды поштамен (Gmail) тіркелген қолданушы бар.');
-  }
-
   const newAccount = {
     id: crypto.randomUUID(),
     fullName: fullName.trim(),
     username: cleanUsername,
-    email: cleanEmail,
-    password: password ? password.trim() : '',
-    authProvider,
-    avatarUrl,
+    password: password.trim(),
     status: 'pending', // Requires Super Admin approval
     registeredAt: new Date().toISOString(),
   };
   accounts.push(newAccount);
   saveAdminAccounts(accounts);
   return newAccount;
-}
-
-export function loginOrRegisterGoogle({ email, fullName, googleId, avatarUrl }) {
-  const accounts = getAdminAccounts();
-  const cleanEmail = (email || '').trim().toLowerCase();
-  if (!cleanEmail) {
-    throw new Error('Google / Gmail электронды поштасы табылмады.');
-  }
-
-  const existing = accounts.find(
-    (a) => (a.email && a.email.toLowerCase() === cleanEmail) || (a.googleId && a.googleId === googleId)
-  );
-
-  if (existing) {
-    if (existing.status !== 'approved') {
-      throw new Error('Google арқылы өтінішіңіз қабылдану үстінде. Бас әкімшінің мақұлдауын күтіңіз.');
-    }
-    return { account: existing, isNew: false };
-  }
-
-  const generatedUsername = cleanEmail.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '') || ('user_' + Date.now());
-  const newAccount = {
-    id: crypto.randomUUID(),
-    fullName: fullName ? fullName.trim() : cleanEmail.split('@')[0],
-    username: generatedUsername,
-    email: cleanEmail,
-    password: '',
-    authProvider: 'google',
-    googleId: googleId || ('gid_' + Date.now()),
-    avatarUrl: avatarUrl || '',
-    status: 'pending', // Requires Super Admin approval
-    registeredAt: new Date().toISOString(),
-  };
-  accounts.push(newAccount);
-  saveAdminAccounts(accounts);
-  return { account: newAccount, isNew: true };
 }
 
 export function approveEditorAccount(accountId) {
@@ -143,12 +96,10 @@ export function loginEditor({ username, password }) {
   const accounts = getAdminAccounts();
   const clean = (username || '').trim().toLowerCase();
   const account = accounts.find(
-    (a) =>
-      ((a.username && a.username.toLowerCase() === clean) || (a.email && a.email.toLowerCase() === clean)) &&
-      a.password === password.trim()
+    (a) => a.username && a.username.toLowerCase() === clean && a.password === password.trim()
   );
   if (!account) {
-    throw new Error('Логин/пошта немесе құпиясөз қате.');
+    throw new Error('Логин немесе құпиясөз қате.');
   }
   if (account.status !== 'approved') {
     throw new Error('Сіздің тіркелу өтінішіңіз әлі қаралмады. Бас әкімшінің мақұлдауын күтіңіз.');
