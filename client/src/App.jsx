@@ -41,6 +41,37 @@ const NAV_LABELS = {
   library: 'Цифрлық кітапхана',
 };
 
+const PROJECT_LEADERS = [
+  {
+    id: 'tolegen-kuanyshev',
+    name: 'Қуанышев Төлеген Шағытбайұлы',
+    role: 'Қор төрағасы · Жоба жетекшісі',
+    bio: '«КҮЙ АНАСЫ» жеке қорының төрағасы, қазақтың дәстүрлі музыкасын насихаттау және мәдени мұраны цифрландыру бастамасының жетекшісі.',
+    initials: 'ТҚ',
+  },
+  {
+    id: 'scientific-advisor',
+    name: 'Ғылыми кеңесші',
+    role: 'Музыкатанушы · Ғылыми сарапшы',
+    bio: 'Дәстүрлі күй өнері мен жыраулық мұраны зерттеу, тарихи деректердің ғылыми негіздемесін сараптау бағыты (Орын қалдырылды).',
+    initials: 'ҒК',
+  },
+  {
+    id: 'editorial-lead',
+    name: 'Бас редактор / Өнертанушы',
+    role: 'Энциклопедияның мазмұндық жетекшісі',
+    bio: 'Өнер иелерінің өмірбаяны мен музыкалық шығармаларының деректік қорын жүйелеу және мәтіндерді редакциялау (Орын қалдырылды).',
+    initials: 'БР',
+  },
+  {
+    id: 'project-coordinator',
+    name: 'Жоба үйлестірушісі',
+    role: 'Мәдени жобалар және серіктестік',
+    bio: 'Күйшілер аллеясы жобасын дамыту, қоғамдық және мәдени ұйымдармен серіктестік байланыстарды үйлестіру (Орын қалдырылды).',
+    initials: 'ЖҮ',
+  },
+];
+
 const PARENT_SECTIONS = [
   { slug: 'people', title: 'Тұлғалар (күйшілер, жыраулар, әншілер)' },
   { slug: 'heritage', title: 'Музыкалық мұра (күйлер, әндер, сарындар)' },
@@ -283,6 +314,32 @@ function HomePage({ page, onNavigate }) {
           </div>
         </section>
       )}
+            {/* Жоба жетекшілері мен тұлғалары */}
+      <section className="project-leaders-section content-width">
+        <div className="section-topline">
+          <div>
+            <span className="block-kicker">ЖОБА АВТОРЛАРЫ МЕН ЖЕТЕКШІЛЕРІ</span>
+            <h2>Жобаның басты тұлғалары</h2>
+          </div>
+        </div>
+        <div className="leaders-grid">
+          {PROJECT_LEADERS.map((leader) => (
+            <article key={leader.id} className="leader-card">
+              <div className="leader-avatar-wrap">
+                <div className="leader-avatar-placeholder">
+                  <span>{leader.initials}</span>
+                </div>
+              </div>
+              <div className="leader-info">
+                <span className="leader-role">{leader.role}</span>
+                <h3>{leader.name}</h3>
+                <p>{leader.bio}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <Callout onNavigate={onNavigate} />
     </>
   );
