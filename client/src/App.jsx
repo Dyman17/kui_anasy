@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight,
-  Check, Eye, FilePlus2, FolderOpen, LockKeyhole, Menu, Pencil, Plus, RotateCcw, Save, Search, ShieldCheck, Trash2, UserCheck, Users, X,
+  Check, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, Menu, Moon, Pencil, Plus, RotateCcw, Save, Search, ShieldCheck, Sun, Trash2, UserCheck, Users, X,
 } from 'lucide-react';
 import QRCode from 'qrcode';
 import {
@@ -32,13 +32,107 @@ const BLOCK_TYPES = [
   ['qr', 'QR сілтеме'],
 ];
 const NAV_ORDER = ['home', 'people', 'heritage', 'projects', 'about', 'library'];
-const NAV_LABELS = {
-  home: 'Басты бет',
-  people: 'Тұлғалар',
-  heritage: 'Музыкалық мұра',
-  projects: 'Жобалар',
-  about: 'Қор туралы',
-  library: 'Цифрлық кітапхана',
+
+const NAV_LABELS_MAP = {
+  kk: {
+    home: 'Басты бет',
+    people: 'Тұлғалар',
+    heritage: 'Музыкалық мұра',
+    projects: 'Жобалар',
+    about: 'Қор туралы',
+    library: 'Цифрлық кітапхана',
+  },
+  ru: {
+    home: 'Главная',
+    people: 'Деятели',
+    heritage: 'Музыкальное наследие',
+    projects: 'Проекты',
+    about: 'О фонде',
+    library: 'Цифровая библиотека',
+  },
+  en: {
+    home: 'Home',
+    people: 'Notable Figures',
+    heritage: 'Musical Heritage',
+    projects: 'Projects',
+    about: 'About Us',
+    library: 'Digital Library',
+  },
+};
+
+const UI_TRANSLATIONS = {
+  kk: {
+    brandSubtitle: 'Қазақ музыкасының цифрлық энциклопедиясы',
+    heroKicker: 'Қазақ музыка мұрасының цифрлық орталығы',
+    heroTitle: 'Күй анасы.',
+    heroTitleEm: 'Ұлы дала әуені.',
+    peopleBtn: 'Тұлғалар бөлімі',
+    heritageBtn: 'Музыкалық мұра',
+    searchPlaceholder: 'Тұлғаларды, күйлерді немесе материалдарды іздеу...',
+    notFound: 'Нәтиже табылмады.',
+    libraryBtn: 'Кітапханаға өту',
+    aboutFund: 'Қор туралы',
+    leadersTitle: 'Жобаның басты тұлғалары',
+    leadersKicker: 'ЖОБА АВТОРЛАРЫ МЕН ЖЕТЕКШІЛЕРІ',
+    adminPanel: 'Әкімшілік панель',
+    footerCopy: '© 2026 «КҮЙ АНАСЫ» жеке қоры',
+    footerDesc: 'Қазақ музыкасының цифрлық энциклопедиясы',
+    readMore: 'Оқу',
+    backHome: 'Басты бет',
+    subpagesTitle: 'Бөлім материалдары',
+    subpagesKicker: 'ОСЫ БӨЛІМДЕГІ БЕТТЕР',
+    calloutTitle: 'Қазақ музыкасының үш томдық жинағы.',
+    calloutDesc: 'Күй өнері, жыраулық дәстүр мен әншілік мектептер туралы зерттеу материалдары.',
+    calloutBtn: 'Кітапхананы қарау',
+  },
+  ru: {
+    brandSubtitle: 'Цифровая энциклопедия казахской музыки',
+    heroKicker: 'Цифровой центр музыкального наследия Казахстана',
+    heroTitle: 'Күй анасы.',
+    heroTitleEm: 'Мелодии Великой степи.',
+    peopleBtn: 'Раздел деятелей',
+    heritageBtn: 'Музыкальное наследие',
+    searchPlaceholder: 'Поиск деятелей, кюев, книг и материалов...',
+    notFound: 'По запросу ничего не найдено.',
+    libraryBtn: 'Перейти в библиотеку',
+    aboutFund: 'О фонде',
+    leadersTitle: 'Ключевые лица проекта',
+    leadersKicker: 'АВТОРЫ И РУКОВОДИТЕЛИ ПРОЕКТА',
+    adminPanel: 'Панель управления',
+    footerCopy: '© 2026 Частный фонд «КҮЙ АНАСЫ»',
+    footerDesc: 'Цифровая энциклопедия казахской музыки',
+    readMore: 'Читать',
+    backHome: 'Главная',
+    subpagesTitle: 'Материалы раздела',
+    subpagesKicker: 'СТРАНИЦЫ ДАННОГО РАЗДЕЛА',
+    calloutTitle: 'Трехтомное собрание казахской музыки.',
+    calloutDesc: 'Исследовательские материалы об искусстве кюя, традиции жырау и школах пения.',
+    calloutBtn: 'Смотреть библиотеку',
+  },
+  en: {
+    brandSubtitle: 'Digital Encyclopedia of Kazakh Music',
+    heroKicker: 'Digital Center of Kazakh Musical Heritage',
+    heroTitle: 'Kui Anasy.',
+    heroTitleEm: 'Steppe Melodies.',
+    peopleBtn: 'Notable People',
+    heritageBtn: 'Musical Heritage',
+    searchPlaceholder: 'Search artists, kuy records, books...',
+    notFound: 'No results found.',
+    libraryBtn: 'Explore Library',
+    aboutFund: 'About the Foundation',
+    leadersTitle: 'Key Figures of the Project',
+    leadersKicker: 'PROJECT LEADERS & AUTHORS',
+    adminPanel: 'Admin Panel',
+    footerCopy: '© 2026 "KUI ANASY" Private Foundation',
+    footerDesc: 'Digital Encyclopedia of Kazakh Music',
+    readMore: 'Read more',
+    backHome: 'Home',
+    subpagesTitle: 'Section Materials',
+    subpagesKicker: 'PAGES IN THIS SECTION',
+    calloutTitle: 'Three-volume collection of Kazakh traditional music.',
+    calloutDesc: 'Research materials, biographies, and audio archives of the great steppe masters.',
+    calloutBtn: 'Browse Library',
+  },
 };
 
 const PROJECT_LEADERS = [
@@ -80,10 +174,29 @@ const PARENT_SECTIONS = [
   { slug: 'about', title: 'Қор туралы (ұйым, қызмет)' },
 ];
 
+function DombraSilhouette({ className = '' }) {
+  return (
+    <svg className={className} viewBox="0 0 160 520" fill="currentColor" aria-hidden="true">
+      <path d="M78 0c-4 0-7 3-7 7v180c-18 8-36 28-44 52-16 48-10 114 16 160 22 39 48 48 74 48s52-9 74-48c26-46 32-112 16-160-8-24-26-44-44-52V7c0-4-3-7-7-7h-8zm-2 225c2 0 4 2 4 4v85c0 2-2 4-4 4s-4-2-4-4v-85c0-2 2-4 4-4zm8 140c8 0 15 7 15 15s-7 15-15 15-15-7-15-15 7-15 15-15z" />
+    </svg>
+  );
+}
+
+function OrnamentDivider() {
+  return (
+    <div className="ornament-divider" aria-hidden="true">
+      <span className="ornament-glyph">❖</span>
+    </div>
+  );
+}
+
 function App() {
   const [pages, setPages] = useState([]);
   const [activeSlug, setActiveSlug] = useState(INITIAL_SLUG);
   const [adminOpen, setAdminOpen] = useState(window.location.hash.startsWith('#admin'));
+  const [lang, setLang] = useState(() => localStorage.getItem('kui-lang') || 'kk');
+  const [theme, setTheme] = useState(() => localStorage.getItem('kui-theme') || 'light');
+
   const [sessionUser, setSessionUser] = useState(() => {
     try {
       const raw = sessionStorage.getItem('kui-auth-session');
@@ -97,6 +210,23 @@ function App() {
   const [query, setQuery] = useState('');
   const [loadError, setLoadError] = useState('');
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('kui-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  const handleLangChange = (newLang) => {
+    setLang(newLang);
+    localStorage.setItem('kui-lang', newLang);
+  };
+
+  const t = UI_TRANSLATIONS[lang] || UI_TRANSLATIONS.kk;
+  const navLabels = NAV_LABELS_MAP[lang] || NAV_LABELS_MAP.kk;
 
   useEffect(() => {
     getPages()
@@ -172,28 +302,49 @@ function App() {
         onSessionUserChange={handleSetSessionUser}
         onPagesChange={setPages}
         onExit={() => { window.location.hash = ''; }}
+        navLabels={navLabels}
       />
     );
   }
 
   return (
     <div className="site-shell">
+      {/* Vintage Paper Texture Overlay */}
+      <div className="vintage-parchment-overlay" aria-hidden="true" />
+
       <header className="site-header">
         <a className="brand" href="#" onClick={(event) => { event.preventDefault(); navigate('home'); }}>
           <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
           <span className="brand-copy"><strong>Күй анасы</strong></span>
         </a>
+
         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Мәзір">
           {menuOpen ? <X /> : <Menu />}
         </button>
+
         <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`}>
           {navPages.map((page) => (
             <button key={page.slug} className={page.slug === activePage?.slug ? 'nav-link active' : 'nav-link'} onClick={() => navigate(page.slug)}>
-              {NAV_LABELS[page.slug] || page.title}
+              {navLabels[page.slug] || page.title}
             </button>
           ))}
         </nav>
+
         <div className="header-actions">
+          <div className="header-extra-controls">
+            {/* Trilingual switcher */}
+            <div className="lang-switcher">
+              <button className={`lang-btn ${lang === 'kk' ? 'active' : ''}`} onClick={() => handleLangChange('kk')}>ҚАЗ</button>
+              <button className={`lang-btn ${lang === 'ru' ? 'active' : ''}`} onClick={() => handleLangChange('ru')}>РУС</button>
+              <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => handleLangChange('en')}>ENG</button>
+            </div>
+
+            {/* Dark / Light theme toggle */}
+            <button className="theme-toggle-btn" onClick={toggleTheme} title={theme === 'dark' ? 'Жарық тақырып' : 'Қараңғы тақырып'}>
+              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+          </div>
+
           <button className="icon-button" aria-label="Іздеу" onClick={() => setSearchOpen(!searchOpen)}><Search size={19} /></button>
         </div>
       </header>
@@ -202,7 +353,7 @@ function App() {
         <section className="search-wrap">
           <div className="search-bar">
             <Search size={18} />
-            <input type="search" placeholder="Тұлғаларды, күйлерді немесе материалдарды іздеу..." value={query} onChange={(event) => setQuery(event.target.value)} autoFocus />
+            <input type="search" placeholder={t.searchPlaceholder} value={query} onChange={(event) => setQuery(event.target.value)} autoFocus />
             {query && <button className="icon-button" onClick={() => setQuery('')}><X size={17} /></button>}
           </div>
           {query.trim() && (
@@ -210,9 +361,9 @@ function App() {
               {searchResults.length ? searchResults.map((page) => (
                 <button key={page.slug} onClick={() => { navigate(page.slug); setSearchOpen(false); setQuery(''); }}>
                   <strong>{page.title}</strong>
-                  <span>{NAV_LABELS[page.parent_slug] || NAV_LABELS[page.slug] || 'Парақша'}</span>
+                  <span>{navLabels[page.parent_slug] || navLabels[page.slug] || 'Парақша'}</span>
                 </button>
-              )) : <p>Нәтиже табылмады.</p>}
+              )) : <p>{t.notFound}</p>}
             </div>
           )}
         </section>
@@ -221,14 +372,15 @@ function App() {
       {activePage && (
         <main>
           {activePage.slug === 'home' ? (
-            <HomePage page={activePage} onNavigate={navigate} />
+            <HomePage page={activePage} onNavigate={navigate} t={t} navLabels={navLabels} />
           ) : (
-            <StandardPage page={activePage} onNavigate={navigate} query={query} allPages={pages} isEditor={!!sessionUser} />
+            <StandardPage page={activePage} onNavigate={navigate} query={query} allPages={pages} isEditor={!!sessionUser} t={t} navLabels={navLabels} />
           )}
         </main>
       )}
 
       <footer className="site-footer">
+        <DombraSilhouette className="dombra-watermark dombra-watermark-footer" />
         <div className="footer-main">
           <div className="footer-brand">
             <a className="brand" href="#" onClick={(event) => { event.preventDefault(); navigate('home'); }}>
@@ -237,18 +389,32 @@ function App() {
             </a>
             <p>Қазақтың ұлттық музыкалық мұрасын сақтау, зерттеу және келер ұрпаққа жеткізуге арналған цифрлық бастама.</p>
           </div>
-          <div><span className="footer-heading">Бөлімдер</span><div className="footer-links">
-            {navPages.filter((page) => page.slug !== 'home').slice(0, 4).map((page) => <button key={page.slug} onClick={() => navigate(page.slug)}>{NAV_LABELS[page.slug] || page.title}</button>)}
-          </div></div>
-          <div><span className="footer-heading">Басқару</span><p>Энциклопедия мазмұнын басқару және жаңа парақшалар енгізу.</p><a href="#admin">Әкімшілік панельге өту <ArrowUpRight size={14} /></a></div>
+          <div>
+            <span className="footer-heading">Бөлімдер</span>
+            <div className="footer-links">
+              {navPages.filter((page) => page.slug !== 'home').slice(0, 4).map((page) => (
+                <button key={page.slug} onClick={() => navigate(page.slug)}>
+                  {navLabels[page.slug] || page.title}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <span className="footer-heading">Басқару</span>
+            <p>Энциклопедия мазмұнын басқару және жаңа парақшалар енгізу.</p>
+            <a href="#admin">{t.adminPanel} <ArrowUpRight size={14} /></a>
+          </div>
         </div>
-        <div className="footer-bottom"><span>© 2026 «КҮЙ АНАСЫ» жеке қоры</span><span>Қазақ музыкасының цифрлық энциклопедиясы</span></div>
+        <div className="footer-bottom">
+          <span>{t.footerCopy}</span>
+          <span>{t.footerDesc}</span>
+        </div>
       </footer>
     </div>
   );
 }
 
-function HomePage({ page, onNavigate }) {
+function HomePage({ page, onNavigate, t, navLabels }) {
   const blocks = page.blocks || [];
   const intro = blocks.find((block) => block.type === 'quote');
   const stats = blocks.find((block) => block.type === 'stats');
@@ -258,23 +424,24 @@ function HomePage({ page, onNavigate }) {
   return (
     <>
       <section className="archive-hero content-width">
+        <DombraSilhouette className="dombra-watermark dombra-watermark-hero" />
         <div className="archive-hero-copy">
-          <p className="hero-kicker">Қазақ музыка мұрасының цифрлық орталығы</p>
-          <h1>Күй анасы.<br /><em>Ұлы дала әуені.</em></h1>
+          <p className="hero-kicker">{t.heroKicker}</p>
+          <h1>{t.heroTitle}<br /><em>{t.heroTitleEm}</em></h1>
           <p>{page.description}</p>
           <p className="hero-english">Kazakh music, its people and living traditions.</p>
           <div className="hero-actions">
-            <button className="button button-dark" onClick={() => onNavigate('people')}>Тұлғалар бөлімі <ArrowRight size={17} /></button>
-            <button className="text-button" onClick={() => onNavigate('heritage')}>Музыкалық мұра <ArrowUpRight size={16} /></button>
+            <button className="button button-dark" onClick={() => onNavigate('people')}>{t.peopleBtn} <ArrowRight size={17} /></button>
+            <button className="text-button" onClick={() => onNavigate('heritage')}>{t.heritageBtn} <ArrowUpRight size={16} /></button>
           </div>
         </div>
         <figure className="hero-image">
-          <img src="/images/kuyshiler-alley.jpg" alt="Астана қаласындағы Күйшілер аллеясы ұлттық музыка тұлғаларына арналған мәдени кеңістік" />
+          <img src="/images/kuyshiler-alley.jpg" alt="Астана қаласындағы Күйшілер аллеясы" />
           <figcaption><strong>Күйшілер аллеясы</strong><span>Астана · Қазақстан</span></figcaption>
         </figure>
       </section>
 
-      {/* Дина Нұрпейісова блогы - басты беттің жоғарғы жағына шығарылды */}
+      {/* Дина Нұрпейісова блогы */}
       {feature && (
         <section className="featured-person">
           <figure className="featured-person-image"><img src="/images/dina-monument.jpg" alt="Дина Нұрпейісова ескерткіші" /><figcaption>Дина Нұрпейісова ескерткіші · Астана</figcaption></figure>
@@ -285,9 +452,11 @@ function HomePage({ page, onNavigate }) {
 
       {stats && <section className="archive-stats content-width"><h2>Бір мұра.<br /><strong>Үш дәстүр.</strong></h2>{stats.items?.map((item) => <div className="archive-stat-row" key={item.label}><strong>{item.value}</strong><p>{item.label}</p></div>)}</section>}
 
+      <OrnamentDivider />
+
       {intro && (
         <section className="editorial-intro content-width">
-          <div className="intro-copy"><h2>{intro.title}</h2><p>{intro.body}</p><button className="underlined-link" onClick={() => onNavigate('about')}>Қор туралы <ArrowRight size={15} /></button></div>
+          <div className="intro-copy"><h2>{intro.title}</h2><p>{intro.body}</p><button className="underlined-link" onClick={() => onNavigate('about')}>{t.aboutFund} <ArrowRight size={15} /></button></div>
           <figure className="intro-artwork">
             <img src="/images/dombra-player-illustration.png" alt="Домбырашының көркем бейнесі" loading="lazy" />
             <figcaption>КӨРКЕМ БЕЙНЕ · АТРИБУЦИЯ ЖОҚ</figcaption>
@@ -298,7 +467,7 @@ function HomePage({ page, onNavigate }) {
 
       {latest && (
         <section className="discover-section content-width">
-          <div className="section-topline"><h2>{latest.title}</h2><button className="underlined-link" onClick={() => onNavigate('library')}>Кітапханаға өту <ArrowRight size={15} /></button></div>
+          <div className="section-topline"><h2>{latest.title}</h2><button className="underlined-link" onClick={() => onNavigate('library')}>{t.libraryBtn} <ArrowRight size={15} /></button></div>
           <div className="discover-spread">
             {(latest.items || []).slice(0, 3).map((item, index) => (
               <button className="discover-card" key={item.title} onClick={() => onNavigate(item.slug || 'heritage')}>
@@ -314,12 +483,13 @@ function HomePage({ page, onNavigate }) {
           </div>
         </section>
       )}
-            {/* Жоба жетекшілері мен тұлғалары */}
+
+      {/* Жоба жетекшілері мен басты тұлғалары */}
       <section className="project-leaders-section content-width">
         <div className="section-topline">
           <div>
-            <span className="block-kicker">ЖОБА АВТОРЛАРЫ МЕН ЖЕТЕКШІЛЕРІ</span>
-            <h2>Жобаның басты тұлғалары</h2>
+            <span className="block-kicker">{t.leadersKicker}</span>
+            <h2>{t.leadersTitle}</h2>
           </div>
         </div>
         <div className="leaders-grid">
@@ -340,12 +510,12 @@ function HomePage({ page, onNavigate }) {
         </div>
       </section>
 
-      <Callout onNavigate={onNavigate} />
+      <Callout onNavigate={onNavigate} t={t} />
     </>
   );
 }
 
-function StandardPage({ page, onNavigate, query, allPages = [], isEditor = false }) {
+function StandardPage({ page, onNavigate, query, allPages = [], isEditor = false, t, navLabels }) {
   const relevantBlocks = (page.blocks || []).filter((block) => !query || `${block.title} ${block.body}`.toLowerCase().includes(query.toLowerCase()));
   const parentCategory = PARENT_SECTIONS.find((p) => p.slug === page.parent_slug);
   const themeSlug = page.parent_slug || page.slug;
@@ -359,55 +529,56 @@ function StandardPage({ page, onNavigate, query, allPages = [], isEditor = false
         <div className="content-width page-banner-inner">
           {page.parent_slug && (
             <span className="block-kicker banner-parent-kicker">
-              {NAV_LABELS[page.parent_slug] || parentCategory?.title}
+              {navLabels[page.parent_slug] || parentCategory?.title}
             </span>
           )}
-          <h1>{NAV_LABELS[page.slug] || page.title}</h1>
+          <h1>{navLabels[page.slug] || page.title}</h1>
           <p>{page.description}</p>
           <div className="breadcrumb">
-            <button onClick={() => onNavigate('home')}>Басты бет</button>
+            <button onClick={() => onNavigate('home')}>{t.backHome}</button>
             <span>/</span>
             {page.parent_slug && (
               <>
                 <button onClick={() => onNavigate(page.parent_slug)}>
-                  {NAV_LABELS[page.parent_slug] || parentCategory?.title}
+                  {navLabels[page.parent_slug] || parentCategory?.title}
                 </button>
                 <span>/</span>
               </>
             )}
-            <span>{NAV_LABELS[page.slug] || page.title}</span>
+            <span>{navLabels[page.slug] || page.title}</span>
           </div>
         </div>
       </section>
+
       <section className="editorial content-width">
         {relevantBlocks.map((block, index) => <ContentBlock key={block.id || index} block={block} index={index} pageSlug={themeSlug} />)}
-        {relevantBlocks.length === 0 && <p className="empty-search">Сұрауыңыз бойынша ақпарат табылмады.</p>}
+        {relevantBlocks.length === 0 && <p className="empty-search">{t.notFound}</p>}
 
         {subpages.length > 0 && !query && (
           <div className="subpages-container">
             <div className="section-topline">
               <div>
-                <span className="block-kicker">ОСЫ БӨЛІМДЕГІ БЕТТЕР</span>
-                <h2>Бөлім материалдары ({subpages.length})</h2>
+                <span className="block-kicker">{t.subpagesKicker}</span>
+                <h2>{t.subpagesTitle} ({subpages.length})</h2>
               </div>
             </div>
             <div className="subpages-grid">
               {subpages.map((sub) => (
                 <article key={sub.slug} className="subpage-card" onClick={() => onNavigate(sub.slug)}>
                   <div className="subpage-card-header">
-                    <span className="subpage-badge">{NAV_LABELS[page.slug] || page.title}</span>
+                    <span className="subpage-badge">{navLabels[page.slug] || page.title}</span>
                     <small>{sub.blocks?.length || 0} модуль</small>
                   </div>
                   <h3>{sub.title}</h3>
                   <p>{sub.description || 'Толық мазмұнын ашу үшін басыңыз.'}</p>
-                  <span className="subpage-read-link">Оқу <ArrowRight size={14} /></span>
+                  <span className="subpage-read-link">{t.readMore} <ArrowRight size={14} /></span>
                 </article>
               ))}
             </div>
           </div>
         )}
       </section>
-      <Callout onNavigate={onNavigate} />
+      <Callout onNavigate={onNavigate} t={t} />
     </>
   );
 }
@@ -525,13 +696,13 @@ function QRBlock({ block }) {
   );
 }
 
-function Callout({ onNavigate }) {
+function Callout({ onNavigate, t }) {
   return (
     <section className="callout">
       <div className="callout-content">
-        <h2>Қазақ музыкасының үш томдық жинағы.</h2>
-        <p>Күй өнері, жыраулық дәстүр мен әншілік мектептер туралы зерттеу материалдары.</p>
-        <button className="button button-dark" onClick={() => onNavigate('library')}>Кітапхананы қарау <ArrowRight size={16} /></button>
+        <h2>{t?.calloutTitle || 'Қазақ музыкасының үш томдық жинағы.'}</h2>
+        <p>{t?.calloutDesc || 'Күй өнері, жыраулық дәстүр мен әншілік мектептер туралы зерттеу материалдары.'}</p>
+        <button className="button button-dark" onClick={() => onNavigate('library')}>{t?.calloutBtn || 'Кітапхананы қарау'} <ArrowRight size={16} /></button>
       </div>
     </section>
   );
@@ -540,7 +711,7 @@ function Callout({ onNavigate }) {
 // -------------------------------------------------------------
 // ADMIN PANEL COMPONENT WITH 2 ROLES & ADVANCED APPROVAL WORKFLOW
 // -------------------------------------------------------------
-function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, onExit }) {
+function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, onExit, navLabels }) {
   const [route, setRoute] = useState(window.location.hash || '#admin');
   const [draft, setDraft] = useState(() => createEmptyPage(pages.filter((p) => p.is_custom).length));
   const [error, setError] = useState('');
@@ -548,7 +719,7 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
   const [saving, setSaving] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [selectedSlugs, setSelectedSlugs] = useState([]);
-  const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'pending', 'published'
+  const [statusFilter, setStatusFilter] = useState('all');
   const [accounts, setAccounts] = useState(() => getAdminAccounts());
 
   const isSuperAdmin = sessionUser?.role === 'SUPER_ADMIN';
@@ -604,6 +775,7 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
         slug,
         title: draft.title.trim(),
         parent_slug: draft.parent_slug || 'people',
+        lang: draft.lang || 'kk',
         status: isPublishing ? 'published' : 'pending',
         created_by: draft.created_by || (isSuperAdmin ? 'Бас әкімші' : sessionUser?.fullName || 'Редактор'),
         created_at: draft.created_at || now,
@@ -630,7 +802,6 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
     }
   };
 
-  // Super Admin: Single Approve
   const handleSingleApprove = async (pageSlug) => {
     const target = customPages.find((p) => p.slug === pageSlug);
     if (!target) return;
@@ -650,7 +821,6 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
     }
   };
 
-  // Super Admin: Bulk Approve
   const handleBulkApprove = () => {
     if (selectedSlugs.length === 0) return;
     const updated = bulkApprovePages(selectedSlugs, 'Бас әкімші');
@@ -659,7 +829,6 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
     setSelectedSlugs([]);
   };
 
-  // Toggle select page for bulk
   const toggleSelectPage = (slug) => {
     setSelectedSlugs((prev) => prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]);
   };
@@ -681,7 +850,6 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
     }
   };
 
-  // Account approvals by Super Admin
   const handleApproveAccount = (accId) => {
     const updated = approveEditorAccount(accId);
     setAccounts(getAdminAccounts());
@@ -696,7 +864,6 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
     }
   };
 
-  // If not logged in, render the Auth Card
   if (!sessionUser) {
     return <AuthView onLoginSuccess={onSessionUserChange} onExit={onExit} />;
   }
@@ -847,7 +1014,7 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
                     )}
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '4px' }}>
-                        <span className="page-library-tag">{NAV_LABELS[page.parent_slug] || page.parent_slug || 'Тұлғалар'}</span>
+                        <span className="page-library-tag">{navLabels[page.parent_slug] || page.parent_slug || 'Тұлғалар'}</span>
                         <span className={`page-status-badge ${page.status === 'pending' ? 'badge-pending' : 'badge-published'}`}>
                           {page.status === 'pending' ? 'Қаралуда (Күтуде)' : 'Жарияланған'}
                         </span>
@@ -856,7 +1023,6 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
                       <h2>{page.title}</h2>
                       <p>{page.description || 'Қысқаша сипаттамасы жоқ.'}</p>
 
-                      {/* Audit metadata box */}
                       <div className="page-audit-box">
                         <span>👤 <strong>Авторы:</strong> {page.created_by || 'Бас әкімші'} {page.created_at ? `(${new Date(page.created_at).toLocaleString()})` : ''}</span>
                         {page.change_summary && <span>📝 <strong>Өзгерістер:</strong> {page.change_summary}</span>}
@@ -931,24 +1097,39 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
 
             {draft && previewOpen ? (
               <div className="editor-preview">
-                <StandardPage page={{ ...draft, slug: draft.slug || toSlug(draft.title) || 'preview' }} onNavigate={() => {}} query="" />
+                <StandardPage page={{ ...draft, slug: draft.slug || toSlug(draft.title) || 'preview' }} onNavigate={() => {}} query="" navLabels={navLabels} t={UI_TRANSLATIONS.kk} />
               </div>
             ) : draft && (
               <>
                 <section className="edit-card page-settings-card">
-                  <label>
-                    Негізгі бөлім (Бұл бет қай бөлімнің ішінде болады?)
-                    <select
-                      value={draft.parent_slug || 'people'}
-                      onChange={(event) => updateDraft('parent_slug', event.target.value)}
-                    >
-                      {PARENT_SECTIONS.map((sec) => (
-                        <option key={sec.slug} value={sec.slug}>
-                          {NAV_LABELS[sec.slug] || sec.slug} — {sec.title}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+                    <label>
+                      Негізгі бөлім (Бұл бет қай санатқа тиесілі?)
+                      <select
+                        value={draft.parent_slug || 'people'}
+                        onChange={(event) => updateDraft('parent_slug', event.target.value)}
+                      >
+                        {PARENT_SECTIONS.map((sec) => (
+                          <option key={sec.slug} value={sec.slug}>
+                            {navLabels[sec.slug] || sec.slug} — {sec.title}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label>
+                      Тілдік нұсқасы (Тіл таңдау)
+                      <select
+                        value={draft.lang || 'kk'}
+                        onChange={(event) => updateDraft('lang', event.target.value)}
+                      >
+                        <option value="kk">Қазақ тілінде (Негізгі)</option>
+                        <option value="ru">Русский язык</option>
+                        <option value="en">English version</option>
+                      </select>
+                    </label>
+                  </div>
+
                   <label>Бет атауы<input value={draft.title} onChange={(event) => updateDraft('title', event.target.value)} placeholder="Мысалы: Ақан сері" /></label>
                   <label>Қысқаша сипаттама<textarea rows="2" value={draft.description} onChange={(event) => updateDraft('description', event.target.value)} placeholder="Беттің қысқаша кіріспесі" /></label>
                   <label>
@@ -1010,8 +1191,8 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
 // AUTHENTICATION VIEW (Super Admin & Editor Login/Register)
 // -------------------------------------------------------------
 function AuthView({ onLoginSuccess, onExit }) {
-  const [roleMode, setRoleMode] = useState('super'); // 'super' | 'editor'
-  const [editorMode, setEditorMode] = useState('login'); // 'login' | 'register'
+  const [roleMode, setRoleMode] = useState('super');
+  const [editorMode, setEditorMode] = useState('login');
   const [superToken, setSuperToken] = useState('');
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
@@ -1056,7 +1237,6 @@ function AuthView({ onLoginSuccess, onExit }) {
         setError(err.message);
       }
     } else {
-      // Register
       if (!fullName.trim() || !username.trim() || !password.trim()) {
         setError('Барлық өрістерді толтырыңыз.');
         return;
@@ -1184,6 +1364,7 @@ function createEmptyPage(position) {
     description: '',
     position,
     parent_slug: 'people',
+    lang: 'kk',
     status: 'pending',
     change_summary: '',
     blocks: [],

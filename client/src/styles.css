@@ -1525,3 +1525,226 @@ img { display: block; max-width: 100%; height: auto; }
   font-size: 14px;
   line-height: 1.6;
 }
+
+
+/* ==========================================================================
+   DARK THEME (ТҮНГІ ДАЛА / ОБСИДИАН ЖӘНЕ АЛТЫН ТАҚЫРЫБЫ)
+   ========================================================================== */
+[data-theme="dark"] {
+  --paper: #14070b;
+  --paper-light: #220d15;
+  --paper-panel: #1a080fed;
+  --paper-shade: #361722;
+  --ink: #fdf5f2;
+  --muted: #c7a7a0;
+  --line: #3d1b26;
+  --terra: #e27d63;
+  --plum: #fde2cf;
+  --wine: var(--terra);
+  --green: var(--plum);
+  --ochre: #e5a45b;
+}
+
+[data-theme="dark"] body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+[data-theme="dark"] body::before {
+  mix-blend-mode: hard-light;
+  opacity: .32;
+}
+
+[data-theme="dark"] .site-shell {
+  background: var(--paper-panel);
+  border: 1px solid #4a1f2c;
+  box-shadow: 0 30px 90px #00000088;
+}
+
+[data-theme="dark"] .site-header,
+[data-theme="dark"] .search-wrap {
+  border-color: var(--line);
+}
+
+[data-theme="dark"] .search-results {
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 50px #00000088;
+}
+
+[data-theme="dark"] .archive-hero-copy > p:not(.hero-kicker),
+[data-theme="dark"] .intro-copy p,
+[data-theme="dark"] .editorial-block p,
+[data-theme="dark"] .subpage-card p,
+[data-theme="dark"] .leader-card p {
+  color: #d8c2bd;
+}
+
+[data-theme="dark"] .hero-image figcaption,
+[data-theme="dark"] .featured-person-image figcaption {
+  color: #fff;
+}
+
+[data-theme="dark"] .archive-hero h1,
+[data-theme="dark"] .intro-copy h2,
+[data-theme="dark"] .editorial-block h2,
+[data-theme="dark"] .section-topline h2 {
+  color: #fff4f0;
+}
+
+[data-theme="dark"] .subpage-card,
+[data-theme="dark"] .leader-card,
+[data-theme="dark"] .account-card,
+[data-theme="dark"] .page-library-card,
+[data-theme="dark"] .auth-box,
+[data-theme="dark"] .qr-block {
+  background: var(--paper-light);
+  border-color: var(--line);
+}
+
+[data-theme="dark"] .main-nav {
+  background: #1e0b13f8;
+  border-color: var(--terra);
+}
+
+[data-theme="dark"] .nav-link {
+  color: var(--ink);
+}
+
+[data-theme="dark"] .nav-link.active {
+  background: #e27d6322;
+  color: var(--terra);
+}
+
+[data-theme="dark"] .leader-avatar-placeholder {
+  background: #e27d6325;
+  color: var(--terra);
+}
+
+[data-theme="dark"] .admin-shell {
+  background: #18070ef8;
+  border-color: var(--line);
+}
+
+[data-theme="dark"] .admin-topbar,
+[data-theme="dark"] .builder-sidebar,
+[data-theme="dark"] .admin-editor,
+[data-theme="dark"] .edit-card,
+[data-theme="dark"] .bulk-toolbar {
+  background: var(--paper-light);
+  border-color: var(--line);
+}
+
+[data-theme="dark"] .edit-card input,
+[data-theme="dark"] .edit-card textarea,
+[data-theme="dark"] .edit-card select,
+[data-theme="dark"] .auth-form input {
+  background: #14070b;
+  color: #fff;
+  border-color: var(--line);
+}
+
+/* ==========================================================================
+   VINTAGE PARCHMENT GRAIN & KAZAKH ORNAMENTAL ACCENTS
+   ========================================================================== */
+.vintage-parchment-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: .032;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Dombra Silhouette Watermark */
+.dombra-watermark {
+  position: absolute;
+  pointer-events: none;
+  opacity: .075;
+  z-index: 0;
+}
+.dombra-watermark-hero {
+  right: -30px;
+  bottom: -40px;
+  width: min(340px, 45vw);
+  height: auto;
+  transform: rotate(-15deg);
+}
+.dombra-watermark-footer {
+  right: 5%;
+  bottom: 10px;
+  width: 190px;
+  height: auto;
+  opacity: .05;
+}
+
+/* Kazakh Ornamental Border & Corners */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 32px 0;
+  opacity: .8;
+}
+.ornament-divider::before,
+.ornament-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--terra), transparent);
+}
+.ornament-glyph {
+  color: var(--terra);
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Header Controls: Theme toggle & Language switcher */
+.header-extra-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-toggle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.theme-toggle-btn:hover {
+  background: var(--terra);
+  color: #fff;
+  border-color: var(--terra);
+}
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--paper-light);
+}
+.lang-btn {
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--muted);
+  font: 700 11px/1 var(--font-body);
+  letter-spacing: .05em;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.lang-btn.active {
+  background: var(--terra);
+  color: #fff;
+}
