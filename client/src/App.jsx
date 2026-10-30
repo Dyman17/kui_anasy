@@ -419,52 +419,25 @@ function App() {
 
 
 // -------------------------------------------------------------
-// HOMEPAGE ORNAMENTAL ACCENTS & CORNER DECORATIONS
+// KAZAKH ORNAMENTAL BORDER & CORNER DECORATIONS
 // -------------------------------------------------------------
 function CornerOrnament({ position = 'top-left' }) {
   return (
     <span className={'corner-ornament corner-' + position} aria-hidden="true">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-        <path d="M 0 0 L 18 0 L 18 3.5 L 3.5 3.5 L 3.5 18 L 0 18 Z" fill="var(--gold)" opacity="0.65" />
-        <circle cx="7" cy="7" r="2" fill="var(--gold)" opacity="0.85" />
+      <svg viewBox="0 0 28 28" width="26" height="26" fill="none">
+        <path d="M 0 0 L 24 0 L 24 4.5 L 4.5 4.5 L 4.5 24 L 0 24 Z" fill="var(--gold)" opacity="0.8" />
+        <circle cx="10" cy="10" r="2.8" fill="var(--gold)" opacity="0.9" />
+        <path d="M 4.5 4.5 L 14 14" stroke="var(--gold)" strokeWidth="1.2" opacity="0.6" />
       </svg>
     </span>
   );
 }
 
-function SideOrnamentRibbon({ side = 'left' }) {
+function KazakhOrnamentFrieze({ className = '' }) {
   return (
-    <aside className={'homepage-side-ribbon ribbon-' + side} aria-hidden="true">
-      <div className="side-ribbon-content">
-        <svg viewBox="0 0 32 90" width="24" height="68" fill="none" className="mini-dombra-side">
-          <path d="M16 2 C17 8, 17 25, 16 35 C12 42, 7 55, 7 68 C7 82, 11 88, 16 88 C21 88, 25 82, 25 68 C25 55, 20 42, 16 35 C15 25, 15 8, 16 2 Z" fill="var(--gold)" opacity="0.5" />
-          <circle cx="16" cy="62" r="3" fill="#000" opacity="0.25" />
-          <line x1="16" y1="2" x2="16" y2="65" stroke="var(--gold)" strokeWidth="1" opacity="0.6" />
-        </svg>
-
-        <div className="ribbon-vertical-line" />
-
-        <svg viewBox="0 0 40 40" width="26" height="26" fill="none" className="mini-ornament-side">
-          <path d="M 20 28 C 15 17, 4 15, 2 23 C 0 30, 9 37, 17 31 C 13 29, 9 26, 10 22 C 11 18, 18 20, 20 28 Z" fill="var(--gold)" opacity="0.45" />
-          <path d="M 20 28 C 25 17, 36 15, 38 23 C 40 30, 31 37, 23 31 C 27 29, 31 26, 30 22 C 29 18, 22 20, 20 28 Z" fill="var(--gold)" opacity="0.45" />
-          <circle cx="20" cy="28" r="2.5" fill="var(--gold)" opacity="0.65" />
-        </svg>
-
-        <div className="ribbon-vertical-line" />
-
-        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" className="mini-diamond-side">
-          <polygon points="10,0 20,10 10,20 0,10" fill="var(--gold)" opacity="0.4" />
-          <circle cx="10" cy="10" r="3" fill="var(--bg)" />
-        </svg>
-
-        <div className="ribbon-vertical-line" />
-
-        <svg viewBox="0 0 32 90" width="24" height="68" fill="none" className="mini-dombra-side">
-          <path d="M16 2 C17 8, 17 25, 16 35 C12 42, 7 55, 7 68 C7 82, 11 88, 16 88 C21 88, 25 82, 25 68 C25 55, 20 42, 16 35 C15 25, 15 8, 16 2 Z" fill="var(--gold)" opacity="0.5" />
-          <circle cx="16" cy="62" r="3" fill="#000" opacity="0.25" />
-        </svg>
-      </div>
-    </aside>
+    <div className={'kazakh-ornament-frieze ' + className} aria-hidden="true">
+      <div className="frieze-pattern" />
+    </div>
   );
 }
 
@@ -477,11 +450,19 @@ function HomePage({ page, onNavigate, t, navLabels }) {
 
   return (
     <div className="homepage-wrapper">
-      <SideOrnamentRibbon side="left" />
-      <SideOrnamentRibbon side="right" />
-
       <section className="archive-hero content-width">
-        <DombraSilhouette className="dombra-watermark dombra-watermark-hero" />
+        <KazakhOrnamentFrieze className="frieze-top" />
+        
+        {/* Animated Floating Dombra (Real High-Res Transparent PNG) */}
+        <div className="floating-instrument floating-dombra-hero" aria-hidden="true">
+          <img src="/images/dombra-real.png" alt="Қазақ домбырасы" loading="eager" />
+        </div>
+
+        {/* Animated Floating Qobyz (Real High-Res Transparent PNG) */}
+        <div className="floating-instrument floating-kobyz-hero" aria-hidden="true">
+          <img src="/images/kobyz-real.png" alt="Қасиетті қылқобыз" loading="eager" />
+        </div>
+
         <div className="archive-hero-copy">
           <p className="hero-kicker">{t.heroKicker}</p>
           <h1>{t.heroTitle}<br /><em>{t.heroTitleEm}</em></h1>
@@ -496,39 +477,91 @@ function HomePage({ page, onNavigate, t, navLabels }) {
           <img src="/images/kuyshiler-alley.jpg" alt="Астана қаласындағы Күйшілер аллеясы" />
           <figcaption><strong>Күйшілер аллеясы</strong><span>Астана · Қазақстан</span></figcaption>
         </figure>
+
+        <KazakhOrnamentFrieze className="frieze-bottom" />
       </section>
 
       {/* Дина Нұрпейісова блогы */}
       {feature && (
         <section className="featured-person">
+          <KazakhOrnamentFrieze className="frieze-top" />
           <CornerOrnament position="top-left" />
           <CornerOrnament position="top-right" />
           <CornerOrnament position="bottom-left" />
           <CornerOrnament position="bottom-right" />
-          <figure className="featured-person-image"><img src="/images/dina-monument.jpg" alt="Дина Нұрпейісова ескерткіші" /><figcaption>Дина Нұрпейісова ескерткіші · Астана</figcaption></figure>
-          <div className="featured-person-copy"><span className="hero-kicker">ТҰЛҒА · {feature.eyebrow || '1861 — 1955'}</span><h2>{feature.title}</h2><p>{feature.body}</p><button className="underlined-link" onClick={() => onNavigate('people')}>Тұлғалар каталогы <ArrowRight size={15} /></button></div>
+
+          {/* Floating animated Dombra beside Dina section */}
+          <div className="floating-instrument floating-dombra-dina" aria-hidden="true">
+            <img src="/images/dombra-real.png" alt="" />
+          </div>
+
+          <figure className="featured-person-image">
+            <img src="/images/dina-monument.jpg" alt="Дина Нұрпейісова ескерткіші" />
+            <figcaption>Дина Нұрпейісова ескерткіші · Астана</figcaption>
+          </figure>
+          <div className="featured-person-copy">
+            <span className="hero-kicker">ТҰЛҒА · {feature.eyebrow || '1861 — 1955'}</span>
+            <h2>{feature.title}</h2>
+            <p>{feature.body}</p>
+            <button className="underlined-link" onClick={() => onNavigate('people')}>
+              Тұлғалар каталогы <ArrowRight size={15} />
+            </button>
+          </div>
           <span className="featured-person-pattern" aria-hidden="true" />
+          <KazakhOrnamentFrieze className="frieze-bottom" />
         </section>
       )}
 
-      {stats && <section className="archive-stats content-width"><h2>Бір мұра.<br /><strong>Үш дәстүр.</strong></h2>{stats.items?.map((item) => <div className="archive-stat-row" key={item.label}><strong>{item.value}</strong><p>{item.label}</p></div>)}</section>}
+      {stats && (
+        <section className="archive-stats content-width">
+          <h2>Бір мұра.<br /><strong>Үш дәстүр.</strong></h2>
+          {stats.items?.map((item) => (
+            <div className="archive-stat-row" key={item.label}>
+              <strong>{item.value}</strong>
+              <p>{item.label}</p>
+            </div>
+          ))}
+        </section>
+      )}
 
       <OrnamentDivider />
 
       {intro && (
         <section className="editorial-intro content-width">
-          <div className="intro-copy"><h2>{intro.title}</h2><p>{intro.body}</p><button className="underlined-link" onClick={() => onNavigate('about')}>{t.aboutFund} <ArrowRight size={15} /></button></div>
+          <KazakhOrnamentFrieze className="frieze-top" />
+          <CornerOrnament position="top-left" />
+          <CornerOrnament position="top-right" />
+
+          {/* Floating animated Qobyz beside intro section */}
+          <div className="floating-instrument floating-kobyz-intro" aria-hidden="true">
+            <img src="/images/kobyz-real.png" alt="" />
+          </div>
+
+          <div className="intro-copy">
+            <h2>{intro.title}</h2>
+            <p>{intro.body}</p>
+            <button className="underlined-link" onClick={() => onNavigate('about')}>
+              {t.aboutFund} <ArrowRight size={15} />
+            </button>
+          </div>
           <figure className="intro-artwork">
             <img src="/images/dombra-player-illustration.png" alt="Домбырашының көркем бейнесі" loading="lazy" />
             <figcaption>КӨРКЕМ БЕЙНЕ · АТРИБУЦИЯ ЖОҚ</figcaption>
           </figure>
           <span className="intro-pattern" aria-hidden="true" />
+          <KazakhOrnamentFrieze className="frieze-bottom" />
         </section>
       )}
 
       {latest && (
         <section className="discover-section content-width">
-          <div className="section-topline"><h2>{latest.title}</h2><button className="underlined-link" onClick={() => onNavigate('library')}>{t.libraryBtn} <ArrowRight size={15} /></button></div>
+          <KazakhOrnamentFrieze className="frieze-top" />
+          <div className="section-topline">
+            <h2>{latest.title}</h2>
+            <button className="underlined-link" onClick={() => onNavigate('library')}>
+              {t.libraryBtn} <ArrowRight size={15} />
+            </button>
+          </div>
           <div className="discover-spread">
             {(latest.items || []).slice(0, 3).map((item, index) => (
               <button className="discover-card" key={item.title} onClick={() => onNavigate(item.slug || 'heritage')}>
@@ -542,11 +575,15 @@ function HomePage({ page, onNavigate, t, navLabels }) {
               </button>
             ))}
           </div>
+          <KazakhOrnamentFrieze className="frieze-bottom" />
         </section>
       )}
 
       {/* Жоба жетекшілері мен басты тұлғалары */}
       <section className="project-leaders-section content-width">
+        <KazakhOrnamentFrieze className="frieze-top" />
+        <CornerOrnament position="top-left" />
+        <CornerOrnament position="top-right" />
         <div className="section-topline">
           <div>
             <span className="block-kicker">{t.leadersKicker}</span>
@@ -569,6 +606,7 @@ function HomePage({ page, onNavigate, t, navLabels }) {
             </article>
           ))}
         </div>
+        <KazakhOrnamentFrieze className="frieze-bottom" />
       </section>
 
       <Callout onNavigate={onNavigate} t={t} />

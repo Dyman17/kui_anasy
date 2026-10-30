@@ -2480,3 +2480,146 @@ img { display: block; max-width: 100%; height: auto; }
   border-color: var(--gold);
   color: var(--accent);
 }
+
+/* ==========================================================================
+   FLOATING ANIMATED CULTURAL INSTRUMENTS (DOMBRA & KOBYZ)
+   ========================================================================== */
+.floating-instrument {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+  will-change: transform;
+  filter: drop-shadow(0 14px 28px rgba(194, 155, 56, 0.45));
+  transition: filter 0.3s ease;
+}
+
+/* Floating Real Dombra in Hero (top-right flank) */
+.floating-dombra-hero {
+  top: -35px;
+  right: -30px;
+  width: clamp(140px, 16vw, 220px);
+  animation: floatDombra 6.5s ease-in-out infinite;
+}
+
+.floating-dombra-hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Floating Real Qobyz in Hero (top-left flank) */
+.floating-kobyz-hero {
+  top: 30px;
+  left: -40px;
+  width: clamp(110px, 13vw, 175px);
+  animation: floatKobyz 7.5s ease-in-out infinite;
+}
+
+.floating-kobyz-hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Floating Dombra in Dina Section */
+.floating-dombra-dina {
+  bottom: -45px;
+  right: -25px;
+  width: clamp(130px, 15vw, 195px);
+  animation: floatDombra 7s ease-in-out infinite reverse;
+}
+
+.floating-dombra-dina img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Floating Kobyz in Editorial Section */
+.floating-kobyz-intro {
+  top: -30px;
+  right: -25px;
+  width: clamp(110px, 12vw, 165px);
+  animation: floatKobyz 8s ease-in-out infinite;
+}
+
+.floating-kobyz-intro img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@keyframes floatDombra {
+  0%, 100% {
+    transform: translateY(0px) rotate(-8deg);
+  }
+  50% {
+    transform: translateY(-24px) rotate(-3deg);
+  }
+}
+
+@keyframes floatKobyz {
+  0%, 100% {
+    transform: translateY(0px) rotate(10deg);
+  }
+  50% {
+    transform: translateY(-22px) rotate(5deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .floating-kobyz-hero {
+    display: none;
+  }
+  .floating-dombra-hero {
+    width: 110px;
+    right: -10px;
+    top: -15px;
+  }
+  .floating-dombra-dina {
+    width: 100px;
+    right: -10px;
+    bottom: -20px;
+  }
+}
+
+/* ==========================================================================
+   KAZAKH ORNAMENT FRIEZE ALONG LIGHT CONTAINER EDGES
+   ========================================================================== */
+.kazakh-ornament-frieze {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 14px;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.kazakh-ornament-frieze.frieze-top {
+  top: 0;
+}
+
+.kazakh-ornament-frieze.frieze-bottom {
+  bottom: 0;
+  transform: rotate(180deg);
+}
+
+.frieze-pattern {
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='14' viewBox='0 0 48 14'%3E%3Cpath d='M0 7 L12 0 L24 7 L36 0 L48 7 L36 14 L24 7 L12 14 Z' fill='none' stroke='%23c29b38' stroke-width='1.5' stroke-opacity='0.6'/%3E%3Ccircle cx='24' cy='7' r='2' fill='%23c29b38' fill-opacity='0.8'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 48px 14px;
+}
+
+/* Ensure containers have relative positioning for friezes and corners */
+.archive-hero,
+.featured-person,
+.editorial-intro,
+.discover-section,
+.project-leaders-section,
+.callout {
+  position: relative;
+  overflow: visible !important;
+}
