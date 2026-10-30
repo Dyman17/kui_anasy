@@ -1748,3 +1748,512 @@ img { display: block; max-width: 100%; height: auto; }
   background: var(--terra);
   color: #fff;
 }
+
+/* ==========================================================================
+   HISTORICAL MAP OF KAZAKHSTAN & KUYSHI HOTSPOTS
+   ========================================================================== */
+.historical-map-section {
+  margin: 60px auto;
+  padding: 40px 24px;
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .historical-map-section {
+  background: var(--surface);
+  border-color: rgba(194, 155, 56, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.map-header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 30px;
+}
+
+.map-header h2 {
+  font-family: var(--font-title);
+  font-size: clamp(26px, 4vw, 36px);
+  color: var(--primary);
+  margin: 10px 0 12px;
+}
+
+.map-header p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.map-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.map-filter-pill {
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.map-filter-pill:hover,
+.map-filter-pill.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .map-filter-pill.active {
+  background: var(--gold);
+  color: #0c131a;
+  border-color: var(--gold);
+  font-weight: 600;
+}
+
+.map-stage-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08), transparent 70%), var(--bg);
+  border: 1px solid var(--line);
+  aspect-ratio: 16 / 9;
+  min-height: 420px;
+}
+
+[data-theme="dark"] .map-stage-wrapper {
+  background: radial-gradient(circle at 50% 50%, rgba(194, 155, 56, 0.12), transparent 70%), #0a0f14;
+}
+
+.map-viewport {
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
+  transition: transform 0.65s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.map-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Map SVG Elements */
+.kz-land {
+  fill: rgba(194, 155, 56, 0.09);
+  stroke: var(--accent);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+  transition: fill 0.3s ease;
+}
+
+[data-theme="dark"] .kz-land {
+  fill: rgba(194, 155, 56, 0.13);
+  stroke: #c29b38;
+}
+
+.map-river {
+  fill: none;
+  stroke: #6fa8dc;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  opacity: 0.65;
+}
+
+.map-lake {
+  fill: rgba(111, 168, 220, 0.35);
+  stroke: #6fa8dc;
+  stroke-width: 1.2;
+}
+
+.map-trade-route {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 4;
+  opacity: 0.5;
+}
+
+/* Map Hotspots */
+.map-hotspot {
+  cursor: pointer;
+  outline: none;
+}
+
+.map-pin-pulse {
+  animation: mapPing 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  transform-origin: center;
+}
+
+@keyframes mapPing {
+  0% { r: 10; opacity: 0.8; }
+  50% { r: 22; opacity: 0.2; }
+  100% { r: 30; opacity: 0; }
+}
+
+.map-pin-circle {
+  fill: var(--accent);
+  stroke: #fff;
+  stroke-width: 2.5;
+  transition: all 0.25s ease;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.25));
+}
+
+.map-hotspot:hover .map-pin-circle,
+.map-hotspot.is-active .map-pin-circle {
+  fill: var(--gold);
+  r: 16;
+}
+
+[data-theme="dark"] .map-pin-circle {
+  fill: #c29b38;
+  stroke: #0c131a;
+}
+
+.map-pin-badge {
+  fill: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+[data-theme="dark"] .map-pin-badge {
+  fill: #0c131a;
+}
+
+.map-pin-label {
+  fill: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  text-anchor: middle;
+  pointer-events: none;
+  paint-order: stroke fill;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+/* Floating Controls */
+.map-controls-floating {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+.map-btn-floating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  transition: all 0.2s ease;
+}
+
+.map-btn-floating:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+[data-theme="dark"] .map-btn-floating:hover {
+  background: var(--gold);
+  color: #0c131a;
+  border-color: var(--gold);
+}
+
+/* Active Town Detail Panel */
+.map-selected-drawer {
+  margin-top: 24px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 10px;
+  animation: slideDown 0.35s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.drawer-title-wrap h3 {
+  font-family: var(--font-title);
+  font-size: 22px;
+  color: var(--primary);
+  margin: 0 0 6px;
+}
+
+.drawer-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.drawer-tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(194, 155, 56, 0.15);
+  color: var(--accent);
+}
+
+[data-theme="dark"] .drawer-tag {
+  color: var(--gold);
+}
+
+.drawer-desc {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.drawer-figures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.drawer-figure-card {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.drawer-figure-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+
+.drawer-figure-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(194, 155, 56, 0.18);
+  border: 2px solid var(--gold);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .drawer-figure-avatar {
+  color: var(--gold);
+}
+
+.drawer-figure-content h4 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: var(--primary);
+}
+
+.figure-years {
+  font-size: 12px;
+  color: var(--gold);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.figure-bio {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0 0 8px;
+}
+
+.figure-works {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 500;
+  background: rgba(0,0,0,0.03);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+[data-theme="dark"] .figure-works {
+  background: rgba(255,255,255,0.05);
+}
+
+/* ==========================================================================
+   QR CODE MODAL & DYNAMIC GENERATOR
+   ========================================================================== */
+.qr-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.qr-modal-card {
+  width: min(480px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 30px 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  position: relative;
+  text-align: center;
+}
+
+.qr-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.qr-modal-close:hover {
+  background: var(--line);
+  color: var(--text);
+}
+
+.qr-preview-box {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 10px;
+  border: 2px dashed var(--gold);
+  display: inline-block;
+  margin: 18px auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.qr-preview-box img {
+  width: 220px;
+  height: 220px;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.qr-input-group {
+  margin: 16px 0;
+  text-align: left;
+}
+
+.qr-input-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.qr-input-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.qr-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.banner-qr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  background: rgba(194, 155, 56, 0.15);
+  border: 1px solid var(--gold);
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.banner-qr-btn:hover {
+  background: var(--gold);
+  color: #0c131a;
+}
+
+/* Constructor Live QR Preview */
+.constructor-qr-preview {
+  margin-top: 12px;
+  padding: 14px;
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.constructor-qr-preview img {
+  width: 90px;
+  height: 90px;
+  background: #fff;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  image-rendering: pixelated;
+}
+
+.constructor-qr-preview-info {
+  font-size: 13px;
+  color: var(--text-muted);
+}

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight,
-  Check, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, Menu, Moon, Pencil, Plus, RotateCcw, Save, Search, ShieldCheck, Sun, Trash2, UserCheck, Users, X,
+  Check, Compass, Copy, Download, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, MapPin, Maximize2, Menu, Minimize2, Moon, Pencil, Plus, QrCode, RotateCcw, Save, Search, Share2, ShieldCheck, Sun, Trash2, UserCheck, Users, X,
 } from 'lucide-react';
 import QRCode from 'qrcode';
 import {
@@ -59,6 +59,278 @@ const NAV_LABELS_MAP = {
     library: 'Digital Library',
   },
 };
+
+
+const HISTORICAL_REGIONS = [
+  {
+    id: 'bokei',
+    name: 'Бөкей Ордасы — Нарын құмы',
+    regionType: 'west',
+    regionLabel: 'Батыс Қазақстан',
+    school: 'Төкпе күй дәстүрі',
+    x: 130,
+    y: 245,
+    desc: 'Төкпе күй дәстүрінің алтын бесігі. Бөкей ордасы мен Нарын құмынан қазақ күй өнерінің заңғар алыптары түлеп ұшқан.',
+    figures: [
+      {
+        name: 'Дина Нұрпейісова',
+        years: '1861 — 1955',
+        title: 'Күй анасы, Құрманғазының батасын алған дәулескер күйші',
+        initials: 'ДН',
+        works: '«Әсемқоңыр», «Бұлбұл», «16-жыл», «Науысқы»',
+        link: 'people',
+      },
+      {
+        name: 'Құрманғазы Сағырбайұлы',
+        years: '1823 — 1896',
+        title: 'Қазақ аспаптық музыкасының ұлы классигі',
+        initials: 'ҚС',
+        works: '«Сарыарқа», «Адай», «Серпер», «Кісен ашқан»',
+        link: 'people',
+      },
+      {
+        name: 'Дәулеткерей Шығайұлы',
+        years: '1820 — 1887',
+        title: 'Төре күйлерінің көшбасшысы, лирик сазгер',
+        initials: 'ДШ',
+        works: '«Жігер», «Бұлбұл», «Қоңыр», «Тартыс»',
+        link: 'people',
+      },
+      {
+        name: 'Сейтек Оразалыұлы',
+        years: '1861 — 1933',
+        title: 'Азаттық рухты күйші, төкпе шебері',
+        initials: 'СО',
+        works: '«Заман-ай», «Бес қыз», «Той бастар»',
+        link: 'people',
+      },
+    ],
+  },
+  {
+    id: 'saraishyq',
+    name: 'Сарайшық — Атырау өңірі',
+    regionType: 'west',
+    regionLabel: 'Жайық бойы',
+    school: 'Төкпе күй мектебі',
+    x: 175,
+    y: 310,
+    desc: 'Ежелгі Сарайшық қаласы мен Жайық бойындағы күйшілік өнер ордасы.',
+    figures: [
+      {
+        name: 'Құлшар Бақтыбайұлы',
+        years: 'XIX ғ.',
+        title: 'Төкпе күйдің хас шебері',
+        initials: 'ҚБ',
+        works: '«Құлшардың күйі», «Кербез Ақжелең»',
+        link: 'people',
+      },
+      {
+        name: 'Әлікей күйші',
+        years: 'XIX ғ.',
+        title: 'Жайық бойының шежірелі домбырашысы',
+        initials: 'ӘК',
+        works: '«Әлікейдің сарыны», «Жайық толқыны»',
+        link: 'people',
+      },
+    ],
+  },
+  {
+    id: 'mangystau',
+    name: 'Маңғыстау — Үстірт',
+    regionType: 'west',
+    regionLabel: 'Каспий өңірі',
+    school: 'Маңғыстаулық төкпе және жыр-күй',
+    x: 125,
+    y: 420,
+    desc: 'Қарт Каспий мен Үстірт арасындағы бірегей, екпінді жыр-күй сарындарының мекені.',
+    figures: [
+      {
+        name: 'Абыл Тарақұлы',
+        years: '1820 — 1892',
+        title: 'Маңғыстау күй мектебінің негізін қалаушы',
+        initials: 'АТ',
+        works: '«Абылдың күйі», «Нарату», «Ақжелең»',
+        link: 'people',
+      },
+      {
+        name: 'Есір Айшуақұлы',
+        years: '1837 — 1901',
+        title: 'Өршіл күйші, «Ақжарманың» авторы',
+        initials: 'ЕА',
+        works: '«Ақжарма», «Маңғыстау күйі»',
+        link: 'people',
+      },
+      {
+        name: 'Өскенбай Қалманбетұлы',
+        years: '1860 — 1925',
+        title: 'Дәулескер домбырашы әрі жыршы',
+        initials: 'ӨҚ',
+        works: '«Өскенбайдың күйі», «Жеті қайқы сарындары»',
+        link: 'people',
+      },
+    ],
+  },
+  {
+    id: 'shalkar',
+    name: 'Шалқар — Арал өңірі',
+    regionType: 'west',
+    regionLabel: 'Ақтөбе өңірі',
+    school: 'Қазанғаптың 62 Ақжелең мектебі',
+    x: 290,
+    y: 315,
+    desc: 'Арал теңізі мен Шалқар құмы арасындағы төкпе күйдің ерекше нәзік қағысты мектебі.',
+    figures: [
+      {
+        name: 'Қазанғап Тілепбергенұлы',
+        years: '1854 — 1921',
+        title: 'Қазақтың дара композиторы, 62 Ақжелеңнің авторы',
+        initials: 'ҚТ',
+        works: '«Көкіл», «Ноғайлы босқыны», «Жұртта қалған», «Ақжелең»',
+        link: 'people',
+      },
+    ],
+  },
+  {
+    id: 'turkistan',
+    name: 'Түркістан — Отырар — Созақ',
+    regionType: 'south',
+    regionLabel: 'Қаратау және Сыр бойы',
+    school: 'Қаратау шертпе күй мектебі',
+    x: 440,
+    y: 460,
+    desc: 'Көне түркі өркениетінің орталығы, Қаратау баурайындағы философиялық терең шертпе күй ордасы.',
+    figures: [
+      {
+        name: 'Сүгір Әлиұлы',
+        years: '1882 — 1961',
+        title: 'Қаратау шертпе күйінің заңғар шебері',
+        initials: 'СӘ',
+        works: '«Бозжүйрік», «Шалқыма», «Аққу», «Кертолғау»',
+        link: 'people',
+      },
+      {
+        name: 'Төлеген Момбеков',
+        years: '1918 — 1997',
+        title: 'Сүгір мұрасын жалғастырушы классик',
+        initials: 'ТМ',
+        works: '«Салтанат», «Қосбасар», «Ана зары»',
+        link: 'people',
+      },
+    ],
+  },
+  {
+    id: 'ulytau',
+    name: 'Ұлытау — Жезқазған',
+    regionType: 'central',
+    regionLabel: 'Орталық Қазақстан',
+    school: 'Көне жыраулық және қобыз сарыны',
+    x: 430,
+    y: 285,
+    desc: 'Қазақ хандығының қасиетті бесігі, аңыз күйлер мен қобыз үні тоғысқан дала жүрегі.',
+    figures: [
+      {
+        name: 'Кетбұға',
+        years: 'XIII ғ.',
+        title: 'Ұлы жырау, күйші, тарихи дастаншы',
+        initials: 'КБ',
+        works: '«Ақсақ құлан», «Жошы ханға естірту»',
+        link: 'people',
+      },
+      {
+        name: 'Ықылас Дүкенұлы',
+        years: '1843 — 1916',
+        title: 'Қазақ қобыз өнерінің қайталанбас реформаторы',
+        initials: 'ЫД',
+        works: '«Жезкиік», «Қазан», «Айрауықтың ащы күйі», «Қасқыр»',
+        link: 'people',
+      },
+    ],
+  },
+  {
+    id: 'saryarka',
+    name: 'Қарқаралы — Баянауыл',
+    regionType: 'saryarka',
+    regionLabel: 'Сарыарқа кеңістігі',
+    school: 'Шертпе күй мектебінің классикасы',
+    x: 610,
+    y: 200,
+    desc: 'Арқаның сыршыл шертпе күй өнерінің, сырбаз домбыра қағыстарының гүлденген өлкесі.',
+    figures: [
+      {
+        name: 'Тәттімбет Қазанғапұлы',
+        years: '1815 — 1862',
+        title: 'Шертпе күйдің асқар шыңы, лирик күйші',
+        initials: 'ТҚ',
+        works: '«Сылқылдақ», «Көкейкесті», «Қосбасар», «Сарыжайлау»',
+        link: 'people',
+      },
+      {
+        name: 'Жаяу Мұса Байжанұлы',
+        years: '1835 — 1918',
+        title: 'Азаттық жыршысы, композитор әрі күйші',
+        initials: 'ЖМ',
+        works: '«Ақ сиса», «Көгілдір», «Сүйіндік күйі»',
+        link: 'people',
+      },
+    ],
+  },
+  {
+    id: 'tarbagatai',
+    name: 'Тарбағатай — Алтай',
+    regionType: 'east',
+    regionLabel: 'Шығыс Қазақстан',
+    school: 'Шығыс шертпе күй дәстүрі',
+    x: 795,
+    y: 215,
+    desc: 'Абылай хан дәуірінен тамыр тартқан көне шертпе күй үлгілерінің сақталған мекені.',
+    figures: [
+      {
+        name: 'Байжігіт күйші',
+        years: 'XVIII ғ.',
+        title: 'Шертпе күй өнерінің арғы атасы',
+        initials: 'БК',
+        works: '«Ақтабан шұбырынды», «Көкбалақ», «Азат күйі»',
+        link: 'people',
+      },
+      {
+        name: 'Әміре Қашаубаев',
+        years: '1888 — 1934',
+        title: 'Парижде қазақ өнерін әлемге танытқан саңлақ',
+        initials: 'ӘҚ',
+        works: '«Балқадиша», «Ағаш аяқ», домбыра сарындары',
+        link: 'people',
+      },
+    ],
+  },
+  {
+    id: 'zhetysu',
+    name: 'Жетісу — Алатау баурайы',
+    regionType: 'east',
+    regionLabel: 'Жетісу өлкесі',
+    school: 'Академиялық күй және «Отырар сазы»',
+    x: 675,
+    y: 430,
+    desc: 'Жеті өзен мен қарлы Алатау етегіндегі дәстүрлі және симфониялық күйлердің бас қосқан ордасы.',
+    figures: [
+      {
+        name: 'Нұрғиса Тілендиев',
+        years: '1925 — 1998',
+        title: 'Халық қаһарманы, дирижер, біртуар композитор',
+        initials: 'НТ',
+        works: '«Әлқисса», «Ата толғауы», «Махамбет», «Аққу»',
+        link: 'people',
+      },
+      {
+        name: 'Мұхит Мералыұлы дәстүрі',
+        years: 'XIX — XX ғ.',
+        title: 'Батыс-Шығыс ән мен күйін тоғыстырушылар',
+        initials: 'ММ',
+        works: '«Айнамкөз», «Зәуреш» күйлік сарындары',
+        link: 'people',
+      },
+    ],
+  },
+];
 
 const UI_TRANSLATIONS = {
   kk: {
@@ -208,6 +480,8 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [qrModalUrl, setQrModalUrl] = useState('');
   const [loadError, setLoadError] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -340,6 +614,7 @@ function App() {
             </div>
 
             {/* Dark / Light theme toggle */}
+            <button className="theme-toggle-btn" onClick={() => { setQrModalUrl(window.location.href); setQrModalOpen(true); }} title="QR код генераторы"><QrCode size={17} /></button>
             <button className="theme-toggle-btn" onClick={toggleTheme} title={theme === 'dark' ? 'Жарық тақырып' : 'Қараңғы тақырып'}>
               {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
             </button>
@@ -348,6 +623,8 @@ function App() {
           <button className="icon-button" aria-label="Іздеу" onClick={() => setSearchOpen(!searchOpen)}><Search size={19} /></button>
         </div>
       </header>
+
+      <QRCodeModal isOpen={qrModalOpen} onClose={() => setQrModalOpen(false)} defaultUrl={qrModalUrl} t={t} />
 
       {searchOpen && (
         <section className="search-wrap">
@@ -429,6 +706,7 @@ function HomePage({ page, onNavigate, t, navLabels }) {
           <p className="hero-kicker">{t.heroKicker}</p>
           <h1>{t.heroTitle}<br /><em>{t.heroTitleEm}</em></h1>
           <p>{page.description}</p>
+          <button className="banner-qr-btn" onClick={() => { setQrModalUrl(window.location.origin + '#' + page.slug); setQrModalOpen(true); }}><QrCode size={14} /> <span>{t?.qrBtn || 'Беттің QR-кодын көрсету'}</span></button>
           <p className="hero-english">Kazakh music, its people and living traditions.</p>
           <div className="hero-actions">
             <button className="button button-dark" onClick={() => onNavigate('people')}>{t.peopleBtn} <ArrowRight size={17} /></button>
@@ -451,6 +729,11 @@ function HomePage({ page, onNavigate, t, navLabels }) {
       )}
 
       {stats && <section className="archive-stats content-width"><h2>Бір мұра.<br /><strong>Үш дәстүр.</strong></h2>{stats.items?.map((item) => <div className="archive-stat-row" key={item.label}><strong>{item.value}</strong><p>{item.label}</p></div>)}</section>}
+
+      <OrnamentDivider />
+
+      {/* Интерактивті тарихи карта */}
+      <HistoricalMap onNavigate={onNavigate} t={t} />
 
       <OrnamentDivider />
 
@@ -711,6 +994,26 @@ function Callout({ onNavigate, t }) {
 // -------------------------------------------------------------
 // ADMIN PANEL COMPONENT WITH 2 ROLES & ADVANCED APPROVAL WORKFLOW
 // -------------------------------------------------------------
+
+function ConstructorQRPreview({ link }) {
+  const [dataUrl, setDataUrl] = useState('');
+  useEffect(() => {
+    if (link) {
+      QRCode.toDataURL(link, { width: 120, margin: 1 }).then(setDataUrl).catch(() => {});
+    }
+  }, [link]);
+  if (!dataUrl) return null;
+  return (
+    <>
+      <img src={dataUrl} alt="QR Preview" />
+      <div className="constructor-qr-preview-info">
+        <strong>QR дайын!</strong>
+        <p>Бұл QR-код мақала ішінде сақталып, оқырмандарға көрсетіледі.</p>
+      </div>
+    </>
+  );
+}
+
 function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, onExit, navLabels }) {
   const [route, setRoute] = useState(window.location.hash || '#admin');
   const [draft, setDraft] = useState(() => createEmptyPage(pages.filter((p) => p.is_custom).length));
@@ -1162,7 +1465,26 @@ function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, on
                         </div>
                         {block.type !== 'image' && <label>Тақырып<input value={block.title || ''} onChange={(event) => updateBlock(block.id, 'title', event.target.value)} /></label>}
                         {block.type === 'image' && <label>Суретке балама мәтін<input value={block.title || ''} onChange={(event) => updateBlock(block.id, 'title', event.target.value)} placeholder="Суретте не бейнеленген?" /></label>}
-                        {block.type === 'qr' && <label>QR кодқа апаратын сілтеме<input type="url" value={block.link || ''} onChange={(event) => updateBlock(block.id, 'link', event.target.value)} placeholder="https://example.com" /></label>}
+                        {block.type === 'qr' && (
+  <div>
+    <label>
+      QR кодқа апаратын сілтеме
+      <input
+        type="url"
+        value={block.link || ''}
+        onChange={(event) => updateBlock(block.id, 'link', event.target.value)}
+        placeholder="https://example.com"
+      />
+    </label>
+    <div className="constructor-qr-preview">
+      {block.link ? (
+        <ConstructorQRPreview link={block.link} />
+      ) : (
+        <div className="constructor-qr-preview-info">Сілтемені енгізген сәтте QR-код осы жерде бірден шығады.</div>
+      )}
+    </div>
+  </div>
+)}
                         {!['stats', 'qr'].includes(block.type) && <label>{block.type === 'image' ? 'Суретке түсіндірме' : 'Мәтін'}<textarea rows={block.type === 'text' ? 7 : 4} value={block.body || ''} onChange={(event) => updateBlock(block.id, 'body', event.target.value)} /></label>}
                         {['feature', 'heading', 'callout'].includes(block.type) && <label>Қосымша белгі<input value={block.eyebrow || ''} onChange={(event) => updateBlock(block.id, 'eyebrow', event.target.value)} placeholder="ҚОСЫМША БЕЛГІ" /></label>}
                         {['image', 'text', 'feature', 'callout'].includes(block.type) && <label>{block.type === 'image' ? 'Сурет мекенжайы' : 'Сілтеме (міндетті емес)'}<input value={block.link || ''} onChange={(event) => updateBlock(block.id, 'link', event.target.value)} placeholder={block.type === 'image' ? '/images/example.jpg немесе https://...' : 'https://...'} /></label>}
