@@ -1456,74 +1456,179 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 
-/* Project Leaders Section */
+/* ==========================================================================
+   PROJECT LEADERS SECTION (4 KEY FIGURES - IMPLANTIUM CARD TEMPLATE)
+   ========================================================================== */
 .project-leaders-section {
-  padding-block: clamp(38px, 6vw, 75px);
+  padding-block: clamp(35px, 5vw, 65px);
 }
+
 .leaders-grid {
-  margin-top: 28px;
+  margin-top: 32px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
 }
+
+@media (max-width: 1100px) {
+  .leaders-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .leaders-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
 .leader-card {
-  padding: 26px 22px;
-  background: var(--paper-light);
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--line);
+  background: var(--paper-light);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.055);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
 }
+
 .leader-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px);
   border-color: var(--terra);
-  box-shadow: 0 12px 28px #33000e12;
+  box-shadow: 0 24px 60px rgba(184, 67, 42, 0.12);
 }
-.leader-avatar-wrap {
-  width: 72px;
-  height: 72px;
+
+.leader-avatar-cover {
+  position: relative;
+  aspect-ratio: 4 / 3.4;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(184, 67, 42, 0.07), rgba(66, 24, 32, 0.13));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.leader-avatar-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/patterns/tolqyn.svg") center/cover no-repeat;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.leader-avatar-orb {
+  position: relative;
+  z-index: 2;
+  width: 82px;
+  height: 82px;
   border-radius: 50%;
-  border: 2px solid var(--terra);
+  border: 2.5px solid var(--terra);
   padding: 3px;
-  background: #fff;
-  flex-shrink: 0;
+  background: var(--paper-panel);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
 }
-.leader-avatar-placeholder {
+
+.leader-card:hover .leader-avatar-orb {
+  transform: scale(1.05);
+}
+
+.leader-avatar-orb span {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #33000e12;
+  background: rgba(184, 67, 42, 0.09);
   color: var(--plum);
   display: flex;
   align-items: center;
   justify-content: center;
-  font: 700 18px var(--font-brand);
-  letter-spacing: .05em;
+  font-family: var(--font-brand);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
-.leader-info {
+
+.leader-body {
+  padding: 22px 20px 24px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
-.leader-role {
+
+.leader-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 3px 11px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: rgba(184, 67, 42, 0.08);
   color: var(--terra);
-  font: 700 11px/1.4 var(--font-stamp);
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
+  border: 1px solid rgba(184, 67, 42, 0.2);
+  margin-bottom: 12px;
 }
-.leader-card h3 {
-  margin: 0 0 10px;
-  font: 600 clamp(20px, 4vw, 23px)/1.2 var(--font-editorial);
+
+.leader-name {
+  margin: 0 0 6px 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
   color: var(--plum);
+  font-family: var(--font-body);
 }
-.leader-card p {
-  margin: 0;
+
+.leader-specialty {
+  margin: 0 0 12px 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--terra);
+}
+
+.leader-bio {
+  margin: 0 0 16px 0;
   color: #4a2d27;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 13.5px;
+  line-height: 1.62;
+  flex: 1;
+}
+
+.leader-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  margin-top: auto;
+}
+
+.leader-highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.leader-check-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--terra);
 }
 
 
@@ -1616,9 +1721,61 @@ img { display: block; max-width: 100%; height: auto; }
   color: var(--terra);
 }
 
-[data-theme="dark"] .leader-avatar-placeholder {
-  background: #e27d6325;
-  color: var(--terra);
+[data-theme="dark"] .leader-card {
+  background: var(--paper-light);
+  border-color: var(--line);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .leader-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .leader-avatar-cover {
+  background: linear-gradient(145deg, rgba(194, 155, 56, 0.12), rgba(20, 7, 11, 0.65));
+  border-bottom-color: var(--line);
+}
+
+[data-theme="dark"] .leader-avatar-orb {
+  border-color: var(--gold);
+  background: #1c0811;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .leader-avatar-orb span {
+  background: rgba(194, 155, 56, 0.15);
+  color: var(--gold);
+}
+
+[data-theme="dark"] .leader-pill-badge {
+  background: rgba(194, 155, 56, 0.12);
+  color: var(--gold);
+  border-color: rgba(194, 155, 56, 0.3);
+}
+
+[data-theme="dark"] .leader-name {
+  color: #fff4f0;
+}
+
+[data-theme="dark"] .leader-specialty {
+  color: var(--gold);
+}
+
+[data-theme="dark"] .leader-bio {
+  color: #d8c2bd;
+}
+
+[data-theme="dark"] .leader-highlights {
+  border-top-color: var(--line);
+}
+
+[data-theme="dark"] .leader-highlight-item {
+  color: #b59f99;
+}
+
+[data-theme="dark"] .leader-check-icon {
+  color: var(--gold);
 }
 
 [data-theme="dark"] .admin-shell {
@@ -2276,50 +2433,47 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 .archive-stats {
-  margin: clamp(55px, 7vw, 95px) auto !important;
-}
-
-.ornament-divider {
-  margin: clamp(40px, 6vw, 75px) auto !important;
+  margin: clamp(38px, 4.5vw, 55px) auto clamp(16px, 2vw, 24px) !important;
 }
 
 .editorial-intro {
-  margin: clamp(65px, 8vw, 110px) auto !important;
+  margin: clamp(14px, 1.8vw, 22px) auto clamp(55px, 7vw, 95px) !important;
 }
 
 .discover-section {
-  margin: clamp(65px, 8vw, 110px) auto !important;
+  margin: clamp(55px, 7vw, 95px) auto !important;
 }
 
 .project-leaders-section {
-  margin: clamp(65px, 8vw, 110px) auto !important;
-  padding-block: clamp(35px, 5vw, 65px) !important;
+  margin: clamp(55px, 7vw, 95px) auto !important;
+  padding-block: clamp(30px, 4vw, 55px) !important;
 }
 
 .callout {
-  margin: clamp(65px, 8vw, 120px) auto clamp(40px, 6vw, 80px) !important;
+  margin: clamp(55px, 7vw, 100px) auto clamp(40px, 5vw, 70px) !important;
 }
 
 /* ==========================================================================
    VERTICAL KAZAKH ORNAMENTS (LEFT & RIGHT EDGES OF LIGHT UNDERLAY)
+   Bolder, larger authentic Kazakh national ribbon pattern
    ========================================================================== */
 .shell-vertical-ornament {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 30px;
+  width: clamp(46px, 4.2vw, 62px);
   pointer-events: none;
   z-index: 2;
   background-repeat: repeat-y;
-  background-size: 30px 75px;
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
+  background-size: 52px 108px;
+  opacity: 0.72;
+  transition: opacity 0.3s ease, width 0.3s ease;
 }
 
 .shell-vertical-ornament.ornament-left {
   left: 0;
   background-image: url("/patterns/kazakh-border-light.svg");
-  border-right: 1px solid rgba(163, 72, 54, 0.12);
+  border-right: 1.5px solid rgba(163, 72, 54, 0.18);
   border-top-left-radius: 28px;
   border-bottom-left-radius: 28px;
 }
@@ -2328,34 +2482,34 @@ img { display: block; max-width: 100%; height: auto; }
   right: 0;
   background-image: url("/patterns/kazakh-border-light.svg");
   transform: scaleX(-1);
-  border-right: 1px solid rgba(163, 72, 54, 0.12);
+  border-right: 1.5px solid rgba(163, 72, 54, 0.18);
   border-top-right-radius: 28px;
   border-bottom-right-radius: 28px;
 }
 
 [data-theme="dark"] .shell-vertical-ornament {
-  opacity: 0.4;
+  opacity: 0.62;
 }
 
 [data-theme="dark"] .shell-vertical-ornament.ornament-left {
   background-image: url("/patterns/kazakh-border-dark.svg");
-  border-right: 1px solid rgba(194, 155, 56, 0.18);
+  border-right: 1.5px solid rgba(194, 155, 56, 0.28);
 }
 
 [data-theme="dark"] .shell-vertical-ornament.ornament-right {
   background-image: url("/patterns/kazakh-border-dark.svg");
-  border-right: 1px solid rgba(194, 155, 56, 0.18);
+  border-right: 1.5px solid rgba(194, 155, 56, 0.28);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .shell-vertical-ornament {
-    width: 15px;
-    background-size: 15px 38px;
-    opacity: 0.3;
+    width: 32px;
+    background-size: 32px 66px;
+    opacity: 0.55;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 680px) {
   .shell-vertical-ornament {
     display: none;
   }
@@ -2506,23 +2660,23 @@ img { display: block; max-width: 100%; height: auto; }
 .floating-instrument {
   position: absolute;
   pointer-events: none;
-  z-index: 1;
+  z-index: 12 !important; /* Raised to top layer over photos and background cards */
   will-change: transform;
-  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.16));
-  opacity: 0.78;
+  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.32));
+  opacity: 0.95;
   transition: opacity 0.3s ease;
 }
 
 [data-theme="dark"] .floating-instrument {
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.5));
-  opacity: 0.82;
+  filter: drop-shadow(0 18px 42px rgba(0, 0, 0, 0.65));
+  opacity: 0.95;
 }
 
-/* Floating Real Dombra in Hero (top-right flank of photo, completely clear of text) */
+/* Floating Real Dombra in Hero (top-right outer flank, shifted to corner edge) */
 .floating-dombra-hero {
-  top: -45px;
-  right: -25px;
-  width: clamp(140px, 15vw, 210px);
+  top: -55px;
+  right: -42px;
+  width: clamp(160px, 18vw, 240px);
   animation: floatDombra 6.5s ease-in-out infinite;
 }
 
@@ -2532,11 +2686,11 @@ img { display: block; max-width: 100%; height: auto; }
   display: block;
 }
 
-/* Floating Real Qobyz in Hero (bottom-right flank of photo, completely clear of text) */
+/* Floating Real Qobyz in Hero (bottom-right outer flank, shifted to corner edge) */
 .floating-kobyz-hero {
-  bottom: -35px;
-  right: -30px;
-  width: clamp(110px, 12vw, 165px);
+  bottom: -45px;
+  right: -38px;
+  width: clamp(125px, 14vw, 180px);
   animation: floatKobyz 7.5s ease-in-out infinite;
 }
 
@@ -2546,11 +2700,11 @@ img { display: block; max-width: 100%; height: auto; }
   display: block;
 }
 
-/* Floating Dombra in Dina Section (strictly on LEFT photo flank, away from right-side text) */
+/* Floating Dombra in Dina Section (outer LEFT photo flank, shifted to corner edge, clear of text) */
 .floating-dombra-dina {
-  bottom: -30px;
-  left: -25px;
-  width: clamp(130px, 14vw, 190px);
+  bottom: -45px;
+  left: -48px;
+  width: clamp(140px, 16vw, 210px);
   animation: floatDombra 7s ease-in-out infinite reverse;
 }
 
@@ -2560,11 +2714,11 @@ img { display: block; max-width: 100%; height: auto; }
   display: block;
 }
 
-/* Floating Kobyz in Editorial Section (strictly on RIGHT artwork flank, away from left-side text) */
+/* Floating Kobyz in Editorial Section (outer RIGHT artwork flank, shifted to corner edge, clear of text) */
 .floating-kobyz-intro {
-  top: -30px;
-  right: -25px;
-  width: clamp(110px, 12vw, 160px);
+  top: -45px;
+  right: -40px;
+  width: clamp(120px, 13vw, 175px);
   animation: floatKobyz 8s ease-in-out infinite;
 }
 

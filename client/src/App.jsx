@@ -142,29 +142,37 @@ const PROJECT_LEADERS = [
     id: 'tolegen-kuanyshev',
     name: 'Қуанышев Төлеген Шағытбайұлы',
     role: 'Қор төрағасы · Жоба жетекшісі',
+    badge: 'Қор басшылығы',
     bio: '«КҮЙ АНАСЫ» жеке қорының төрағасы, қазақтың дәстүрлі музыкасын насихаттау және мәдени мұраны цифрландыру бастамасының жетекшісі.',
     initials: 'ТҚ',
+    highlights: ['Мәдени мұраны цифрландыру', 'Күйшілер аллеясы бастамасы'],
   },
   {
     id: 'scientific-advisor',
     name: 'Ғылыми кеңесші',
     role: 'Музыкатанушы · Ғылыми сарапшы',
+    badge: 'Ғылыми бағыт',
     bio: 'Дәстүрлі күй өнері мен жыраулық мұраны зерттеу, тарихи деректердің ғылыми негіздемесін сараптау бағыты (Орын қалдырылды).',
     initials: 'ҒК',
+    highlights: ['Тарихи деректер сараптамасы', 'Дәстүрлі музыканы зерттеу'],
   },
   {
     id: 'editorial-lead',
     name: 'Бас редактор / Өнертанушы',
     role: 'Энциклопедияның мазмұндық жетекшісі',
+    badge: 'Редакциялық алқа',
     bio: 'Өнер иелерінің өмірбаяны мен музыкалық шығармаларының деректік қорын жүйелеу және мәтіндерді редакциялау (Орын қалдырылды).',
     initials: 'БР',
+    highlights: ['Мұрағаттық құжаттарды жүйелеу', 'Өнер иелері каталогы'],
   },
   {
     id: 'project-coordinator',
     name: 'Жоба үйлестірушісі',
     role: 'Мәдени жобалар және серіктестік',
+    badge: 'Үйлестіру және серіктестік',
     bio: 'Күйшілер аллеясы жобасын дамыту, қоғамдық және мәдени ұйымдармен серіктестік байланыстарды үйлестіру (Орын қалдырылды).',
     initials: 'ЖҮ',
+    highlights: ['Қоғамдық серіктестік', 'Мәдени бастамаларды үйлестіру'],
   },
 ];
 
@@ -500,8 +508,6 @@ function HomePage({ page, onNavigate, t, navLabels }) {
         </section>
       )}
 
-      <OrnamentDivider />
-
       {intro && (
         <section className="editorial-intro content-width">
           <div className="intro-copy">
@@ -562,15 +568,28 @@ function HomePage({ page, onNavigate, t, navLabels }) {
         <div className="leaders-grid">
           {PROJECT_LEADERS.map((leader) => (
             <article key={leader.id} className="leader-card">
-              <div className="leader-avatar-wrap">
-                <div className="leader-avatar-placeholder">
+              <div className="leader-avatar-cover">
+                <div className="leader-avatar-orb">
                   <span>{leader.initials}</span>
                 </div>
               </div>
-              <div className="leader-info">
-                <span className="leader-role">{leader.role}</span>
-                <h3>{leader.name}</h3>
-                <p>{leader.bio}</p>
+
+              <div className="leader-body">
+                <span className="leader-pill-badge">{leader.badge}</span>
+                <h3 className="leader-name">{leader.name}</h3>
+                <p className="leader-specialty">{leader.role}</p>
+                <p className="leader-bio">{leader.bio}</p>
+
+                {leader.highlights && leader.highlights.length > 0 && (
+                  <div className="leader-highlights">
+                    {leader.highlights.map((item, idx) => (
+                      <div key={idx} className="leader-highlight-item">
+                        <Check size={13} className="leader-check-icon" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </article>
           ))}
