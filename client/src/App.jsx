@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight,
-  Check, Compass, Copy, Download, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, MapPin, Maximize2, Menu, Minimize2, Moon, Pencil, Plus, QrCode, RotateCcw, Save, Search, Share2, ShieldCheck, Sun, Trash2, UserCheck, Users, X,
+  Check, ChevronLeft, ChevronRight, Compass, Copy, Download, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, MapPin, Maximize2, Menu, Minimize2, Moon, Pencil, Plus, QrCode, RotateCcw, Save, Search, Share2, ShieldCheck, Sun, Trash2, UserCheck, Users, X,
 } from 'lucide-react';
 import QRCode from 'qrcode';
 import {
@@ -111,6 +111,7 @@ const UI_TRANSLATIONS = {
     galleryTitle: 'Күйшілер аллеясының фотопанорамасы',
     galleryDesc: 'Елорда төріндегі қазақ музыкалық өркениетінің сәулеттік кешені мен тарихи мемориалдары.',
     exploreAlley: 'Аллеяны толық көру',
+    exploreBtn: 'Толығырақ көру',
     adminPanel: 'Әкімшілік панель',
     footerCopy: '© 2026 «КҮЙ АНАСЫ» жеке қоры',
     footerDesc: 'Қазақ музыкасының цифрлық энциклопедиясы',
@@ -139,6 +140,7 @@ const UI_TRANSLATIONS = {
     galleryTitle: 'Фотопанорама Аллеи Кюйши',
     galleryDesc: 'Архитектурный комплекс и исторические мемориалы казахской музыкальной цивилизации в столице.',
     exploreAlley: 'Исследовать аллею',
+    exploreBtn: 'Смотреть подробнее',
     adminPanel: 'Панель управления',
     footerCopy: '© 2026 Частный фонд «КҮЙ АНАСЫ»',
     footerDesc: 'Цифровая энциклопедия казахской музыки',
@@ -167,6 +169,7 @@ const UI_TRANSLATIONS = {
     galleryTitle: 'Photo Panorama of Kuyshiler Alley',
     galleryDesc: 'Architectural complex and historical memorials of Kazakh musical civilization in the capital.',
     exploreAlley: 'Explore the Alley',
+    exploreBtn: 'Explore details',
     adminPanel: 'Admin Panel',
     footerCopy: '© 2026 "KUI ANASY" Private Foundation',
     footerDesc: 'Digital Encyclopedia of Kazakh Music',
@@ -245,45 +248,75 @@ const PROJECT_LEADERS = [
 
 const ALLEY_GALLERY = [
   {
+    id: 1,
     image: '/images/alley-arch-main.jpg',
+    genre: 'АРХИТЕКТУРАЛЫҚ КЕШЕН · 2021',
     title: 'Күйшілер аллеясының бас қақпасы',
     subtitle: 'Астана · Күйші Дина көшесі',
-    desc: 'Шаңырақ пен қола ноталармен көмкерілген саябақтың монументалды кіреберіс аркасы.',
+    desc: 'Астана қаласының Күйші Дина көшесінде бой көтерген салтанатты бас қақпа. Жоғарғы жағы киелі Шаңырақпен және қоладан құйылған ноталық белгілермен безендірілген.',
     targetSlug: 'projects-alley',
   },
   {
+    id: 2,
     image: '/images/dina-monument-full.jpg',
+    genre: 'МОНУМЕНТАЛДЫ ӨНЕР · 2021',
     title: '«Күй анасы — Дина» монументі',
     subtitle: '2021 ж. орнатылған',
-    desc: 'Дина Нұрпейісованың 160 жылдығына арналған қола ескерткіш пен мәрмәр тұғыр.',
+    desc: 'Қазақтың ұлы күйші-композиторы Дина Нұрпейісованың 160 жылдығына орай орнатылған айбынды қола ескерткіш пен мәрмәр тұғыр. Мүсіншісі — Жалын Бауыржан.',
     targetSlug: 'projects-monument',
   },
   {
+    id: 3,
+    image: '/images/dina-sculpture-bronze.jpg',
+    genre: 'МҮСІНДІК КОМПОЗИЦИЯ',
+    title: 'Дина бейнесінің қола шешімі',
+    subtitle: 'Ұлттық мұра сомдалуы',
+    desc: 'Домбыраны пернесінен құдіретті сарын төккен сәті. Ұлттық киім мен күйшілік асқақ рухтың терең шеберлікпен сомдалған бейнесі.',
+    targetSlug: 'projects-monument',
+  },
+  {
+    id: 4,
     image: '/images/stele-kuyshi-side-a.jpg',
-    title: '101 Күйші гранит стеласы',
+    genre: 'ТАРИХИ МЕМОРИАЛ · 101 КҮЙШІ',
+    title: '101 Күйші канондық стеласы',
     subtitle: 'Қола қобыз және домбыра',
-    desc: 'Қазақ халқының 101 күйші-композиторының есімдері қашалған қос бетті мәрмәр тақта.',
+    desc: 'Қазақ даласының ғасырлар қойнауынан жеткен 101 ұлы күйші-композиторының есімдері тасқа қашалған қос бетті мәрмәр-гранит кешені.',
     targetSlug: 'people-kuyshi',
   },
   {
+    id: 5,
     image: '/images/stele-zhyrau-side-a.jpg',
+    genre: '«ҒАСЫРЛАР ҮНІ» · 110 САҢЛАҚ',
     title: '110 Жырау мен жыршы стеласы',
-    subtitle: '«Ғасырлар үні» кешені',
-    desc: 'Тоныкөктен басталған 110 жыр саңлағының тарихи шежіресі (2025 ж.).',
+    subtitle: 'Жыр сүлейлері шежіресі',
+    desc: 'Тоныкөк пен Қорқыттан бастау алатын көне жыраулық дәстүр мен эпостық жыр сүлейлерінің 110 өкіліне арналған еңселі стела (2025 ж.).',
     targetSlug: 'people-zhyrau',
   },
   {
+    id: 6,
     image: '/images/dina-dedication-plaque.jpg',
-    title: 'Ескерткіштің авторлық тақтасы',
+    genre: 'ҚҰЖАТТЫҚ ДЕРЕК · ТАРИХ',
+    title: 'Монументтің ресми естелік тақтасы',
     subtitle: 'Ресми естелік тақта',
-    desc: 'Идея авторы профессор Т. Қуанышев және мүсінші Ж. Бауыржан авторлық белгісі.',
+    desc: 'Аллея мен монументтің ашылу күні, идея авторы профессор Төлеген Қуанышев және мүсіншілер ұжымының авторлық құқықтық деректері.',
     targetSlug: 'projects-monument',
   },
   {
+    id: 7,
+    image: '/images/tolegen-kuanyshev-founder.jpg',
+    genre: 'ЖОБА ЖЕТЕКШІСІ · ҚҰРЫЛТАЙШЫ',
+    title: 'Профессор Төлеген Қуанышев',
+    subtitle: 'Қор басшылығы · Идея авторы',
+    desc: '«Күй анасы» жеке қорының құрылтайшысы, Күйшілер аллеясы мен Дина монументінің басты бастамашысы әрі үш томдық ғылыми жинақтың жетекшісі.',
+    targetSlug: 'about-leadership',
+  },
+  {
+    id: 8,
     image: '/images/alley-gazebo.jpg',
-    title: 'Саябақтың демалыс аймағы',
+    genre: 'ҚАЛАЛЫҚ КЕҢІСТІК · АСТАНА',
+    title: 'Аллеяның демалыс пен мәдениет аймағы',
     subtitle: 'Заманауи мәдени кеңістік',
-    desc: 'Елорда тұрғындары мен қала қонақтарына арналған рухани демалыс орындары.',
+    desc: 'Елорда тұрғындары мен руханият жанашырларына арналған заманауи сәулеттік орындықтар, күмбезді демалыс беседкасы мен көгалдандырылған жасыл желек.',
     targetSlug: 'projects-alley',
   },
 ];
@@ -542,6 +575,173 @@ function App() {
 
 
 
+function AppleTvMediaGallery({ items, onNavigate, t }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const touchStartX = useRef(null);
+
+  const total = items.length;
+
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + total) % total);
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev + 1) % total);
+  };
+
+  useEffect(() => {
+    if (isPaused || total <= 1) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % total);
+    }, 5500);
+    return () => clearInterval(interval);
+  }, [isPaused, total]);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) handleNext();
+      else handlePrev();
+    }
+    touchStartX.current = null;
+  };
+
+  return (
+    <section className="tv-gallery-section" aria-labelledby="tv-media-gallery-title">
+      <div className="tv-gallery-header">
+        <span className="block-kicker">{t.galleryKicker}</span>
+        <h2 id="tv-media-gallery-title" className="tv-gallery-title">{t.galleryTitle}</h2>
+        <p className="tv-gallery-subtitle">{t.galleryDesc}</p>
+      </div>
+
+      <div
+        id="tv-media-gallery"
+        className="media-gallery tv-media-gallery"
+        role="group"
+        data-analytics-section-engagement="name:tv-plus-gallery"
+        data-analytics-gallery-id="Tv Plus Gallery"
+        aria-label="Күйшілер аллеясының фотопанорамасы"
+        data-media-gallery=""
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="tv-gallery-viewport">
+          <ul
+            className="media-gallery-item-container"
+            role="list"
+            style={{
+              transform: `translateX(calc(50% - ${activeIndex} * (var(--slide-w) + var(--slide-gap)) - var(--slide-w) / 2))`,
+            }}
+          >
+            {items.map((item, idx) => {
+              const isCurrent = idx === activeIndex;
+
+              return (
+                <li
+                  key={item.id}
+                  id={`endless-entertainment-gallery-item-${item.id}`}
+                  className={`media-gallery-item theme-dark ${isCurrent ? 'current current-item' : ''}`}
+                  data-media-gallery-item={item.id}
+                  data-title={item.title}
+                  role="tabpanel"
+                  aria-labelledby={`media-gallery-item-${item.id}-link`}
+                  aria-hidden={!isCurrent}
+                  style={{
+                    '--progress': isCurrent ? 1 : 0,
+                  }}
+                  onClick={() => {
+                    if (!isCurrent) setActiveIndex(idx);
+                  }}
+                >
+                  <a
+                    id={`media-gallery-item-${item.id}-link`}
+                    className="media-gallery-wrapper-link fam-media-gallery-wrapper-link"
+                    href={`#${item.targetSlug}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (isCurrent) {
+                        onNavigate(item.targetSlug);
+                      } else {
+                        setActiveIndex(idx);
+                      }
+                    }}
+                    aria-label={`${item.title} - ${item.desc}`}
+                  >
+                    <div className="media-gallery-bg-wrapper">
+                      <picture className="media-gallery-bg" data-lazy="">
+                        <img src={item.image} alt={item.title} loading="lazy" />
+                      </picture>
+                      <div className="media-gallery-scrim" aria-hidden="true" />
+                    </div>
+
+                    <div className="media-gallery-contents">
+                      <div className="media-gallery-top-content tv-gallery-top-content-s-only">
+                        <span className="tv-gallery-badge">{item.genre}</span>
+                      </div>
+                      <div className="media-gallery-bottom-content">
+                        <div className="media-gallery-headline">
+                          <span className="media-gallery-genre">{item.genre}</span>
+                          <h3 className="media-gallery-title">{item.title}</h3>
+                        </div>
+                        <p className="media-gallery-desc">{item.desc}</p>
+                        <span className="media-gallery-button">
+                          <span>{t.exploreBtn || 'Толығырақ көру'}</span>
+                          <ArrowRight size={15} />
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+
+          <button
+            type="button"
+            className="tv-gallery-nav-btn prev-btn"
+            onClick={handlePrev}
+            aria-label="Алдыңғы слайд"
+          >
+            <ChevronLeft size={26} />
+          </button>
+          <button
+            type="button"
+            className="tv-gallery-nav-btn next-btn"
+            onClick={handleNext}
+            aria-label="Келесі слайд"
+          >
+            <ChevronRight size={26} />
+          </button>
+        </div>
+
+        <div className="tv-gallery-pagination" role="tablist" aria-label="Слайдтар">
+          {items.map((item, idx) => (
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={idx === activeIndex}
+              aria-label={`${item.title} (${idx + 1} / ${total})`}
+              className={`tv-gallery-dot ${idx === activeIndex ? 'active' : ''}`}
+              onClick={() => setActiveIndex(idx)}
+            >
+              <span className="tv-gallery-dot-inner" />
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HomePage({ page, onNavigate, t, navLabels }) {
   const blocks = page.blocks || [];
   const intro = blocks.find((block) => block.type === 'quote');
@@ -643,37 +843,8 @@ function HomePage({ page, onNavigate, t, navLabels }) {
         </section>
       )}
 
-      {/* Күйшілер аллеясының фотопанорамасы */}
-      <section className="alley-gallery-section content-width">
-        <div className="section-topline">
-          <div>
-            <span className="block-kicker">{t.galleryKicker}</span>
-            <h2>{t.galleryTitle}</h2>
-            <p className="section-subtitle-copy">{t.galleryDesc}</p>
-          </div>
-          <button className="underlined-link" onClick={() => onNavigate('projects-alley')}>
-            {t.exploreAlley} <ArrowRight size={15} />
-          </button>
-        </div>
-        <div className="alley-gallery-grid">
-          {ALLEY_GALLERY.map((item, idx) => (
-            <figure
-              key={idx}
-              className="alley-gallery-item"
-              onClick={() => onNavigate(item.targetSlug || 'projects-alley')}
-            >
-              <div className="alley-gallery-image-wrap">
-                <img src={item.image} alt={item.title} loading="lazy" />
-                <span className="alley-gallery-badge">{item.subtitle}</span>
-              </div>
-              <figcaption>
-                <strong>{item.title}</strong>
-                <p>{item.desc}</p>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
+      {/* Күйшілер аллеясының Apple TV үлгісіндегі фотопанорамасы */}
+      <AppleTvMediaGallery items={ALLEY_GALLERY} onNavigate={onNavigate} t={t} />
 
       {/* Жоба жетекшілері мен басты тұлғалары */}
       <section className="project-leaders-section content-width">
