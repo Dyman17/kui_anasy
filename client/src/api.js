@@ -4,16 +4,7 @@ const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 const DEFAULT_SUPER_TOKEN = (import.meta.env.VITE_ADMIN_TOKEN || 'kui_anasy_admin_secret_key_2026_xyz!').trim();
 
 function getLocalPages() {
-  try {
-    const raw = localStorage.getItem('kui-custom-pages');
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch {
-    // Ignore localStorage parse errors
-  }
-  return defaultPages.map((p) => ({
+  const defaults = defaultPages.map((p) => ({
     ...p,
     status: p.status || 'published',
     created_by: p.created_by || 'Бас әкімші',
@@ -21,6 +12,27 @@ function getLocalPages() {
     approved_at: p.approved_at || '2026-10-29T10:00:00.000Z',
     change_summary: p.change_summary || 'Бастапқы нұсқа',
   }));
+
+  try {
+    const raw = localStorage.getItem('kui-custom-pages');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Merge missing default pages into parsed so new subpages and enriched pages appear
+        const existingSlugs = new Set(parsed.map((p) => p.slug));
+        const missing = defaults.filter((d) => !existingSlugs.has(d.slug));
+        if (missing.length > 0) {
+          const merged = [...parsed, ...missing];
+          saveLocalPages(merged);
+          return merged;
+        }
+        return parsed;
+      }
+    }
+  } catch {
+    // Ignore localStorage parse errors
+  }
+  return defaults;
 }
 
 function saveLocalPages(pages) {

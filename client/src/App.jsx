@@ -41,6 +41,17 @@ const NAV_LABELS_MAP = {
     projects: 'Жобалар',
     about: 'Қор туралы',
     library: 'Цифрлық кітапхана',
+    'about-charter': 'Қордың құрылымы мен міндеттері',
+    'about-leadership': 'Қор басшылығы мен ғылыми кеңес',
+    'projects-alley': 'Күйшілер аллеясы',
+    'projects-monument': 'Дина Нұрпейісова монументі',
+    'projects-muragerler': '«Мұрагерлер» жастар үйірмесі',
+    'people-kuyshi': '101 Күйші каноны',
+    'people-zhyrau': '110 Жырау мен жыршы',
+    'people-anshi': '110 Дәстүрлі әнші',
+    'library-vol-1': 'I том · Күй әлемі',
+    'library-vol-2': 'II том · Ғасырлар үні',
+    'library-vol-3': 'III том · Ұлы дала әуені',
   },
   ru: {
     home: 'Главная',
@@ -49,6 +60,17 @@ const NAV_LABELS_MAP = {
     projects: 'Проекты',
     about: 'О фонде',
     library: 'Цифровая библиотека',
+    'about-charter': 'Структура и задачи фонда',
+    'about-leadership': 'Руководство и научный совет',
+    'projects-alley': 'Аллея Кюйши',
+    'projects-monument': 'Монумент Дины Нурпеисовой',
+    'projects-muragerler': 'Молодежный клуб «Мұрагерлер»',
+    'people-kuyshi': 'Канон 101 Кюйши',
+    'people-zhyrau': 'Канон 110 Жырау и жыршы',
+    'people-anshi': 'Канон 110 Традиционных певцов',
+    'library-vol-1': 'Том I · Мир кюя',
+    'library-vol-2': 'Том II · Голос веков',
+    'library-vol-3': 'Том III · Мелодии Великой степи',
   },
   en: {
     home: 'Home',
@@ -57,10 +79,19 @@ const NAV_LABELS_MAP = {
     projects: 'Projects',
     about: 'About Us',
     library: 'Digital Library',
+    'about-charter': 'Charter & Objectives',
+    'about-leadership': 'Leadership & Advisory Board',
+    'projects-alley': 'Kuyshiler Alley',
+    'projects-monument': 'Dina Nurpeisova Monument',
+    'projects-muragerler': '"Muragerler" Youth Club',
+    'people-kuyshi': 'Canon of 101 Kuyshis',
+    'people-zhyrau': 'Canon of 110 Zhyrau',
+    'people-anshi': 'Canon of 110 Traditional Singers',
+    'library-vol-1': 'Vol. I · World of Kui',
+    'library-vol-2': 'Vol. II · Echo of Centuries',
+    'library-vol-3': 'Vol. III · Steppe Melodies',
   },
 };
-
-
 
 const UI_TRANSLATIONS = {
   kk: {
@@ -76,6 +107,10 @@ const UI_TRANSLATIONS = {
     aboutFund: 'Қор туралы',
     leadersTitle: 'Жобаның басты тұлғалары',
     leadersKicker: 'ЖОБА АВТОРЛАРЫ МЕН ЖЕТЕКШІЛЕРІ',
+    galleryKicker: 'АСТАНА · КҮЙШІ ДИНА КӨШЕСІ',
+    galleryTitle: 'Күйшілер аллеясының фотопанорамасы',
+    galleryDesc: 'Елорда төріндегі қазақ музыкалық өркениетінің сәулеттік кешені мен тарихи мемориалдары.',
+    exploreAlley: 'Аллеяны толық көру',
     adminPanel: 'Әкімшілік панель',
     footerCopy: '© 2026 «КҮЙ АНАСЫ» жеке қоры',
     footerDesc: 'Қазақ музыкасының цифрлық энциклопедиясы',
@@ -100,6 +135,10 @@ const UI_TRANSLATIONS = {
     aboutFund: 'О фонде',
     leadersTitle: 'Ключевые лица проекта',
     leadersKicker: 'АВТОРЫ И РУКОВОДИТЕЛИ ПРОЕКТА',
+    galleryKicker: 'АСТАНА · УЛИЦА КУЙШИ ДИНА',
+    galleryTitle: 'Фотопанорама Аллеи Кюйши',
+    galleryDesc: 'Архитектурный комплекс и исторические мемориалы казахской музыкальной цивилизации в столице.',
+    exploreAlley: 'Исследовать аллею',
     adminPanel: 'Панель управления',
     footerCopy: '© 2026 Частный фонд «КҮЙ АНАСЫ»',
     footerDesc: 'Цифровая энциклопедия казахской музыки',
@@ -124,6 +163,10 @@ const UI_TRANSLATIONS = {
     aboutFund: 'About the Foundation',
     leadersTitle: 'Key Figures of the Project',
     leadersKicker: 'PROJECT LEADERS & AUTHORS',
+    galleryKicker: 'ASTANA · KUYSHI DINA STREET',
+    galleryTitle: 'Photo Panorama of Kuyshiler Alley',
+    galleryDesc: 'Architectural complex and historical memorials of Kazakh musical civilization in the capital.',
+    exploreAlley: 'Explore the Alley',
     adminPanel: 'Admin Panel',
     footerCopy: '© 2026 "KUI ANASY" Private Foundation',
     footerDesc: 'Digital Encyclopedia of Kazakh Music',
@@ -141,38 +184,107 @@ const PROJECT_LEADERS = [
   {
     id: 'tolegen-kuanyshev',
     name: 'Қуанышев Төлеген Шағытбайұлы',
-    role: 'Қор төрағасы · Жоба жетекшісі',
-    badge: 'Қор басшылығы',
-    bio: '«КҮЙ АНАСЫ» жеке қорының төрағасы, қазақтың дәстүрлі музыкасын насихаттау және мәдени мұраны цифрландыру бастамасының жетекшісі.',
+    role: 'Қор құрылтайшысы · Жоба жетекшісі',
+    badge: 'Қор басшылығы · Идея авторы',
+    bio: 'Педагогика ғылымдарының кандидаты, профессор. «Күй анасы» жеке қорының құрылтайшысы. 2021 жылы Астанадағы Дина Нұрпейісова монументін орнату, Күйшілер аллеясын құру және «Ұлы дала әуенінің тұлғалары» үш томдық жинағының бастамашысы әрі жетекшісі.',
     initials: 'ТҚ',
-    highlights: ['Мәдени мұраны цифрландыру', 'Күйшілер аллеясы бастамасы'],
+    photo: '/images/tolegen-kuanyshev-founder.jpg',
+    highlights: [
+      'Дина Нұрпейісова монументі идеясының авторы (2021)',
+      'Астанадағы Күйшілер аллеясының бастамашысы',
+      '«Ұлы дала әуенінің тұлғалары» жинағының жетекшісі',
+      'П.ғ.к., профессор, қоғам қайраткері',
+    ],
   },
   {
-    id: 'scientific-advisor',
-    name: 'Ғылыми кеңесші',
-    role: 'Музыкатанушы · Ғылыми сарапшы',
-    badge: 'Ғылыми бағыт',
-    bio: 'Дәстүрлі күй өнері мен жыраулық мұраны зерттеу, тарихи деректердің ғылыми негіздемесін сараптау бағыты (Орын қалдырылды).',
-    initials: 'ҒК',
-    highlights: ['Тарихи деректер сараптамасы', 'Дәстүрлі музыканы зерттеу'],
+    id: 'erzat-zhetibayev',
+    name: 'Жетибаев Ерзат Өмірзақұлы',
+    role: 'Ғылыми кеңесші · Бас сарапшы',
+    badge: 'Ғылыми бағыт · Редакция',
+    bio: 'Филология ғылымдарының кандидаты. «Ұлы дала әуенінің тұлғалары» үш томдық академиялық басылымының ғылыми кеңесшісі, тарихи-музыкалық зерттеулердің методологиялық және деректанушылық сапасына жауапты жетекші ғалым.',
+    initials: 'ЕЖ',
+    photo: null,
+    highlights: [
+      '«Ұлы дала әуенінің тұлғалары» ғылыми кеңесшісі',
+      '321+ тарихи тұлғаның ғылыми канонын сараптау',
+      'Ф.ғ.к., фольклортанушы әрі деректанушы',
+      'Академиялық контент сапасы мен библиография',
+    ],
   },
   {
-    id: 'editorial-lead',
-    name: 'Бас редактор / Өнертанушы',
-    role: 'Энциклопедияның мазмұндық жетекшісі',
-    badge: 'Редакциялық алқа',
-    bio: 'Өнер иелерінің өмірбаяны мен музыкалық шығармаларының деректік қорын жүйелеу және мәтіндерді редакциялау (Орын қалдырылды).',
-    initials: 'БР',
-    highlights: ['Мұрағаттық құжаттарды жүйелеу', 'Өнер иелері каталогы'],
+    id: 'zhalyn-bauyrzhan',
+    name: 'Жалын Бауыржан',
+    role: 'Мүсінші · Монументалист суретші',
+    badge: 'Сәулет және монумент',
+    bio: 'Астана қаласындағы Күйшілер аллеясында орнатылған «Күй анасы — Дина» қола монументінің басты мүсінші-авторы (бірлескен авторлар: Болатбек Еркебайұлы, Аманжол Бекенұлы).',
+    initials: 'ЖБ',
+    photo: null,
+    highlights: [
+      'Дина Нұрпейісованың қола ескерткішінің авторы',
+      'Қазақстанның кәсіби мүсінші-монументалисі',
+      'Күйшілер аллеясының сәулеттік композициясы',
+      'Ұлттық нақыштағы көркем бейнелерді сомдаушы',
+    ],
   },
   {
-    id: 'project-coordinator',
-    name: 'Жоба үйлестірушісі',
-    role: 'Мәдени жобалар және серіктестік',
-    badge: 'Үйлестіру және серіктестік',
-    bio: 'Күйшілер аллеясы жобасын дамыту, қоғамдық және мәдени ұйымдармен серіктестік байланыстарды үйлестіру (Орын қалдырылды).',
-    initials: 'ЖҮ',
-    highlights: ['Қоғамдық серіктестік', 'Мәдени бастамаларды үйлестіру'],
+    id: 'muragerler-club',
+    name: '«Мұрагерлер» жастар үйірмесі',
+    role: 'Мәдени сабақтастық · Жастар бағыты',
+    badge: '«Мұраны сақта, жаңғырт, дамыт!»',
+    bio: '«Күй анасы» қоры жанындағы жастар бастамасы. Дәстүрлі домбыра, қобыз және ән өнерін өскелең ұрпаққа жеткізу, Дина атындағы шәкіртақы тағайындау, экспедициялар мен шеберлік сыныптарын ұйымдастыру.',
+    initials: 'МҰ',
+    photo: null,
+    highlights: [
+      'Ұраны: «Мұраны сақта, жаңғырт, дамыт!»',
+      'Жас таланттарға Дина атындағы стипендиялар',
+      'Фольклорлық және музыкалық экспедициялар',
+      'Жүйелі шеберлік сабақтары мен байқаулар',
+    ],
+  },
+];
+
+const ALLEY_GALLERY = [
+  {
+    image: '/images/alley-arch-main.jpg',
+    title: 'Күйшілер аллеясының бас қақпасы',
+    subtitle: 'Астана · Күйші Дина көшесі',
+    desc: 'Шаңырақ пен қола ноталармен көмкерілген саябақтың монументалды кіреберіс аркасы.',
+    targetSlug: 'projects-alley',
+  },
+  {
+    image: '/images/dina-monument-full.jpg',
+    title: '«Күй анасы — Дина» монументі',
+    subtitle: '2021 ж. орнатылған',
+    desc: 'Дина Нұрпейісованың 160 жылдығына арналған қола ескерткіш пен мәрмәр тұғыр.',
+    targetSlug: 'projects-monument',
+  },
+  {
+    image: '/images/stele-kuyshi-side-a.jpg',
+    title: '101 Күйші гранит стеласы',
+    subtitle: 'Қола қобыз және домбыра',
+    desc: 'Қазақ халқының 101 күйші-композиторының есімдері қашалған қос бетті мәрмәр тақта.',
+    targetSlug: 'people-kuyshi',
+  },
+  {
+    image: '/images/stele-zhyrau-side-a.jpg',
+    title: '110 Жырау мен жыршы стеласы',
+    subtitle: '«Ғасырлар үні» кешені',
+    desc: 'Тоныкөктен басталған 110 жыр саңлағының тарихи шежіресі (2025 ж.).',
+    targetSlug: 'people-zhyrau',
+  },
+  {
+    image: '/images/dina-dedication-plaque.jpg',
+    title: 'Ескерткіштің авторлық тақтасы',
+    subtitle: 'Ресми естелік тақта',
+    desc: 'Идея авторы профессор Т. Қуанышев және мүсінші Ж. Бауыржан авторлық белгісі.',
+    targetSlug: 'projects-monument',
+  },
+  {
+    image: '/images/alley-gazebo.jpg',
+    title: 'Саябақтың демалыс аймағы',
+    subtitle: 'Заманауи мәдени кеңістік',
+    desc: 'Елорда тұрғындары мен қала қонақтарына арналған рухани демалыс орындары.',
+    targetSlug: 'projects-alley',
   },
 ];
 
@@ -531,6 +643,38 @@ function HomePage({ page, onNavigate, t, navLabels }) {
         </section>
       )}
 
+      {/* Күйшілер аллеясының фотопанорамасы */}
+      <section className="alley-gallery-section content-width">
+        <div className="section-topline">
+          <div>
+            <span className="block-kicker">{t.galleryKicker}</span>
+            <h2>{t.galleryTitle}</h2>
+            <p className="section-subtitle-copy">{t.galleryDesc}</p>
+          </div>
+          <button className="underlined-link" onClick={() => onNavigate('projects-alley')}>
+            {t.exploreAlley} <ArrowRight size={15} />
+          </button>
+        </div>
+        <div className="alley-gallery-grid">
+          {ALLEY_GALLERY.map((item, idx) => (
+            <figure
+              key={idx}
+              className="alley-gallery-item"
+              onClick={() => onNavigate(item.targetSlug || 'projects-alley')}
+            >
+              <div className="alley-gallery-image-wrap">
+                <img src={item.image} alt={item.title} loading="lazy" />
+                <span className="alley-gallery-badge">{item.subtitle}</span>
+              </div>
+              <figcaption>
+                <strong>{item.title}</strong>
+                <p>{item.desc}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
       {/* Жоба жетекшілері мен басты тұлғалары */}
       <section className="project-leaders-section content-width">
         <div className="section-topline">
@@ -543,9 +687,13 @@ function HomePage({ page, onNavigate, t, navLabels }) {
           {PROJECT_LEADERS.map((leader) => (
             <article key={leader.id} className="leader-card">
               <div className="leader-avatar-cover">
-                <div className="leader-avatar-orb">
-                  <span>{leader.initials}</span>
-                </div>
+                {leader.photo ? (
+                  <img src={leader.photo} alt={leader.name} className="leader-photo-img" />
+                ) : (
+                  <div className="leader-avatar-orb">
+                    <span>{leader.initials}</span>
+                  </div>
+                )}
               </div>
 
               <div className="leader-body">
@@ -687,11 +835,11 @@ function ContentBlock({ block, index, pageSlug }) {
     return (
       <section className="editorial-cards">
         <h2>{block.title}</h2>
-        <p>{block.body}</p>
+        {block.body && <p>{block.body}</p>}
         <div className="mini-card-grid">
           {(block.items || []).map((card, cardIndex) => (
             <article className="mini-card" key={card.title || cardIndex}>
-              <div className="mini-card-image"><img src={['/images/book-kui-alemi.jpg', '/images/book-gasyrlar-uni.jpg', '/images/book-uly-dala-aueni.jpg'][cardIndex % 3]} alt="" /></div>
+              <div className="mini-card-image"><img src={card.image || ['/images/book-kui-alemi.jpg', '/images/book-gasyrlar-uni.jpg', '/images/book-uly-dala-aueni.jpg'][cardIndex % 3]} alt="" /></div>
               <span>{card.meta}</span>
               <h3>{card.title}</h3>
               <p>{card.description}</p>

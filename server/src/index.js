@@ -202,15 +202,13 @@ async function start() {
   await pool.query('ALTER TABLE content_pages ADD COLUMN IF NOT EXISTS approved_at text NOT NULL DEFAULT \'\'');
   await pool.query('ALTER TABLE content_pages ADD COLUMN IF NOT EXISTS change_summary text NOT NULL DEFAULT \'\'');
 
-  const existing = await pool.query('SELECT COUNT(*)::int AS count FROM content_pages');
-  if (existing.rows[0].count === 0) {
-    for (const page of defaultPages) {
-      await pool.query(
-        `INSERT INTO content_pages (slug, title, description, position, parent_slug, status, created_by, approved_by, approved_at, change_summary, blocks)
-         VALUES ($1, $2, $3, $4, $5, 'published', 'Бас әкімші', 'Бас әкімші', NOW()::text, 'Бастапқы нұсқа', $6::jsonb)`,
-        [page.slug, page.title, page.description, page.position, page.parent_slug || '', JSON.stringify(page.blocks)],
-      );
-    }
+  for (const page of defaultPages) {
+    await pool.query(
+      `INSERT INTO content_pages (slug, title, description, position, parent_slug, status, created_by, approved_by, approved_at, change_summary, blocks)
+       VALUES ($1, $2, $3, $4, $5, 'published', 'Бас әкімші', 'Бас әкімші', NOW()::text, 'Бастапқы нұсқа', $6::jsonb)
+       ON CONFLICT (slug) DO NOTHING`,
+      [page.slug, page.title, page.description, page.position, page.parent_slug || '', JSON.stringify(page.blocks)],
+    );
   }
   app.listen(port, '0.0.0.0', () => console.log(`Kui Anasy API listening on port ${port}`));
 }
