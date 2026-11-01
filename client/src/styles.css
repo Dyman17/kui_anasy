@@ -1563,6 +1563,38 @@ img { display: block; max-width: 100%; height: auto; }
    ========================================================================== */
 .project-leaders-section {
   padding-block: clamp(35px, 5vw, 65px);
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.project-leaders-section .section-topline.section-topline-centered {
+  text-align: center;
+  margin: 0 auto 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-leaders-section .section-topline.section-topline-centered h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.8vw, 2.85rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0;
+  text-align: center;
+}
+
+.project-leaders-section .section-topline.section-topline-centered .block-kicker {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--terra);
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: inline-block;
+  text-align: center;
 }
 
 .leaders-grid {
@@ -2800,73 +2832,71 @@ img { display: block; max-width: 100%; height: auto; }
   margin: 0;
 }
 
+/* Centered Stage Wrapper */
+.tv-gallery-stage {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Media Gallery Root */
 .media-gallery.tv-media-gallery {
   position: relative;
   width: 100%;
-  --slide-w: min(920px, 80vw);
-  --slide-gap: 24px;
-}
-
-@media (max-width: 768px) {
-  .media-gallery.tv-media-gallery {
-    --slide-w: 88vw;
-    --slide-gap: 16px;
-  }
+  margin: 0 auto;
 }
 
 .tv-gallery-viewport {
   position: relative;
   width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 24px;
   overflow: hidden;
-  padding: 18px 0;
+  box-shadow: 0 25px 65px -12px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+  background: #0f0a08;
 }
 
-/* Item Container (Track) */
+@media (max-width: 640px) {
+  .tv-gallery-viewport {
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
+  }
+}
+
+/* Item Container (Stacked Centered Slides) */
 .media-gallery-item-container {
-  display: flex;
-  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
   list-style: none;
   margin: 0;
   padding: 0;
-  width: 100%;
-  will-change: transform;
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
 }
 
 /* Slide Item */
 .media-gallery-item {
-  flex-shrink: 0;
-  width: var(--slide-w);
-  margin-right: var(--slide-gap);
-  border-radius: 20px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.65s ease,
-              filter 0.65s ease,
-              box-shadow 0.4s ease;
-  transform: scale(0.9);
-  opacity: 0.45;
-  filter: brightness(0.85);
-  cursor: pointer;
-  user-select: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .media-gallery-item.current {
-  transform: scale(1);
   opacity: 1;
-  filter: brightness(1);
-  z-index: 3;
-  cursor: default;
-  box-shadow: 0 28px 70px -12px rgba(184, 67, 42, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.22) inset;
-}
-
-.media-gallery-item:not(.current):hover {
-  opacity: 0.72;
-  transform: scale(0.92);
-  filter: brightness(0.95);
+  transform: scale(1);
+  pointer-events: auto;
+  z-index: 2;
 }
 
 /* Wrapper Link */
@@ -2874,16 +2904,10 @@ img { display: block; max-width: 100%; height: auto; }
   display: block;
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   text-decoration: none;
   color: #ffffff;
   overflow: hidden;
-}
-
-@media (max-width: 640px) {
-  .media-gallery-wrapper-link {
-    aspect-ratio: 4 / 3;
-  }
 }
 
 /* Background image & zoom */
@@ -3161,6 +3185,7 @@ img { display: block; max-width: 100%; height: auto; }
    ========================================================================== */
 .muragerler-section {
   position: relative;
+  max-width: 1040px;
   margin: var(--spacing-xxl) auto;
   z-index: 2;
 }

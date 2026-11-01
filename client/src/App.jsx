@@ -670,129 +670,118 @@ function AppleTvMediaGallery({ items, onNavigate, t }) {
   };
 
   return (
-    <section className="tv-gallery-section" aria-labelledby="tv-media-gallery-title">
+    <section className="tv-gallery-section content-width" aria-labelledby="tv-media-gallery-title">
       <div className="tv-gallery-header">
         <span className="block-kicker">{t.galleryKicker}</span>
         <h2 id="tv-media-gallery-title" className="tv-gallery-title">{t.galleryTitle}</h2>
         <p className="tv-gallery-subtitle">{t.galleryDesc}</p>
       </div>
 
-      <div
-        id="tv-media-gallery"
-        className="media-gallery tv-media-gallery"
-        role="group"
-        data-analytics-section-engagement="name:tv-plus-gallery"
-        data-analytics-gallery-id="Tv Plus Gallery"
-        aria-label="Күйшілер аллеясының фотопанорамасы"
-        data-media-gallery=""
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="tv-gallery-viewport">
-          <ul
-            className="media-gallery-item-container"
-            role="list"
-            style={{
-              transform: `translateX(calc(50% - ${activeIndex} * (var(--slide-w) + var(--slide-gap)) - var(--slide-w) / 2))`,
-            }}
-          >
-            {items.map((item, idx) => {
-              const isCurrent = idx === activeIndex;
+      <div className="tv-gallery-stage">
+        <div
+          id="tv-media-gallery"
+          className="media-gallery tv-media-gallery"
+          role="group"
+          data-analytics-section-engagement="name:tv-plus-gallery"
+          data-analytics-gallery-id="Tv Plus Gallery"
+          aria-label="Күйшілер аллеясының фотопанорамасы"
+          data-media-gallery=""
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="tv-gallery-viewport">
+            <ul className="media-gallery-item-container" role="list">
+              {items.map((item, idx) => {
+                const isCurrent = idx === activeIndex;
 
-              return (
-                <li
-                  key={item.id}
-                  id={`endless-entertainment-gallery-item-${item.id}`}
-                  className={`media-gallery-item theme-dark ${isCurrent ? 'current current-item' : ''}`}
-                  data-media-gallery-item={item.id}
-                  data-title={item.title}
-                  role="tabpanel"
-                  aria-labelledby={`media-gallery-item-${item.id}-link`}
-                  aria-hidden={!isCurrent}
-                  style={{
-                    '--progress': isCurrent ? 1 : 0,
-                  }}
-                  onClick={() => {
-                    if (!isCurrent) setActiveIndex(idx);
-                  }}
-                >
-                  <a
-                    id={`media-gallery-item-${item.id}-link`}
-                    className="media-gallery-wrapper-link fam-media-gallery-wrapper-link"
-                    href={`#${item.targetSlug}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (isCurrent) {
-                        onNavigate(item.targetSlug);
-                      } else {
-                        setActiveIndex(idx);
-                      }
+                return (
+                  <li
+                    key={item.id}
+                    id={`endless-entertainment-gallery-item-${item.id}`}
+                    className={`media-gallery-item theme-dark ${isCurrent ? 'current current-item' : ''}`}
+                    data-media-gallery-item={item.id}
+                    data-title={item.title}
+                    role="tabpanel"
+                    aria-labelledby={`media-gallery-item-${item.id}-link`}
+                    aria-hidden={!isCurrent}
+                    style={{
+                      '--progress': isCurrent ? 1 : 0,
                     }}
-                    aria-label={`${item.title} - ${item.desc}`}
                   >
-                    <div className="media-gallery-bg-wrapper">
-                      <picture className="media-gallery-bg" data-lazy="">
-                        <img src={item.image} alt={item.title} loading="lazy" />
-                      </picture>
-                      <div className="media-gallery-scrim" aria-hidden="true" />
-                    </div>
-
-                    <div className="media-gallery-contents">
-                      <div className="media-gallery-top-content tv-gallery-top-content-s-only">
-                        <span className="tv-gallery-badge">{item.genre}</span>
+                    <a
+                      id={`media-gallery-item-${item.id}-link`}
+                      className="media-gallery-wrapper-link fam-media-gallery-wrapper-link"
+                      href={`#${item.targetSlug}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onNavigate(item.targetSlug);
+                      }}
+                      aria-label={`${item.title} - ${item.desc}`}
+                    >
+                      <div className="media-gallery-bg-wrapper">
+                        <picture className="media-gallery-bg" data-lazy="">
+                          <img src={item.image} alt={item.title} loading={idx === 0 ? 'eager' : 'lazy'} />
+                        </picture>
+                        <div className="media-gallery-scrim" aria-hidden="true" />
                       </div>
-                      <div className="media-gallery-bottom-content">
-                        <div className="media-gallery-headline">
-                          <span className="media-gallery-genre">{item.genre}</span>
-                          <h3 className="media-gallery-title">{item.title}</h3>
+
+                      <div className="media-gallery-contents">
+                        <div className="media-gallery-top-content tv-gallery-top-content-s-only">
+                          <span className="tv-gallery-badge">{item.genre}</span>
                         </div>
-                        <p className="media-gallery-desc">{item.desc}</p>
-                        <span className="media-gallery-button">
-                          <span>{t.exploreBtn || 'Толығырақ көру'}</span>
-                          <ArrowRight size={15} />
-                        </span>
+                        <div className="media-gallery-bottom-content">
+                          <div className="media-gallery-headline">
+                            <span className="media-gallery-genre">{item.genre}</span>
+                            <h3 className="media-gallery-title">{item.title}</h3>
+                          </div>
+                          <p className="media-gallery-desc">{item.desc}</p>
+                          <span className="media-gallery-button">
+                            <span>{t.exploreBtn || 'Толығырақ көру'}</span>
+                            <ArrowRight size={15} />
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
 
-          <button
-            type="button"
-            className="tv-gallery-nav-btn prev-btn"
-            onClick={handlePrev}
-            aria-label="Алдыңғы слайд"
-          >
-            <ChevronLeft size={26} />
-          </button>
-          <button
-            type="button"
-            className="tv-gallery-nav-btn next-btn"
-            onClick={handleNext}
-            aria-label="Келесі слайд"
-          >
-            <ChevronRight size={26} />
-          </button>
-        </div>
-
-        <div className="tv-gallery-pagination" role="tablist" aria-label="Слайдтар">
-          {items.map((item, idx) => (
             <button
-              key={item.id}
               type="button"
-              role="tab"
-              aria-selected={idx === activeIndex}
-              aria-label={`${item.title} (${idx + 1} / ${total})`}
-              className={`tv-gallery-dot ${idx === activeIndex ? 'active' : ''}`}
-              onClick={() => setActiveIndex(idx)}
+              className="tv-gallery-nav-btn prev-btn"
+              onClick={handlePrev}
+              aria-label="Алдыңғы слайд"
             >
-              <span className="tv-gallery-dot-inner" />
+              <ChevronLeft size={26} />
             </button>
-          ))}
+            <button
+              type="button"
+              className="tv-gallery-nav-btn next-btn"
+              onClick={handleNext}
+              aria-label="Келесі слайд"
+            >
+              <ChevronRight size={26} />
+            </button>
+          </div>
+
+          <div className="tv-gallery-pagination" role="tablist" aria-label="Слайдтар">
+            {items.map((item, idx) => (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                aria-selected={idx === activeIndex}
+                aria-label={`${item.title} (${idx + 1} / ${total})`}
+                className={`tv-gallery-dot ${idx === activeIndex ? 'active' : ''}`}
+                onClick={() => setActiveIndex(idx)}
+              >
+                <span className="tv-gallery-dot-inner" />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -1163,11 +1152,9 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
 
       {/* Жоба жетекшілері мен басты тұлғалары */}
       <section className="project-leaders-section content-width">
-        <div className="section-topline">
-          <div>
-            <span className="block-kicker">{t.leadersKicker}</span>
-            <h2>{t.leadersTitle}</h2>
-          </div>
+        <div className="section-topline section-topline-centered">
+          <span className="block-kicker">{t.leadersKicker}</span>
+          <h2>{t.leadersTitle}</h2>
         </div>
         <div className="leaders-grid">
           {PROJECT_LEADERS.map((leader) => (
