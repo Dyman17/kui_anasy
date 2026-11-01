@@ -1767,10 +1767,15 @@ img { display: block; max-width: 100%; height: auto; }
   color: var(--muted);
 }
 
-.leader-check-icon {
+.leader-highlight-bullet {
   flex-shrink: 0;
-  margin-top: 2px;
   color: var(--terra);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+[data-theme="dark"] .leader-highlight-bullet {
+  color: var(--gold);
 }
 
 
@@ -1916,9 +1921,7 @@ img { display: block; max-width: 100%; height: auto; }
   color: #b59f99;
 }
 
-[data-theme="dark"] .leader-check-icon {
-  color: var(--gold);
-}
+
 
 [data-theme="dark"] .admin-shell {
   background: #18070ef8;
@@ -1956,27 +1959,7 @@ img { display: block; max-width: 100%; height: auto; }
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Dombra Silhouette Watermark */
-.dombra-watermark {
-  position: absolute;
-  pointer-events: none;
-  opacity: .075;
-  z-index: 0;
-}
-.dombra-watermark-hero {
-  right: -30px;
-  bottom: -40px;
-  width: min(340px, 45vw);
-  height: auto;
-  transform: rotate(-15deg);
-}
-.dombra-watermark-footer {
-  right: 5%;
-  bottom: 10px;
-  width: 190px;
-  height: auto;
-  opacity: .05;
-}
+/* Dombra watermarks removed as requested */
 
 /* Kazakh Ornamental Border & Corners */
 .ornament-divider {

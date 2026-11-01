@@ -1,5 +1,40 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  PiSunDuotone,
+  PiMoonStarsDuotone,
+  PiUsersDuotone,
+  PiWaveformDuotone,
+  PiCrownDuotone,
+  PiGraduationCapDuotone,
+  PiPaletteDuotone,
+  PiSparkleDuotone,
+  PiStudentDuotone,
+  PiMusicNotesPlusDuotone,
+  PiChalkboardTeacherDuotone,
+  PiCompassDuotone,
+  PiBookmarksDuotone,
+  PiGearDuotone,
+  PiCopyDuotone,
+  PiCheckBold,
+} from 'react-icons/pi';
+import {
+  RiSearch2Line,
+  RiCloseLine,
+  RiMenu4Line,
+  RiCompass3Line,
+  RiInformationLine,
+  RiBookmarkLine,
+  RiArrowRightUpLine,
+  RiArrowRightLine,
+  RiPlayCircleLine,
+  RiShieldKeyholeLine,
+} from 'react-icons/ri';
+import {
+  TbPanoramaHorizontal,
+  TbChevronLeft,
+  TbChevronRight,
+} from 'react-icons/tb';
+import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight,
   Award, Check, ChevronLeft, ChevronRight, Compass, Copy, Download, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, MapPin, Maximize2, Menu, Minimize2, Moon, Music, Pencil, Plus, QrCode, RotateCcw, Save, Search, Share2, ShieldCheck, Sparkles, Sun, Trash2, UserCheck, Users, X,
 } from 'lucide-react';
@@ -386,21 +421,7 @@ const PARENT_SECTIONS = [
   { slug: 'about', title: 'Қор туралы (ұйым, қызмет)' },
 ];
 
-function DombraSilhouette({ className = '' }) {
-  return (
-    <svg className={className} viewBox="0 0 160 520" fill="currentColor" aria-hidden="true">
-      <path d="M78 0c-4 0-7 3-7 7v180c-18 8-36 28-44 52-16 48-10 114 16 160 22 39 48 48 74 48s52-9 74-48c26-46 32-112 16-160-8-24-26-44-44-52V7c0-4-3-7-7-7h-8zm-2 225c2 0 4 2 4 4v85c0 2-2 4-4 4s-4-2-4-4v-85c0-2 2-4 4-4zm8 140c8 0 15 7 15 15s-7 15-15 15-15-7-15-15 7-15 15-15z" />
-    </svg>
-  );
-}
 
-function OrnamentDivider() {
-  return (
-    <div className="ornament-divider" aria-hidden="true">
-      <span className="ornament-glyph">❖</span>
-    </div>
-  );
-}
 
 function App() {
   const [pages, setPages] = useState([]);
@@ -535,7 +556,7 @@ function App() {
         </a>
 
         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Мәзір">
-          {menuOpen ? <X /> : <Menu />}
+          {menuOpen ? <RiCloseLine size={24} /> : <RiMenu4Line size={24} />}
         </button>
 
         <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`}>
@@ -557,20 +578,20 @@ function App() {
 
             {/* Dark / Light theme toggle */}
             <button className="theme-toggle-btn" onClick={toggleTheme} title={theme === 'dark' ? 'Жарық тақырып' : 'Қараңғы тақырып'}>
-              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+              {theme === 'dark' ? <PiSunDuotone size={19} /> : <PiMoonStarsDuotone size={19} />}
             </button>
           </div>
 
-          <button className="icon-button" aria-label="Іздеу" onClick={() => setSearchOpen(!searchOpen)}><Search size={19} /></button>
+          <button className="icon-button" aria-label="Іздеу" onClick={() => setSearchOpen(!searchOpen)}><RiSearch2Line size={18} /></button>
         </div>
       </header>
 
       {searchOpen && (
         <section className="search-wrap">
           <div className="search-bar">
-            <Search size={18} />
+            <RiSearch2Line size={18} />
             <input type="search" placeholder={t.searchPlaceholder} value={query} onChange={(event) => setQuery(event.target.value)} autoFocus />
-            {query && <button className="icon-button" onClick={() => setQuery('')}><X size={17} /></button>}
+            {query && <button className="icon-button" onClick={() => setQuery('')}><RiCloseLine size={18} /></button>}
           </div>
           {query.trim() && (
             <div className="search-results">
@@ -596,7 +617,6 @@ function App() {
       )}
 
       <footer className="site-footer">
-        <DombraSilhouette className="dombra-watermark dombra-watermark-footer" />
         <div className="footer-main">
           <div className="footer-brand">
             <a className="brand" href="#" onClick={(event) => { event.preventDefault(); navigate('home'); }}>
@@ -606,7 +626,7 @@ function App() {
             <p>Қазақтың ұлттық музыкалық мұрасын сақтау, зерттеу және келер ұрпаққа жеткізуге арналған цифрлық бастама.</p>
           </div>
           <div>
-            <span className="footer-heading">Бөлімдер</span>
+            <span className="footer-heading"><PiBookmarksDuotone size={15} style={{ marginRight: 6, verticalAlign: '-2px' }} />Бөлімдер</span>
             <div className="footer-links">
               {navPages.filter((page) => page.slug !== 'home').slice(0, 4).map((page) => (
                 <button key={page.slug} onClick={() => navigate(page.slug)}>
@@ -616,9 +636,9 @@ function App() {
             </div>
           </div>
           <div>
-            <span className="footer-heading">Басқару</span>
+            <span className="footer-heading"><PiGearDuotone size={15} style={{ marginRight: 6, verticalAlign: '-2px' }} />Басқару</span>
             <p>Энциклопедия мазмұнын басқару және жаңа парақшалар енгізу.</p>
-            <a href="#admin">{t.adminPanel} <ArrowUpRight size={14} /></a>
+            <a href="#admin">{t.adminPanel} <RiShieldKeyholeLine size={15} style={{ marginLeft: 6, verticalAlign: '-2px' }} /></a>
           </div>
         </div>
         <div className="footer-bottom">
@@ -729,7 +749,7 @@ function AppleTvMediaGallery({ items, onNavigate, t }) {
 
                       <div className="media-gallery-contents">
                         <div className="media-gallery-top-content tv-gallery-top-content-s-only">
-                          <span className="tv-gallery-badge">{item.genre}</span>
+                          <span className="tv-gallery-badge"><TbPanoramaHorizontal size={14} style={{ marginRight: 6, verticalAlign: '-2px' }} />{item.genre}</span>
                         </div>
                         <div className="media-gallery-bottom-content">
                           <div className="media-gallery-headline">
@@ -739,7 +759,7 @@ function AppleTvMediaGallery({ items, onNavigate, t }) {
                           <p className="media-gallery-desc">{item.desc}</p>
                           <span className="media-gallery-button">
                             <span>{t.exploreBtn || 'Толығырақ көру'}</span>
-                            <ArrowRight size={15} />
+                            <RiPlayCircleLine size={17} />
                           </span>
                         </div>
                       </div>
@@ -755,7 +775,7 @@ function AppleTvMediaGallery({ items, onNavigate, t }) {
               onClick={handlePrev}
               aria-label="Алдыңғы слайд"
             >
-              <ChevronLeft size={26} />
+              <TbChevronLeft size={26} />
             </button>
             <button
               type="button"
@@ -763,7 +783,7 @@ function AppleTvMediaGallery({ items, onNavigate, t }) {
               onClick={handleNext}
               aria-label="Келесі слайд"
             >
-              <ChevronRight size={26} />
+              <TbChevronRight size={26} />
             </button>
           </div>
 
@@ -1065,8 +1085,8 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
           <p>{page.description}</p>
           <p className="hero-english">Kazakh music, its people and living traditions.</p>
           <div className="hero-actions">
-            <button className="button button-dark" onClick={() => onNavigate('people')}>{t.peopleBtn} <ArrowRight size={17} /></button>
-            <button className="text-button" onClick={() => onNavigate('heritage')}>{t.heritageBtn} <ArrowUpRight size={16} /></button>
+            <button className="button button-dark" onClick={() => onNavigate('people')}>{t.peopleBtn} <PiUsersDuotone size={18} /></button>
+            <button className="text-button" onClick={() => onNavigate('heritage')}>{t.heritageBtn} <PiWaveformDuotone size={18} /></button>
           </div>
         </div>
 
@@ -1086,7 +1106,7 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
             <h2>{feature.title}</h2>
             <p>{feature.body}</p>
             <button className="underlined-link" onClick={() => onNavigate('people')}>
-              Тұлғалар каталогы <ArrowRight size={15} />
+              Тұлғалар каталогы <RiCompass3Line size={16} />
             </button>
           </div>
           <span className="featured-person-pattern" aria-hidden="true" />
@@ -1111,7 +1131,7 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
             <h2>{intro.title}</h2>
             <p>{intro.body}</p>
             <button className="underlined-link" onClick={() => onNavigate('about')}>
-              {t.aboutFund} <ArrowRight size={15} />
+              {t.aboutFund} <RiInformationLine size={16} />
             </button>
           </div>
 
@@ -1128,7 +1148,7 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
           <div className="section-topline">
             <h2>{latest.title}</h2>
             <button className="underlined-link" onClick={() => onNavigate('library')}>
-              {t.libraryBtn} <ArrowRight size={15} />
+              {t.libraryBtn} <RiBookmarkLine size={16} />
             </button>
           </div>
           <div className="discover-spread">
@@ -1140,7 +1160,7 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
                   <strong>{item.title}</strong>
                   <span className="discover-description">{item.description}</span>
                 </span>
-                <ArrowUpRight size={22} />
+                <RiArrowRightUpLine size={22} />
               </button>
             ))}
           </div>
@@ -1170,7 +1190,12 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
               </div>
 
               <div className="leader-body">
-                <span className="leader-pill-badge">{leader.badge}</span>
+                <span className="leader-pill-badge">
+                  {leader.id === 'tolegen-kuanyshev' && <PiCrownDuotone size={13} style={{ marginRight: 6, verticalAlign: '-1px' }} />}
+                  {leader.id === 'erzat-zhetibayev' && <PiGraduationCapDuotone size={13} style={{ marginRight: 6, verticalAlign: '-1px' }} />}
+                  {leader.id === 'zhalyn-bauyrzhan' && <PiPaletteDuotone size={13} style={{ marginRight: 6, verticalAlign: '-1px' }} />}
+                  <span>{leader.badge}</span>
+                </span>
                 <h3 className="leader-name">{leader.name}</h3>
                 <p className="leader-specialty">{leader.role}</p>
                 <p className="leader-bio">{leader.bio}</p>
@@ -1179,7 +1204,7 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
                   <div className="leader-highlights">
                     {leader.highlights.map((item, idx) => (
                       <div key={idx} className="leader-highlight-item">
-                        <Check size={13} className="leader-check-icon" />
+                        <span className="leader-highlight-bullet" aria-hidden="true">✦</span>
                         <span>{item}</span>
                       </div>
                     ))}
@@ -1197,7 +1222,7 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
           <div className="muragerler-header">
             <div className="muragerler-header-copy">
               <span className="muragerler-slogan-pill">
-                <Sparkles size={14} className="muragerler-slogan-icon" />
+                <PiSparkleDuotone size={16} className="muragerler-slogan-icon" />
                 <span>{t.muragerlerSlogan || '«Мұраны сақта, жаңғырт, дамыт!»'}</span>
               </span>
               <span className="block-kicker">{t.muragerlerKicker || 'ЖАСТАР БАСТАМАСЫ · МӘДЕНИ САБАҚТАСТЫҚ'}</span>
@@ -1209,7 +1234,7 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
               onClick={() => onNavigate('projects-muragerler')}
             >
               <span>{t.muragerlerBtn || 'Үйірме туралы толық білу'}</span>
-              <ArrowRight size={17} />
+              <RiArrowRightLine size={18} />
             </button>
           </div>
 
@@ -1217,10 +1242,10 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
             {(MURAGERLER_FEATURES[lang] || MURAGERLER_FEATURES.kk).map((feature, idx) => (
               <div key={idx} className="muragerler-feature-box">
                 <div className="muragerler-feature-icon-orb">
-                  {idx === 0 && <Award size={20} />}
-                  {idx === 1 && <Music size={20} />}
-                  {idx === 2 && <Users size={20} />}
-                  {idx === 3 && <Compass size={20} />}
+                  {idx === 0 && <PiStudentDuotone size={23} />}
+                  {idx === 1 && <PiMusicNotesPlusDuotone size={23} />}
+                  {idx === 2 && <PiChalkboardTeacherDuotone size={23} />}
+                  {idx === 3 && <PiCompassDuotone size={23} />}
                 </div>
                 <div className="muragerler-feature-copy">
                   <h4>{feature.title}</h4>
@@ -1293,7 +1318,7 @@ function StandardPage({ page, onNavigate, query, allPages = [], isEditor = false
                   </div>
                   <h3>{sub.title}</h3>
                   <p>{sub.description || 'Толық мазмұнын ашу үшін басыңыз.'}</p>
-                  <span className="subpage-read-link">{t.readMore} <ArrowRight size={14} /></span>
+                  <span className="subpage-read-link">{t.readMore} <RiArrowRightLine size={14} /></span>
                 </article>
               ))}
             </div>
@@ -1369,7 +1394,7 @@ function ContentBlock({ block, index, pageSlug }) {
         {block.eyebrow && <span className="block-kicker">{block.eyebrow}</span>}
         <h2>{block.title}</h2>
         <p>{block.body}</p>
-        {block.link && <a className="underlined-link" href={block.link} target="_blank" rel="noreferrer">{block.linkLabel || 'Толығырақ'} <ArrowRight size={14} /></a>}
+        {block.link && <a className="underlined-link" href={block.link} target="_blank" rel="noreferrer">{block.linkLabel || 'Толығырақ'} <RiArrowRightLine size={14} /></a>}
       </div>
     );
   }
@@ -1447,7 +1472,7 @@ function QRBlock({ block }) {
             {block.link} <ArrowUpRight size={14} />
           </a>
           <button type="button" className="qr-copy-btn" onClick={handleCopy}>
-            {copied ? <Check size={13} /> : <Copy size={13} />}
+            {copied ? <PiCheckBold size={13} /> : <PiCopyDuotone size={13} />}
             <span>{copied ? 'Көшірілді!' : 'Көшіру'}</span>
           </button>
         </div>
