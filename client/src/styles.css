@@ -111,7 +111,7 @@
   -webkit-font-smoothing: antialiased;
   --paper: #f2eae9;
   --paper-light: #fff8f6;
-  --paper-panel: rgba(242, 234, 233, 0.25);
+  --paper-panel: rgba(242, 234, 233, 0.90);
   --paper-shade: #cfcac8;
   --ink: #3b1106;
   --muted: #6d4d47;
@@ -1791,7 +1791,7 @@ img { display: block; max-width: 100%; height: auto; }
 [data-theme="dark"] {
   --paper: #14070b;
   --paper-light: #220d15;
-  --paper-panel: rgba(26, 8, 15, 0.25);
+  --paper-panel: rgba(20, 7, 11, 0.92);
   --paper-shade: #361722;
   --ink: #fdf5f2;
   --muted: #c7a7a0;
