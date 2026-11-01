@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight,
-  Check, ChevronLeft, ChevronRight, Compass, Copy, Download, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, MapPin, Maximize2, Menu, Minimize2, Moon, Pencil, Plus, QrCode, RotateCcw, Save, Search, Share2, ShieldCheck, Sun, Trash2, UserCheck, Users, X,
+  Award, Check, ChevronLeft, ChevronRight, Compass, Copy, Download, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, MapPin, Maximize2, Menu, Minimize2, Moon, Music, Pencil, Plus, QrCode, RotateCcw, Save, Search, Share2, ShieldCheck, Sparkles, Sun, Trash2, UserCheck, Users, X,
 } from 'lucide-react';
 import QRCode from 'qrcode';
 import {
@@ -122,6 +122,11 @@ const UI_TRANSLATIONS = {
     calloutTitle: 'Қазақ музыкасының үш томдық жинағы.',
     calloutDesc: 'Күй өнері, жыраулық дәстүр мен әншілік мектептер туралы зерттеу материалдары.',
     calloutBtn: 'Кітапхананы қарау',
+    muragerlerKicker: 'ЖАСТАР БАСТАМАСЫ · МӘДЕНИ САБАҚТАСТЫҚ',
+    muragerlerTitle: '«Мұрагерлер» жастар үйірмесі',
+    muragerlerSlogan: '«Мұраны сақта, жаңғырт, дамыт!»',
+    muragerlerDesc: '«Күй анасы» жеке қоры жанындағы өскелең ұрпақты ұлттық музыка өнеріне баулу және жас дарындарды жан-жақты қолдау бастамасы.',
+    muragerlerBtn: 'Үйірме туралы толық білу',
   },
   ru: {
     brandSubtitle: 'Цифровая энциклопедия казахской музыки',
@@ -151,6 +156,11 @@ const UI_TRANSLATIONS = {
     calloutTitle: 'Трехтомное собрание казахской музыки.',
     calloutDesc: 'Исследовательские материалы об искусстве кюя, традиции жырау и школах пения.',
     calloutBtn: 'Смотреть библиотеку',
+    muragerlerKicker: 'МОЛОДЕЖНАЯ ИНИЦИАТИВА · КУЛЬТУРНАЯ ПРЕЕМСТВЕННОСТЬ',
+    muragerlerTitle: 'Молодежный клуб «Мұрагерлер»',
+    muragerlerSlogan: '«Сохраняй, возрождай, развивай наследие!»',
+    muragerlerDesc: 'Молодежная инициатива при фонде «Күй анасы» по приобщению подрастающего поколения к традиционной музыке и всесторонней поддержке юных талантов.',
+    muragerlerBtn: 'Подробнее о клубе',
   },
   en: {
     brandSubtitle: 'Digital Encyclopedia of Kazakh Music',
@@ -180,6 +190,11 @@ const UI_TRANSLATIONS = {
     calloutTitle: 'Three-volume collection of Kazakh traditional music.',
     calloutDesc: 'Research materials, biographies, and audio archives of the great steppe masters.',
     calloutBtn: 'Browse Library',
+    muragerlerKicker: 'YOUTH INITIATIVE · CULTURAL CONTINUITY',
+    muragerlerTitle: '"Muragerler" Youth Club',
+    muragerlerSlogan: '"Preserve, Revive, Develop the Heritage!"',
+    muragerlerDesc: 'A youth initiative by the "Kui Anasy" Foundation to engage the younger generation in traditional Kazakh music and support emerging talents.',
+    muragerlerBtn: 'Learn More About the Club',
   },
 };
 
@@ -229,22 +244,64 @@ const PROJECT_LEADERS = [
       'Ұлттық нақыштағы көркем бейнелерді сомдаушы',
     ],
   },
-  {
-    id: 'muragerler-club',
-    name: '«Мұрагерлер» жастар үйірмесі',
-    role: 'Мәдени сабақтастық · Жастар бағыты',
-    badge: '«Мұраны сақта, жаңғырт, дамыт!»',
-    bio: '«Күй анасы» қоры жанындағы жастар бастамасы. Дәстүрлі домбыра, қобыз және ән өнерін өскелең ұрпаққа жеткізу, Дина атындағы шәкіртақы тағайындау, экспедициялар мен шеберлік сыныптарын ұйымдастыру.',
-    initials: 'МҰ',
-    photo: null,
-    highlights: [
-      'Ұраны: «Мұраны сақта, жаңғырт, дамыт!»',
-      'Жас таланттарға Дина атындағы стипендиялар',
-      'Фольклорлық және музыкалық экспедициялар',
-      'Жүйелі шеберлік сабақтары мен байқаулар',
-    ],
-  },
 ];
+
+const MURAGERLER_FEATURES = {
+  kk: [
+    {
+      title: 'Дина атындағы стипендия',
+      desc: 'Жас талантты күйшілер мен дәстүрлі өнерпаздарға жыл сайынғы арнайы шәкіртақы және қолдау.',
+    },
+    {
+      title: 'Ашық аспан концерттері',
+      desc: 'Жазғы маусымда Күйшілер аллеясында өтетін ашық аспан астындағы кештер мен дәрістер.',
+    },
+    {
+      title: 'Тәлімгерлік шеберлік сабақтары',
+      desc: 'Еліміздің белгілі күйші-ғалымдары мен кәсіби ұстаздарының мектептердегі дәрістері.',
+    },
+    {
+      title: 'Фольклорлық экспедициялар',
+      desc: 'Көне күйлер мен дала сарындарының шығу аңыздарын зерттейтін жас өлкетанушылар сапарлары.',
+    },
+  ],
+  ru: [
+    {
+      title: 'Стипендия имени Дины',
+      desc: 'Ежегодные специальные стипендии и поддержка юных талантливых кюйши и исполнителей.',
+    },
+    {
+      title: 'Концерты под открытым небом',
+      desc: 'Летние музыкальные вечера, лекции и выступления на Аллее Кюйши в Астане.',
+    },
+    {
+      title: 'Наставнические мастер-классы',
+      desc: 'Уроки мастерства от признанных ученых-музыковедов и мастеров сцены в школах столицы.',
+    },
+    {
+      title: 'Фольклорные экспедиции',
+      desc: 'Краеведческие экспедиции молодежи по исследованию исторических истоков и легенд кюев.',
+    },
+  ],
+  en: [
+    {
+      title: 'Dina Nurpeisova Scholarship',
+      desc: 'Annual grants and financial support for young gifted kuyshis and traditional artists.',
+    },
+    {
+      title: 'Open-Air Concerts',
+      desc: 'Summer evening performances and lectures held at the Kuyshiler Alley in Astana.',
+    },
+    {
+      title: 'Masterclasses & Mentorship',
+      desc: 'Interactive workshops in schools led by prominent musicologists and virtuosos.',
+    },
+    {
+      title: 'Folklore Expeditions',
+      desc: 'Youth research trips exploring historical legends and origins of traditional kuys.',
+    },
+  ],
+};
 
 const ALLEY_GALLERY = [
   {
@@ -1144,6 +1201,47 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
               </div>
             </article>
           ))}
+        </div>
+      </section>
+
+      {/* «Мұрагерлер» жастар үйірмесі арнайы блогы */}
+      <section className="muragerler-section content-width">
+        <div className="muragerler-card">
+          <div className="muragerler-header">
+            <div className="muragerler-header-copy">
+              <span className="muragerler-slogan-pill">
+                <Sparkles size={14} className="muragerler-slogan-icon" />
+                <span>{t.muragerlerSlogan || '«Мұраны сақта, жаңғырт, дамыт!»'}</span>
+              </span>
+              <span className="block-kicker">{t.muragerlerKicker || 'ЖАСТАР БАСТАМАСЫ · МӘДЕНИ САБАҚТАСТЫҚ'}</span>
+              <h2 className="muragerler-title">{t.muragerlerTitle || '«Мұрагерлер» жастар үйірмесі'}</h2>
+              <p className="muragerler-desc">{t.muragerlerDesc || '«Күй анасы» жеке қоры жанындағы өскелең ұрпақты ұлттық музыка өнеріне баулу және жас дарындарды жан-жақты қолдау бастамасы.'}</p>
+            </div>
+            <button
+              className="muragerler-cta-btn"
+              onClick={() => onNavigate('projects-muragerler')}
+            >
+              <span>{t.muragerlerBtn || 'Үйірме туралы толық білу'}</span>
+              <ArrowRight size={17} />
+            </button>
+          </div>
+
+          <div className="muragerler-features-grid">
+            {(MURAGERLER_FEATURES[lang] || MURAGERLER_FEATURES.kk).map((feature, idx) => (
+              <div key={idx} className="muragerler-feature-box">
+                <div className="muragerler-feature-icon-orb">
+                  {idx === 0 && <Award size={20} />}
+                  {idx === 1 && <Music size={20} />}
+                  {idx === 2 && <Users size={20} />}
+                  {idx === 3 && <Compass size={20} />}
+                </div>
+                <div className="muragerler-feature-copy">
+                  <h4>{feature.title}</h4>
+                  <p>{feature.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
