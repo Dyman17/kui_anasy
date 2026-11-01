@@ -333,3 +333,4 @@ export default function AlleyPage({ onNavigate, lang = 'kk', t, navLabels = {} }
     </div>
   );
 }
+

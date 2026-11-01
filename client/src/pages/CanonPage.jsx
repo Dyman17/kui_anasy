@@ -527,3 +527,4 @@ export default function CanonPage({ type = 'kuyshi', onNavigate, lang = 'kk', t,
     </div>
   );
 }
+

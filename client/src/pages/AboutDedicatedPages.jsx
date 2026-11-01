@@ -159,3 +159,4 @@ export function CharterPage({ onNavigate, lang = 'kk', t, navLabels = {} }) {
     </div>
   );
 }
+

@@ -257,3 +257,4 @@ export default function MonumentPage({ onNavigate, lang = 'kk', t, navLabels = {
     </div>
   );
 }
+

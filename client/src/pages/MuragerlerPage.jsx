@@ -793,3 +793,4 @@ export default function MuragerlerPage({ onNavigate, lang = 'kk', t, navLabels =
     </div>
   );
 }
+
