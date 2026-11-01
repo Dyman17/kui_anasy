@@ -2,6 +2,7 @@ import { defaultPages } from './defaultPages.js';
 
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 const DEFAULT_SUPER_TOKEN = (import.meta.env.VITE_ADMIN_TOKEN || 'kui_anasy_admin_secret_key_2026_xyz!').trim();
+const CURRENT_PAGES_VERSION = 'v2_real_subpages_2026';
 
 function getLocalPages() {
   const defaults = defaultPages.map((p) => ({
@@ -14,11 +15,20 @@ function getLocalPages() {
   }));
 
   try {
+    const savedVersion = localStorage.getItem('kui-pages-version');
     const raw = localStorage.getItem('kui-custom-pages');
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // Merge missing default pages into parsed so new subpages and enriched pages appear
+        if (savedVersion !== CURRENT_PAGES_VERSION) {
+          const defaultSlugs = new Set(defaults.map((d) => d.slug));
+          const userCreated = parsed.filter((p) => !defaultSlugs.has(p.slug));
+          const merged = [...defaults, ...userCreated];
+          saveLocalPages(merged);
+          localStorage.setItem('kui-pages-version', CURRENT_PAGES_VERSION);
+          return merged;
+        }
+
         const existingSlugs = new Set(parsed.map((p) => p.slug));
         const missing = defaults.filter((d) => !existingSlugs.has(d.slug));
         if (missing.length > 0) {
@@ -29,6 +39,7 @@ function getLocalPages() {
         return parsed;
       }
     }
+    localStorage.setItem('kui-pages-version', CURRENT_PAGES_VERSION);
   } catch {
     // Ignore localStorage parse errors
   }

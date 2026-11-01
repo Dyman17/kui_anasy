@@ -53,6 +53,13 @@ import {
   verifySuperAdmin,
 } from './api.js';
 
+import MuragerlerPage from './pages/MuragerlerPage.jsx';
+import AlleyPage from './pages/AlleyPage.jsx';
+import MonumentPage from './pages/MonumentPage.jsx';
+import CanonPage from './pages/CanonPage.jsx';
+import LibraryVolumePage from './pages/LibraryVolumePage.jsx';
+import { LeadershipPage, CharterPage } from './pages/AboutDedicatedPages.jsx';
+
 const INITIAL_SLUG = 'home';
 const BLOCK_TYPES = [
   ['heading', 'Бөлім тақырыбы'],
@@ -469,7 +476,15 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const handleHash = () => setAdminOpen(window.location.hash.startsWith('#admin'));
+    const handleHash = () => {
+      const h = window.location.hash;
+      setAdminOpen(h.startsWith('#admin'));
+      if (h && !h.startsWith('#admin')) {
+        const clean = h.replace(/^#\/?/, '');
+        if (clean) setActiveSlug(clean);
+      }
+    };
+    handleHash();
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
@@ -509,6 +524,9 @@ function App() {
   const navigate = (slug) => {
     setActiveSlug(slug);
     setMenuOpen(false);
+    if (!window.location.hash.startsWith('#admin')) {
+      window.location.hash = slug === 'home' ? '' : `#${slug}`;
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -610,6 +628,24 @@ function App() {
         <main>
           {activePage.slug === 'home' ? (
             <HomePage page={activePage} onNavigate={navigate} t={t} navLabels={navLabels} lang={lang} />
+          ) : activePage.slug === 'projects-muragerler' ? (
+            <MuragerlerPage onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
+          ) : activePage.slug === 'projects-alley' ? (
+            <AlleyPage onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
+          ) : activePage.slug === 'projects-monument' ? (
+            <MonumentPage onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
+          ) : activePage.slug === 'people-kuyshi' ? (
+            <CanonPage type="kuyshi" onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
+          ) : activePage.slug === 'people-zhyrau' ? (
+            <CanonPage type="zhyrau" onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
+          ) : activePage.slug === 'people-anshi' ? (
+            <CanonPage type="anshi" onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
+          ) : activePage.slug.startsWith('library-vol-') ? (
+            <LibraryVolumePage volumeSlug={activePage.slug} onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
+          ) : activePage.slug === 'about-leadership' ? (
+            <LeadershipPage onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
+          ) : activePage.slug === 'about-charter' ? (
+            <CharterPage onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
           ) : (
             <StandardPage page={activePage} onNavigate={navigate} query={query} allPages={pages} isEditor={!!sessionUser} t={t} navLabels={navLabels} />
           )}
