@@ -451,38 +451,19 @@ function HomePage({ page, onNavigate, t, navLabels }) {
           </div>
         </div>
 
-        <div className="hero-image-wrap">
-          {/* Animated Floating Dombra (Top-right flank, anchored beside photo) */}
-          <div className="floating-instrument floating-dombra-hero" aria-hidden="true">
-            <img src="/images/dombra-real.png" alt="Қазақ домбырасы" loading="eager" />
-          </div>
-
-          {/* Animated Floating Qobyz (Bottom-right flank, anchored beside photo) */}
-          <div className="floating-instrument floating-kobyz-hero" aria-hidden="true">
-            <img src="/images/kobyz-real.png" alt="Қасиетті қылқобыз" loading="eager" />
-          </div>
-
-          <figure className="hero-image">
-            <img src="/images/kuyshiler-alley.jpg" alt="Астана қаласындағы Күйшілер аллеясы" />
-            <figcaption><strong>Күйшілер аллеясы</strong><span>Астана · Қазақстан</span></figcaption>
-          </figure>
-        </div>
+        <figure className="hero-image">
+          <img src="/images/kuyshiler-alley.jpg" alt="Астана қаласындағы Күйшілер аллеясы" />
+          <figcaption><strong>Күйшілер аллеясы</strong><span>Астана · Қазақстан</span></figcaption>
+        </figure>
       </section>
 
       {/* Дина Нұрпейісова блогы */}
       {feature && (
         <section className="featured-person">
-          <div className="featured-person-visual">
-            {/* Floating animated Dombra beside Dina monument on left flank (away from text) */}
-            <div className="floating-instrument floating-dombra-dina" aria-hidden="true">
-              <img src="/images/dombra-real.png" alt="" />
-            </div>
-
-            <figure className="featured-person-image">
-              <img src="/images/dina-monument.jpg" alt="Дина Нұрпейісова ескерткіші" />
-              <figcaption>Дина Нұрпейісова ескерткіші · Астана</figcaption>
-            </figure>
-          </div>
+          <figure className="featured-person-image">
+            <img src="/images/dina-monument.jpg" alt="Дина Нұрпейісова ескерткіші" />
+            <figcaption>Дина Нұрпейісова ескерткіші · Астана</figcaption>
+          </figure>
 
           <div className="featured-person-copy">
             <span className="hero-kicker">ТҰЛҒА · {feature.eyebrow || '1861 — 1955'}</span>
@@ -518,17 +499,10 @@ function HomePage({ page, onNavigate, t, navLabels }) {
             </button>
           </div>
 
-          <div className="intro-artwork-wrap">
-            {/* Floating animated Qobyz beside artwork on right flank (away from text) */}
-            <div className="floating-instrument floating-kobyz-intro" aria-hidden="true">
-              <img src="/images/kobyz-real.png" alt="" />
-            </div>
-
-            <figure className="intro-artwork">
-              <img src="/images/dombra-player-illustration.png" alt="Домбырашының көркем бейнесі" loading="lazy" />
-              <figcaption>КӨРКЕМ БЕЙНЕ · АТРИБУЦИЯ ЖОҚ</figcaption>
-            </figure>
-          </div>
+          <figure className="intro-artwork">
+            <img src="/images/dombra-player-illustration.png" alt="Домбырашының көркем бейнесі" loading="lazy" />
+            <figcaption>КӨРКЕМ БЕЙНЕ · АТРИБУЦИЯ ЖОҚ</figcaption>
+          </figure>
           <span className="intro-pattern" aria-hidden="true" />
         </section>
       )}
