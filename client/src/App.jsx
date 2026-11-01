@@ -531,7 +531,7 @@ function App() {
       {activePage && (
         <main>
           {activePage.slug === 'home' ? (
-            <HomePage page={activePage} onNavigate={navigate} t={t} navLabels={navLabels} />
+            <HomePage page={activePage} onNavigate={navigate} t={t} navLabels={navLabels} lang={lang} />
           ) : (
             <StandardPage page={activePage} onNavigate={navigate} query={query} allPages={pages} isEditor={!!sessionUser} t={t} navLabels={navLabels} />
           )}
@@ -742,7 +742,200 @@ function AppleTvMediaGallery({ items, onNavigate, t }) {
   );
 }
 
-function HomePage({ page, onNavigate, t, navLabels }) {
+const HERO_SLIDES = {
+  kk: [
+    {
+      image: '/images/kuyshiler-alley.jpg',
+      title: 'Күйшілер аллеясы',
+      subtitle: 'Астана · Қазақстан',
+      alt: 'Астана қаласындағы Күйшілер аллеясының көрінісі',
+    },
+    {
+      image: '/images/dina-monument-full.jpg',
+      title: '«Күй анасы — Дина» монументі',
+      subtitle: 'Астана · 2021 ж. орнатылған',
+      alt: 'Дина Нұрпейісованың қола монументі',
+    },
+    {
+      image: '/images/alley-arch-main.jpg',
+      title: 'Күйшілер аллеясының бас қақпасы',
+      subtitle: 'Күйші Дина көшесі · Астана',
+      alt: 'Күйшілер аллеясының салтанатты бас қақпасы',
+    },
+    {
+      image: '/images/stele-kuyshi-side-a.jpg',
+      title: '101 Күйші канондық стеласы',
+      subtitle: 'Мәрмәр-гранит кешені',
+      alt: '101 Күйші мемориалдық тақтасы',
+    },
+    {
+      image: '/images/stele-zhyrau-side-a.jpg',
+      title: '110 Жырау мен жыршы стеласы',
+      subtitle: '«Ғасырлар үні» кешені',
+      alt: '110 Жырау мен жыршы стеласы',
+    },
+    {
+      image: '/images/dina-sculpture-bronze.jpg',
+      title: 'Дина бейнесінің қола шешімі',
+      subtitle: 'Мүсінші: Жалын Бауыржан',
+      alt: 'Дина Нұрпейісованың қола мүсіні',
+    },
+    {
+      image: '/images/alley-gazebo.jpg',
+      title: 'Саябақтың мәдени кеңістігі',
+      subtitle: 'Елорда тұрғындары мен қонақтарына',
+      alt: 'Күйшілер аллеясының саябақ аймағы',
+    },
+  ],
+  ru: [
+    {
+      image: '/images/kuyshiler-alley.jpg',
+      title: 'Аллея Кюйши',
+      subtitle: 'Астана · Казахстан',
+      alt: 'Панорама Аллеи Кюйши в Астане',
+    },
+    {
+      image: '/images/dina-monument-full.jpg',
+      title: 'Монумент Дины Нурпеисовой',
+      subtitle: 'Астана · Установлен в 2021 г.',
+      alt: 'Бронзовый монумент Дины Нурпеисовой',
+    },
+    {
+      image: '/images/alley-arch-main.jpg',
+      title: 'Главная арка Аллеи Кюйши',
+      subtitle: 'Улица Кюйши Дина · Астана',
+      alt: 'Входная триумфальная арка аллеи',
+    },
+    {
+      image: '/images/stele-kuyshi-side-a.jpg',
+      title: 'Стела «101 Кюйши»',
+      subtitle: 'Мраморно-гранитный мемориал',
+      alt: 'Стела с именами 101 композитора-кюйши',
+    },
+    {
+      image: '/images/stele-zhyrau-side-a.jpg',
+      title: 'Стела «110 Жырау и жыршы»',
+      subtitle: 'Комплекс «Голос веков»',
+      alt: 'Мемориальная стела жырау',
+    },
+    {
+      image: '/images/dina-sculpture-bronze.jpg',
+      title: 'Бронзовая скульптура Дины',
+      subtitle: 'Скульптор: Жалын Бауыржан',
+      alt: 'Скульптура Дины с домброй',
+    },
+    {
+      image: '/images/alley-gazebo.jpg',
+      title: 'Культурное пространство аллеи',
+      subtitle: 'Для жителей и гостей столицы',
+      alt: 'Парковая зона Аллеи Кюйши',
+    },
+  ],
+  en: [
+    {
+      image: '/images/kuyshiler-alley.jpg',
+      title: 'Kuyshiler Alley',
+      subtitle: 'Astana · Kazakhstan',
+      alt: 'Panoramic view of Kuyshiler Alley in Astana',
+    },
+    {
+      image: '/images/dina-monument-full.jpg',
+      title: 'Dina Nurpeisova Monument',
+      subtitle: 'Astana · Erected in 2021',
+      alt: 'Bronze monument of Dina Nurpeisova',
+    },
+    {
+      image: '/images/alley-arch-main.jpg',
+      title: 'Main Arch of the Alley',
+      subtitle: 'Kuyshi Dina Street · Astana',
+      alt: 'Ceremonial arch entrance to Kuyshiler Alley',
+    },
+    {
+      image: '/images/stele-kuyshi-side-a.jpg',
+      title: '101 Kuyshis Memorial Stele',
+      subtitle: 'Marble & granite historical canon',
+      alt: 'Memorial stele inscribed with 101 kuyshis',
+    },
+    {
+      image: '/images/stele-zhyrau-side-a.jpg',
+      title: '110 Zhyrau & Epic Bards Stele',
+      subtitle: '"Echo of Centuries" complex',
+      alt: 'Memorial stele dedicated to 110 zhyrau',
+    },
+    {
+      image: '/images/dina-sculpture-bronze.jpg',
+      title: 'Bronze Sculpture of Dina',
+      subtitle: 'Sculptor: Zhalyn Bauyrzhan',
+      alt: 'Bronze sculpture of Dina Nurpeisova playing dombra',
+    },
+    {
+      image: '/images/alley-gazebo.jpg',
+      title: 'Alley Cultural Space',
+      subtitle: 'For residents and guests of Astana',
+      alt: 'Park relaxation area of Kuyshiler Alley',
+    },
+  ],
+};
+
+function HeroImageRotator({ lang = 'kk' }) {
+  const slides = HERO_SLIDES[lang] || HERO_SLIDES.kk;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [isPaused, slides.length]);
+
+  const currentSlide = slides[currentIndex] || slides[0];
+
+  return (
+    <figure
+      className="hero-image hero-image-rotator"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      aria-label="Басты фотопанорама"
+    >
+      <div className="hero-rotator-track">
+        {slides.map((slide, idx) => (
+          <div
+            key={slide.image}
+            className={`hero-rotator-slide ${idx === currentIndex ? 'active' : ''}`}
+            aria-hidden={idx !== currentIndex}
+          >
+            <img src={slide.image} alt={slide.alt || slide.title} />
+          </div>
+        ))}
+      </div>
+
+      <figcaption>
+        <div className="hero-rotator-caption-copy" key={currentIndex}>
+          <strong>{currentSlide.title}</strong>
+          <span>{currentSlide.subtitle}</span>
+        </div>
+
+        <div className="hero-rotator-dots" role="tablist" aria-label="Фотолар тізімі">
+          {slides.map((slide, idx) => (
+            <button
+              key={slide.image}
+              type="button"
+              role="tab"
+              aria-selected={idx === currentIndex}
+              aria-label={slide.title}
+              className={`hero-rotator-dot ${idx === currentIndex ? 'active' : ''}`}
+              onClick={() => setCurrentIndex(idx)}
+            />
+          ))}
+        </div>
+      </figcaption>
+    </figure>
+  );
+}
+
+function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
   const blocks = page.blocks || [];
   const intro = blocks.find((block) => block.type === 'quote');
   const stats = blocks.find((block) => block.type === 'stats');
@@ -763,10 +956,7 @@ function HomePage({ page, onNavigate, t, navLabels }) {
           </div>
         </div>
 
-        <figure className="hero-image">
-          <img src="/images/kuyshiler-alley.jpg" alt="Астана қаласындағы Күйшілер аллеясы" />
-          <figcaption><strong>Күйшілер аллеясы</strong><span>Астана · Қазақстан</span></figcaption>
-        </figure>
+        <HeroImageRotator lang={lang} />
       </section>
 
       {/* Дина Нұрпейісова блогы */}
