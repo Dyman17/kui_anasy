@@ -1217,18 +1217,16 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
       </section>
 
       {/* «Мұрагерлер» жастар үйірмесі арнайы блогы */}
-      <section className="muragerler-section content-width">
+      <section className="muragerler-section">
         <div className="muragerler-card">
           <div className="muragerler-header">
-            <div className="muragerler-header-copy">
-              <span className="muragerler-slogan-pill">
-                <PiSparkleDuotone size={16} className="muragerler-slogan-icon" />
-                <span>{t.muragerlerSlogan || '«Мұраны сақта, жаңғырт, дамыт!»'}</span>
-              </span>
-              <span className="block-kicker">{t.muragerlerKicker || 'ЖАСТАР БАСТАМАСЫ · МӘДЕНИ САБАҚТАСТЫҚ'}</span>
-              <h2 className="muragerler-title">{t.muragerlerTitle || '«Мұрагерлер» жастар үйірмесі'}</h2>
-              <p className="muragerler-desc">{t.muragerlerDesc || '«Күй анасы» жеке қоры жанындағы өскелең ұрпақты ұлттық музыка өнеріне баулу және жас дарындарды жан-жақты қолдау бастамасы.'}</p>
-            </div>
+            <span className="muragerler-slogan-pill">
+              <PiSparkleDuotone size={16} className="muragerler-slogan-icon" />
+              <span>{t.muragerlerSlogan || '«Мұраны сақта, жаңғырт, дамыт!»'}</span>
+            </span>
+            <span className="block-kicker">{t.muragerlerKicker || 'ЖАСТАР БАСТАМАСЫ · МӘДЕНИ САБАҚТАСТЫҚ'}</span>
+            <h2 className="muragerler-title">{t.muragerlerTitle || '«Мұрагерлер» жастар үйірмесі'}</h2>
+            <p className="muragerler-desc">{t.muragerlerDesc || '«Күй анасы» жеке қоры жанындағы өскелең ұрпақты ұлттық музыка өнеріне баулу және жас дарындарды жан-жақты қолдау бастамасы.'}</p>
             <button
               className="muragerler-cta-btn"
               onClick={() => onNavigate('projects-muragerler')}
