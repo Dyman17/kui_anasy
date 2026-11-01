@@ -111,7 +111,7 @@
   -webkit-font-smoothing: antialiased;
   --paper: #f2eae9;
   --paper-light: #fff8f6;
-  --paper-panel: rgba(242, 234, 233, 0.38);
+  --paper-panel: rgba(242, 234, 233, 0.25);
   --paper-shade: #cfcac8;
   --ink: #3b1106;
   --muted: #6d4d47;
@@ -259,8 +259,8 @@ img { display: block; max-width: 100%; height: auto; }
 .hero-image figcaption strong { font: 400 29px/1 var(--font-playfair); }
 .hero-image figcaption span { font-size: 14px; font-weight: 600; }
 
-/* Hero Image Auto-Rotator */
-.hero-rotator-track {
+/* Hero Image Auto-Rotator (Swipe Carousel) */
+.hero-rotator-track-wrapper {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -269,24 +269,19 @@ img { display: block; max-width: 100%; height: auto; }
   z-index: 0;
 }
 
-.hero-rotator-slide {
-  position: absolute;
-  inset: 0;
+.hero-rotator-track {
+  display: flex;
   width: 100%;
   height: 100%;
-  opacity: 0;
-  transform: scale(1.05);
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 5.5s cubic-bezier(0.25, 1, 0.5, 1);
-  pointer-events: none;
-  z-index: 0;
+  will-change: transform;
 }
 
-.hero-rotator-slide.active {
-  opacity: 1;
-  transform: scale(1);
-  pointer-events: auto;
-  z-index: 1;
+.hero-rotator-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .hero-rotator-slide img {
@@ -1745,7 +1740,7 @@ img { display: block; max-width: 100%; height: auto; }
 [data-theme="dark"] {
   --paper: #14070b;
   --paper-light: #220d15;
-  --paper-panel: rgba(26, 8, 15, 0.42);
+  --paper-panel: rgba(26, 8, 15, 0.25);
   --paper-shade: #361722;
   --ink: #fdf5f2;
   --muted: #c7a7a0;
