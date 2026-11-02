@@ -568,6 +568,9 @@ function App() {
       <div className="shell-vertical-ornament ornament-left" aria-hidden="true" />
       <div className="shell-vertical-ornament ornament-right" aria-hidden="true" />
 
+      {/* Cultural Heritage Contours (18-19th c. Dombra, Kobyz & Torsyk) on Underlay */}
+      <div className="shell-cultural-contours" aria-hidden="true" />
+
       <header className="site-header">
         <a className="brand" href="#" onClick={(event) => { event.preventDefault(); navigate('home'); }}>
           <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>

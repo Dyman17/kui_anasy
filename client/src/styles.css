@@ -2669,8 +2669,63 @@ img { display: block; max-width: 100%; height: auto; }
   }
 }
 
+/* ==========================================================================
+   CULTURAL HERITAGE CONTOURS (18-19th c. Dombra, Kobyz & Torsyk) ON UNDERLAY
+   ========================================================================== */
+.shell-cultural-contours {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+  background-image:
+    url("/patterns/contour-dombra.svg"),
+    url("/patterns/contour-kobyz.svg"),
+    url("/patterns/contour-torsyk.svg"),
+    url("/patterns/contour-dombra.svg"),
+    url("/patterns/contour-kobyz.svg");
+  background-position:
+    left 18px top 260px,
+    right 16px top 780px,
+    left 20px top 1480px,
+    right 18px top 2150px,
+    left 16px top 2850px;
+  background-size:
+    105px auto,
+    115px auto,
+    95px auto,
+    110px auto,
+    115px auto;
+  background-repeat: no-repeat;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="dark"] .shell-cultural-contours {
+  opacity: 0.45;
+  background-image:
+    url("/patterns/contour-dombra-dark.svg"),
+    url("/patterns/contour-kobyz-dark.svg"),
+    url("/patterns/contour-torsyk-dark.svg"),
+    url("/patterns/contour-dombra-dark.svg"),
+    url("/patterns/contour-kobyz-dark.svg");
+}
+
+@media (max-width: 1024px) {
+  .shell-cultural-contours {
+    opacity: 0.38;
+    background-size: 78px auto, 85px auto, 70px auto, 80px auto, 85px auto;
+    background-position:
+      left 8px top 220px,
+      right 8px top 650px,
+      left 8px top 1200px,
+      right 8px top 1750px,
+      left 8px top 2300px;
+  }
+}
+
 @media (max-width: 680px) {
-  .shell-vertical-ornament {
+  .shell-vertical-ornament,
+  .shell-cultural-contours {
     display: none;
   }
 }

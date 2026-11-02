@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 520" fill="none">
+  <!-- 18-19th century Traditional Kazakh Two-string Dombra Contour -->
+  <g stroke="#a34836" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Pegbox (Құлақ басы) -->
+    <path d="M72 12 h16 v38 h-16 z"/>
+    <!-- Left and right tuning wooden pegs (Құлақтары) -->
+    <path d="M60 22 h12 M88 22 h12"/>
+    <circle cx="58" cy="22" r="3.5" fill="#a34836"/>
+    <circle cx="102" cy="22" r="3.5" fill="#a34836"/>
+    <path d="M60 38 h12 M88 38 h12"/>
+    <circle cx="58" cy="38" r="3.5" fill="#a34836"/>
+    <circle cx="102" cy="38" r="3.5" fill="#a34836"/>
+    <circle cx="80" cy="12" r="3.5" fill="#a34836"/>
+
+    <!-- Long slender neck (Ұзын мойны) with frets (пернелер) -->
+    <path d="M74 50 L72 260 M86 50 L88 260"/>
+    <line x1="74" y1="75" x2="86" y2="75" stroke-width="1.2"/>
+    <line x1="73.5" y1="105" x2="86.5" y2="105" stroke-width="1.2"/>
+    <line x1="73" y1="135" x2="87" y2="135" stroke-width="1.2"/>
+    <line x1="73" y1="165" x2="87" y2="165" stroke-width="1.2"/>
+    <line x1="72.5" y1="195" x2="87.5" y2="195" stroke-width="1.2"/>
+    <line x1="72" y1="225" x2="88" y2="225" stroke-width="1.2"/>
+
+    <!-- Resonator Pear-shaped Body (Шанағы) -->
+    <path d="M72 260 C58 285, 34 330, 30 385 C24 450, 48 505, 80 508 C112 505, 136 450, 130 385 C126 330, 102 285, 88 260 Z" stroke-width="3"/>
+    
+    <!-- Inner decorative rib contour (Қабырғалары) -->
+    <path d="M44 380 C40 435, 58 488, 80 492 C102 488, 120 435, 116 380" stroke-width="1.4" stroke-dasharray="4 4" opacity="0.6"/>
+
+    <!-- Sound hole (Түйме / Ойық) with ornamental petals -->
+    <circle cx="80" cy="360" r="11" stroke-width="2"/>
+    <circle cx="80" cy="360" r="3" fill="#a34836"/>
+    <!-- Small acoustic resonator dots -->
+    <circle cx="80" cy="336" r="2" fill="#a34836"/>
+    <circle cx="80" cy="384" r="2" fill="#a34836"/>
+    <circle cx="68" cy="360" r="2" fill="#a34836"/>
+    <circle cx="92" cy="360" r="2" fill="#a34836"/>
+
+    <!-- Bridge (Тиек) -->
+    <path d="M68 435 h24 v4 h-24 z" fill="#a34836" fill-opacity="0.3"/>
+
+    <!-- String holder / Tailpiece (Түймеше) -->
+    <path d="M74 496 h12 v10 h-12 z"/>
+
+    <!-- Two Strings (Екі ішек) -->
+    <line x1="78" y1="50" x2="78" y2="496" stroke-width="1.2"/>
+    <line x1="82" y1="50" x2="82" y2="496" stroke-width="1.2"/>
+  </g>
+</svg>
