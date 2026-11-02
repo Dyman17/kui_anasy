@@ -39,6 +39,7 @@ import {
   Award, Check, ChevronLeft, ChevronRight, Compass, Copy, Download, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, MapPin, Maximize2, Menu, Minimize2, Moon, Music, Pencil, Plus, QrCode, RotateCcw, Save, Search, Share2, ShieldCheck, Sparkles, Sun, Trash2, UserCheck, Users, X,
 } from 'lucide-react';
 import QRCode from 'qrcode';
+import { TextWithTooltips } from './components/ReferenceTooltip';
 import {
   approveEditorAccount,
   bulkApprovePages,
@@ -1140,7 +1141,7 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
           <div className="featured-person-copy">
             <span className="hero-kicker">ТҰЛҒА · {feature.eyebrow || '1861 — 1955'}</span>
             <h2>{feature.title}</h2>
-            <p>{feature.body}</p>
+            <p><TextWithTooltips text={feature.body} /></p>
             <button className="underlined-link" onClick={() => onNavigate('people')}>
               Тұлғалар каталогы <RiCompass3Line size={16} />
             </button>
@@ -1165,7 +1166,7 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
         <section className="editorial-intro content-width">
           <div className="intro-copy">
             <h2>{intro.title}</h2>
-            <p>{intro.body}</p>
+            <p><TextWithTooltips text={intro.body} /></p>
             <button className="underlined-link" onClick={() => onNavigate('about')}>
               {t.aboutFund} <RiInformationLine size={16} />
             </button>

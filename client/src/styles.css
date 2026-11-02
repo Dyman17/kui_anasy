@@ -187,19 +187,7 @@ body::before {
   transform: scale(1.05);
 }
 body::after {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  content: "";
-  background-image:
-    url("/images/decorative-qoshqar.png"),
-    url("/images/decorative-torsyk.png"),
-    url("/images/decorative-asyk.png");
-  background-position: left 2px top 110px, right 2px top 230px, right 2px bottom 34px;
-  background-size: 32px 225px, 48px 66px, 88px auto;
-  background-repeat: no-repeat;
-  opacity: .76;
-  pointer-events: none;
+  display: none !important;
 }
 button, input, textarea, select { font: inherit; }
 button { color: inherit; }
@@ -752,7 +740,7 @@ img { display: block; max-width: 100%; height: auto; }
 .add-block-controls select { width: auto; min-width: 165px; min-height: 40px; padding: 8px; border: 1px solid var(--line); background: var(--paper-light); color: var(--ink); font: inherit; font-size: 13px; }
 
 @media (max-width: 1050px) {
-  body::after { background-position: left 1px top 100px, right 1px top 205px, right 1px bottom 25px; background-size: 24px 175px, 38px 53px, 70px auto; opacity: .52; }
+  body::after { display: none !important; }
   .site-header { gap: 22px; padding-inline: 32px; }
   .main-nav { gap: 16px; }
   .nav-link { font-size: 13px; }
@@ -5337,4 +5325,124 @@ img { display: block; max-width: 100%; height: auto; }
   .form-group.full-width {
     grid-column: span 1;
   }
+}
+
+/* ==========================================================================
+   Name Reference Tooltip (Справочные всплывающие подсказки)
+   ========================================================================== */
+.name-reference-trigger {
+  position: relative;
+  display: inline;
+  color: inherit;
+  font-weight: 600;
+  border-bottom: 1.5px dotted var(--terra, #a14e3a);
+  cursor: help;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  white-space: normal;
+}
+
+.name-reference-trigger:hover,
+.name-reference-trigger:focus-visible {
+  color: #ffcc80 !important;
+  border-bottom-color: #ffcc80;
+  outline: none;
+}
+
+.featured-person-copy .name-reference-trigger {
+  color: #fff8f6;
+  border-bottom-color: #f3b29f;
+}
+
+.featured-person-copy .name-reference-trigger:hover {
+  color: #f3b29f !important;
+}
+
+.name-reference-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-left: 2px;
+  vertical-align: super;
+  background-color: var(--terra, #a14e3a);
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.name-reference-card {
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(320px, calc(100vw - 32px));
+  padding: 14px 16px;
+  background: #240a12;
+  color: #fff8f6;
+  border: 1px solid rgba(243, 178, 159, 0.35);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(51, 0, 14, 0.3);
+  font-family: var(--font-body, 'Open Sans', sans-serif);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  pointer-events: auto;
+  animation: tooltipFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% + 6px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}
+
+.ref-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid rgba(243, 178, 159, 0.2);
+  padding-bottom: 4px;
+}
+
+.ref-card-name {
+  color: #fff8f6;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+}
+
+.ref-card-dates {
+  font-size: 11px;
+  color: #f3b29f;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ref-card-role {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffaa88;
+}
+
+.ref-card-bio {
+  color: #f2eae9;
+  font-size: 12.5px;
+  line-height: 1.55;
+  margin-top: 2px;
+}
+
+.ref-card-tip {
+  font-size: 10px;
+  color: #baa19d;
+  font-style: italic;
+  margin-top: 2px;
+  border-top: 1px dashed rgba(243, 178, 159, 0.15);
+  padding-top: 4px;
 }
