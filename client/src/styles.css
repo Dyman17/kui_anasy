@@ -5327,77 +5327,157 @@ img { display: block; max-width: 100%; height: auto; }
   }
 }
 
+
 /* ==========================================================================
-   Name Reference Tooltip (Справочные всплывающие подсказки)
+   CSS-Powered Speech Balloon Tooltips (Дәл скриншоттағыдай ховер подсказкалар)
    ========================================================================== */
-.name-reference-trigger {
+.ui-tooltip {
   position: relative;
-  display: inline;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Tooltip bubble (speech balloon) */
+.ui-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #f7f7f8;
+  color: #1a1a1c;
+  padding: 7px 14px;
+  font-family: var(--font-body, 'Open Sans', -apple-system, sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+  white-space: nowrap;
+  border-radius: 9px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
+  z-index: 999999;
+}
+
+/* Triangle arrow */
+.ui-tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #f7f7f8;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
+  z-index: 999999;
+}
+
+/* Hover & Focus state */
+.ui-tooltip:hover::after,
+.ui-tooltip:focus-visible::after,
+.ui-tooltip:hover::before,
+.ui-tooltip:focus-visible::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Bottom placement variant */
+.ui-tooltip-bottom::after {
+  bottom: auto;
+  top: calc(100% + 10px);
+  transform: translateX(-50%) translateY(-4px);
+}
+.ui-tooltip-bottom::before {
+  bottom: auto;
+  top: calc(100% + 4px);
+  border-top: none;
+  border-bottom: 6px solid #f7f7f8;
+  transform: translateX(-50%) translateY(-4px);
+}
+.ui-tooltip-bottom:hover::after,
+.ui-tooltip-bottom:focus-visible::after,
+.ui-tooltip-bottom:hover::before,
+.ui-tooltip-bottom:focus-visible::before {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Dark mode support */
+[data-theme="dark"] .ui-tooltip::after {
+  background: #2a2d34;
+  color: #f0f3f6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+[data-theme="dark"] .ui-tooltip::before {
+  border-top-color: #2a2d34;
+}
+[data-theme="dark"] .ui-tooltip-bottom::before {
+  border-bottom-color: #2a2d34;
+}
+
+/* ==========================================================================
+   Historical Figures Reference Cards (Тұлғаларға арналған анықтамалық карточка)
+   ========================================================================== */
+.name-ref-hoverable {
+  position: relative;
+  display: inline-block;
   color: inherit;
   font-weight: 600;
   border-bottom: 1.5px dotted var(--terra, #a14e3a);
   cursor: help;
   transition: color 0.2s ease, border-color 0.2s ease;
-  white-space: normal;
 }
 
-.name-reference-trigger:hover,
-.name-reference-trigger:focus-visible {
-  color: #ffcc80 !important;
-  border-bottom-color: #ffcc80;
-  outline: none;
-}
-
-.featured-person-copy .name-reference-trigger {
+.featured-person-copy .name-ref-hoverable {
   color: #fff8f6;
   border-bottom-color: #f3b29f;
 }
 
-.featured-person-copy .name-reference-trigger:hover {
-  color: #f3b29f !important;
+.name-ref-hoverable:hover,
+.name-ref-hoverable:focus-visible {
+  color: #ffaa88 !important;
+  border-bottom-color: #ffaa88;
+  outline: none;
 }
 
-.name-reference-dot {
-  display: inline-block;
-  width: 4px;
-  height: 4px;
-  margin-left: 2px;
-  vertical-align: super;
-  background-color: var(--terra, #a14e3a);
-  border-radius: 50%;
-  opacity: 0.8;
-}
-
-.name-reference-card {
-  z-index: 99999;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: min(320px, calc(100vw - 32px));
+.name-ref-card {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: min(320px, 86vw);
   padding: 14px 16px;
-  background: #240a12;
+  background: #20070d;
   color: #fff8f6;
-  border: 1px solid rgba(243, 178, 159, 0.35);
+  border: 1px solid rgba(243, 178, 159, 0.4);
   border-radius: 10px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(51, 0, 14, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(51, 0, 14, 0.4);
   font-family: var(--font-body, 'Open Sans', sans-serif);
   font-size: 13px;
   font-weight: 400;
   line-height: 1.5;
   text-align: left;
-  pointer-events: auto;
-  animation: tooltipFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+  z-index: 999999;
 }
 
-@keyframes tooltipFadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, calc(-100% + 6px));
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -100%);
-  }
+.name-ref-hoverable:hover .name-ref-card,
+.name-ref-hoverable:focus-visible .name-ref-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 .ref-card-header {
@@ -5405,8 +5485,9 @@ img { display: block; max-width: 100%; height: auto; }
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
-  border-bottom: 1px solid rgba(243, 178, 159, 0.2);
+  border-bottom: 1px solid rgba(243, 178, 159, 0.25);
   padding-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 .ref-card-name {
@@ -5424,94 +5505,28 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 .ref-card-role {
+  display: block;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #ffaa88;
+  margin-bottom: 6px;
 }
 
 .ref-card-bio {
+  display: block;
   color: #f2eae9;
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.55;
-  margin-top: 2px;
+  margin-bottom: 6px;
 }
 
 .ref-card-tip {
+  display: block;
   font-size: 10px;
   color: #baa19d;
   font-style: italic;
-  margin-top: 2px;
-  border-top: 1px dashed rgba(243, 178, 159, 0.15);
+  border-top: 1px dashed rgba(243, 178, 159, 0.2);
   padding-top: 4px;
-}
-
-/* ==========================================================================
-   Modern Speech Balloon Tooltips (Жаңа қалықтаушы подсказкалар)
-   ========================================================================== */
-.app-tooltip-trigger {
-  position: relative;
-  display: inline-flex;
-}
-
-.app-tooltip-balloon {
-  z-index: 999999;
-  display: inline-block;
-  padding: 6px 14px;
-  background: #f4f4f6;
-  color: #1f2328;
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.15);
-  font-family: var(--font-body, 'Open Sans', -apple-system, sans-serif);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.4;
-  white-space: nowrap;
-  pointer-events: none;
-  animation: balloonPopIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-[data-theme="dark"] .app-tooltip-balloon {
-  background: #2a2d34;
-  color: #f0f3f6;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-}
-
-@keyframes balloonPopIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, calc(-100% + 4px)) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -100%) scale(1);
-  }
-}
-
-.app-tooltip-balloon .app-tooltip-arrow {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid #f4f4f6;
-}
-
-[data-theme="dark"] .app-tooltip-balloon .app-tooltip-arrow {
-  border-top-color: #2a2d34;
-}
-
-.app-tooltip-bottom .app-tooltip-arrow {
-  top: auto;
-  bottom: 100%;
-  border-top: none;
-  border-bottom: 6px solid #f4f4f6;
-}
-
-[data-theme="dark"] .app-tooltip-bottom .app-tooltip-arrow {
-  border-bottom-color: #2a2d34;
 }

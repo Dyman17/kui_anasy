@@ -1,63 +1,31 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 
 /**
- * Modern floating balloon tooltip (like in the user screenshot: white/light bubble,
- * dark sharp text, rounded corners, centered bottom pointer triangle / arrow).
+ * Universal Tooltip component using pure CSS data-tooltip attribute.
+ * It does NOT rely on JS bounding box or state, works 100% reliably
+ * immediately on hover and focus.
  *
- * Props:
- * - text: string (the short hint, e.g. "Қор туралы толық ақпарат алу")
- * - position: 'top' | 'bottom' (default 'top')
- * - children: ReactNode (trigger element, button, caption, etc.)
+ * Usage:
+ * <Tooltip text="Қор туралы толық ақпарат">
+ *   <button ...>Қор туралы</button>
+ * </Tooltip>
  */
 export function Tooltip({ text, position = 'top', children, className = '' }) {
-  const [visible, setVisible] = useState(false);
-  const [coords, setCoords] = useState({ top: 0, left: 0 });
-  const triggerRef = useRef(null);
-
-  const show = () => {
-    if (triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      const left = rect.left + rect.width / 2;
-      const top = position === 'bottom' ? rect.bottom + 8 : rect.top - 8;
-      setCoords({ top, left });
-    }
-    setVisible(true);
-  };
-
-  const hide = () => setVisible(false);
+  if (!text) return children;
 
   return (
     <span
-      ref={triggerRef}
-      className={`app-tooltip-trigger ${className}`}
-      onMouseEnter={show}
-      onMouseLeave={hide}
-      onFocus={show}
-      onBlur={hide}
-      style={{ display: 'inline-flex', alignItems: 'center' }}
+      className={`ui-tooltip ${position === 'bottom' ? 'ui-tooltip-bottom' : ''} ${className}`.trim()}
+      data-tooltip={text}
+      tabIndex={0}
     >
       {children}
-      {visible && text && (
-        <span
-          className={`app-tooltip-balloon app-tooltip-${position}`}
-          style={{
-            position: 'fixed',
-            top: coords.top,
-            left: coords.left,
-            transform: position === 'bottom' ? 'translate(-50%, 0)' : 'translate(-50%, -100%)',
-          }}
-          role="tooltip"
-        >
-          {text}
-          <span className="app-tooltip-arrow" aria-hidden="true" />
-        </span>
-      )}
     </span>
   );
 }
 
 /**
- * Historical references dictionary for figures / keywords.
+ * Historical references dictionary with rich context (30–60 words).
  */
 export const HISTORICAL_REFERENCES = {
   'Құрманғазы': {
@@ -142,7 +110,7 @@ export const HISTORICAL_REFERENCES = {
 
 /**
  * TextWithTooltips component:
- * Highlights key terms and names, displaying the bubble tooltip on hover.
+ * Highlights key terms and names, rendering CSS-powered interactive reference cards.
  */
 export function TextWithTooltips({ text }) {
   if (!text || typeof text !== 'string') return text;
@@ -157,64 +125,25 @@ export function TextWithTooltips({ text }) {
       {parts.map((part, i) => {
         const ref = HISTORICAL_REFERENCES[part];
         if (!ref) return part;
-        return <NameReferenceTooltip key={i} keyword={part} data={ref} />;
+        return (
+          <span
+            key={i}
+            className="name-ref-hoverable"
+            tabIndex={0}
+          >
+            {part}
+            <span className="name-ref-card" role="tooltip">
+              <span className="ref-card-header">
+                <strong className="ref-card-name">{ref.name}</strong>
+                <span className="ref-card-dates">{ref.dates}</span>
+              </span>
+              <span className="ref-card-role">{ref.role}</span>
+              <span className="ref-card-bio">{ref.bio}</span>
+              <span className="ref-card-tip">«Күй анасы» тарихи анықтамалығы</span>
+            </span>
+          </span>
+        );
       })}
     </>
-  );
-}
-
-export function NameReferenceTooltip({ keyword, data }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [coords, setCoords] = useState({ top: 0, left: 0 });
-  const triggerRef = useRef(null);
-
-  const showTooltip = () => {
-    if (triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      setCoords({
-        top: rect.top - 8,
-        left: Math.min(Math.max(16, rect.left + rect.width / 2), window.innerWidth - 320),
-      });
-    }
-    setIsOpen(true);
-  };
-
-  const hideTooltip = () => setIsOpen(false);
-
-  return (
-    <span
-      ref={triggerRef}
-      className="name-reference-trigger"
-      onMouseEnter={showTooltip}
-      onMouseLeave={hideTooltip}
-      onClick={() => setIsOpen(!isOpen)}
-      role="button"
-      tabIndex={0}
-      onFocus={showTooltip}
-      onBlur={hideTooltip}
-    >
-      {keyword}
-      <span className="name-reference-dot" aria-hidden="true" />
-      {isOpen && (
-        <span
-          className="name-reference-card"
-          style={{
-            position: 'fixed',
-            top: coords.top,
-            left: coords.left,
-            transform: 'translate(-50%, -100%)',
-          }}
-          role="tooltip"
-        >
-          <span className="ref-card-header">
-            <strong className="ref-card-name">{data.name}</strong>
-            <span className="ref-card-dates">{data.dates}</span>
-          </span>
-          <span className="ref-card-role">{data.role}</span>
-          <span className="ref-card-bio">{data.bio}</span>
-          <span className="ref-card-tip">«Күй анасы» қысқаша тарихи анықтамалығы</span>
-        </span>
-      )}
-    </span>
   );
 }
