@@ -363,13 +363,13 @@ img { display: block; max-width: 100%; height: auto; }
   }
 }
 
-.archive-stats { position: relative; padding: 28px clamp(16px, 2.5vw, 36px); display: grid; grid-template-columns: minmax(170px, 1.1fr) repeat(4, minmax(0, 1fr)); align-items: center; gap: clamp(8px, 1.2vw, 16px); overflow: hidden; background: var(--terra); color: var(--paper-light); }
+.archive-stats { position: relative; padding: 22px clamp(12px, 1.8vw, 28px); display: grid; grid-template-columns: minmax(145px, 0.95fr) repeat(4, minmax(0, 1fr)); align-items: center; gap: clamp(6px, 0.9vw, 12px); overflow: hidden; background: var(--terra); color: var(--paper-light); }
 .archive-stats::after { position: absolute; top: -165px; right: -75px; width: 440px; height: 340px; content: ""; background: url("/patterns/tolqyn.svg") center/cover no-repeat; opacity: .4; pointer-events: none; }
 .archive-stats > h2 { position: relative; z-index: 1; margin: 0; font: 600 clamp(22px, 2.4vw, 32px)/1.08 var(--font-editorial); }
 .archive-stats > h2 strong { color: var(--paper); font: 400 clamp(24px, 2.8vw, 36px)/1.08 var(--font-nauryz); letter-spacing: .02em; }
-.archive-stat-row { position: relative; z-index: 1; min-height: 80px; padding-inline: clamp(8px, 1.2vw, 16px); display: flex; align-items: center; gap: clamp(6px, 0.9vw, 12px); border-left: 1px solid #f2eae972; }
-.archive-stat-row > strong { color: var(--paper); font: 700 clamp(26px, 2.8vw, 44px)/.9 var(--font-brand); letter-spacing: -.02em; white-space: nowrap; }
-.archive-stat-row p { max-width: 130px; margin: 0; color: #fff8f6; font-size: clamp(12px, 1vw, 14px); font-weight: 600; line-height: 1.35; }
+.archive-stat-row { position: relative; z-index: 1; min-height: 68px; padding-inline: clamp(6px, 0.8vw, 12px); display: flex; align-items: center; gap: clamp(5px, 0.7vw, 10px); border-left: 1px solid #f2eae972; min-width: 0; }
+.archive-stat-row > strong { color: var(--paper); font: 700 clamp(22px, 2.3vw, 36px)/.9 var(--font-brand); letter-spacing: -.02em; white-space: nowrap; flex-shrink: 0; }
+.archive-stat-row p { margin: 0; color: #fff8f6; font-size: clamp(11px, 0.88vw, 12.5px); font-weight: 600; line-height: 1.25; min-width: 0; word-break: normal; overflow-wrap: break-word; hyphens: none; }
 
 .editorial-intro { position: relative; min-height: 420px; padding: 92px clamp(24px, 3vw, 38px); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); align-items: center; gap: 8%; overflow: hidden; }
 .intro-copy { position: relative; z-index: 1; max-width: 720px; }
@@ -5445,4 +5445,73 @@ img { display: block; max-width: 100%; height: auto; }
   margin-top: 2px;
   border-top: 1px dashed rgba(243, 178, 159, 0.15);
   padding-top: 4px;
+}
+
+/* ==========================================================================
+   Modern Speech Balloon Tooltips (Жаңа қалықтаушы подсказкалар)
+   ========================================================================== */
+.app-tooltip-trigger {
+  position: relative;
+  display: inline-flex;
+}
+
+.app-tooltip-balloon {
+  z-index: 999999;
+  display: inline-block;
+  padding: 6px 14px;
+  background: #f4f4f6;
+  color: #1f2328;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-family: var(--font-body, 'Open Sans', -apple-system, sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: balloonPopIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] .app-tooltip-balloon {
+  background: #2a2d34;
+  color: #f0f3f6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes balloonPopIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% + 4px)) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
+
+.app-tooltip-balloon .app-tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #f4f4f6;
+}
+
+[data-theme="dark"] .app-tooltip-balloon .app-tooltip-arrow {
+  border-top-color: #2a2d34;
+}
+
+.app-tooltip-bottom .app-tooltip-arrow {
+  top: auto;
+  bottom: 100%;
+  border-top: none;
+  border-bottom: 6px solid #f4f4f6;
+}
+
+[data-theme="dark"] .app-tooltip-bottom .app-tooltip-arrow {
+  border-bottom-color: #2a2d34;
 }

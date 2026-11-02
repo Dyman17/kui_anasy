@@ -1,11 +1,63 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 /**
- * Historical references dictionary for once-mentioned figures / masters.
- * Each entry has:
- *  - role: Quick identification tag
- *  - dates: Years of life
- *  - bio: 30-60 word informational reference note (қазақша)
+ * Modern floating balloon tooltip (like in the user screenshot: white/light bubble,
+ * dark sharp text, rounded corners, centered bottom pointer triangle / arrow).
+ *
+ * Props:
+ * - text: string (the short hint, e.g. "Қор туралы толық ақпарат алу")
+ * - position: 'top' | 'bottom' (default 'top')
+ * - children: ReactNode (trigger element, button, caption, etc.)
+ */
+export function Tooltip({ text, position = 'top', children, className = '' }) {
+  const [visible, setVisible] = useState(false);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+  const triggerRef = useRef(null);
+
+  const show = () => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const left = rect.left + rect.width / 2;
+      const top = position === 'bottom' ? rect.bottom + 8 : rect.top - 8;
+      setCoords({ top, left });
+    }
+    setVisible(true);
+  };
+
+  const hide = () => setVisible(false);
+
+  return (
+    <span
+      ref={triggerRef}
+      className={`app-tooltip-trigger ${className}`}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      onFocus={show}
+      onBlur={hide}
+      style={{ display: 'inline-flex', alignItems: 'center' }}
+    >
+      {children}
+      {visible && text && (
+        <span
+          className={`app-tooltip-balloon app-tooltip-${position}`}
+          style={{
+            position: 'fixed',
+            top: coords.top,
+            left: coords.left,
+            transform: position === 'bottom' ? 'translate(-50%, 0)' : 'translate(-50%, -100%)',
+          }}
+          role="tooltip"
+        >
+          {text}
+          <span className="app-tooltip-arrow" aria-hidden="true" />
+        </span>
+      )}
+    </span>
+  );
+}
+
+/**
+ * Historical references dictionary for figures / keywords.
  */
 export const HISTORICAL_REFERENCES = {
   'Құрманғазы': {
@@ -90,13 +142,11 @@ export const HISTORICAL_REFERENCES = {
 
 /**
  * TextWithTooltips component:
- * Takes raw text, matches names from HISTORICAL_REFERENCES and renders them
- * with interactive hover/click tooltips showing 20-70 word background notes.
+ * Highlights key terms and names, displaying the bubble tooltip on hover.
  */
 export function TextWithTooltips({ text }) {
   if (!text || typeof text !== 'string') return text;
 
-  // Build sorted regex pattern (longer names first to avoid partial prefix collisions)
   const sortedKeys = Object.keys(HISTORICAL_REFERENCES).sort((a, b) => b.length - a.length);
   const pattern = new RegExp(`(${sortedKeys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
 

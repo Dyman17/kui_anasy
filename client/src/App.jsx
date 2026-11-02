@@ -39,7 +39,7 @@ import {
   Award, Check, ChevronLeft, ChevronRight, Compass, Copy, Download, Eye, FilePlus2, FolderOpen, Globe, LockKeyhole, MapPin, Maximize2, Menu, Minimize2, Moon, Music, Pencil, Plus, QrCode, RotateCcw, Save, Search, Share2, ShieldCheck, Sparkles, Sun, Trash2, UserCheck, Users, X,
 } from 'lucide-react';
 import QRCode from 'qrcode';
-import { TextWithTooltips } from './components/ReferenceTooltip';
+import { TextWithTooltips, Tooltip } from './components/ReferenceTooltip';
 import {
   approveEditorAccount,
   bulkApprovePages,
@@ -1135,16 +1135,22 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
         <section className="featured-person">
           <figure className="featured-person-image">
             <img src="/images/dina-monument.jpg" alt="Дина Нұрпейісова ескерткіші" />
-            <figcaption>Дина Нұрпейісова ескерткіші · Астана</figcaption>
+            <figcaption>
+              <Tooltip text="2021 ж. Астана қаласы, Күйшілер аллеясы · Сәулетшісі: Жалын Бауыржан">
+                <span style={{ cursor: 'help' }}>Дина Нұрпейісова ескерткіші · Астана ⓘ</span>
+              </Tooltip>
+            </figcaption>
           </figure>
 
           <div className="featured-person-copy">
             <span className="hero-kicker">ТҰЛҒА · {feature.eyebrow || '1861 — 1955'}</span>
             <h2>{feature.title}</h2>
             <p><TextWithTooltips text={feature.body} /></p>
-            <button className="underlined-link" onClick={() => onNavigate('people')}>
-              Тұлғалар каталогы <RiCompass3Line size={16} />
-            </button>
+            <Tooltip text="321+ тұлғаның толық антологиясы мен өмірбаянына өту">
+              <button className="underlined-link" onClick={() => onNavigate('people')}>
+                Тұлғалар каталогы <RiCompass3Line size={16} />
+              </button>
+            </Tooltip>
           </div>
           <span className="featured-person-pattern" aria-hidden="true" />
         </section>
@@ -1167,14 +1173,20 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
           <div className="intro-copy">
             <h2>{intro.title}</h2>
             <p><TextWithTooltips text={intro.body} /></p>
-            <button className="underlined-link" onClick={() => onNavigate('about')}>
-              {t.aboutFund} <RiInformationLine size={16} />
-            </button>
+            <Tooltip text="«Күй анасы» қоры, ғылыми кеңесі мен жоба бастамашылары">
+              <button className="underlined-link" onClick={() => onNavigate('about')}>
+                {t.aboutFund} <RiInformationLine size={16} />
+              </button>
+            </Tooltip>
           </div>
 
           <figure className="intro-artwork">
             <img src="/images/dombra-player-illustration.png" alt="Домбырашының көркем бейнесі" loading="lazy" />
-            <figcaption>КӨРКЕМ БЕЙНЕ · АТРИБУЦИЯ ЖОҚ</figcaption>
+            <figcaption>
+              <Tooltip text="Қазақтың дәстүрлі домбырашылық өнерінің символдық көркем бейнесі">
+                <span style={{ cursor: 'help' }}>КӨРКЕМ БЕЙНЕ · АТРИБУЦИЯ ЖОҚ ⓘ</span>
+              </Tooltip>
+            </figcaption>
           </figure>
           <span className="intro-pattern" aria-hidden="true" />
         </section>
@@ -1184,9 +1196,11 @@ function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
         <section className="discover-section content-width">
           <div className="section-topline">
             <h2>{latest.title}</h2>
-            <button className="underlined-link" onClick={() => onNavigate('library')}>
-              {t.libraryBtn} <RiBookmarkLine size={16} />
-            </button>
+            <Tooltip text="3 томдық академиялық басылымдар мен күй партитуралары">
+              <button className="underlined-link" onClick={() => onNavigate('library')}>
+                {t.libraryBtn} <RiBookmarkLine size={16} />
+              </button>
+            </Tooltip>
           </div>
           <div className="discover-spread">
             {(latest.items || []).slice(0, 3).map((item, index) => (
