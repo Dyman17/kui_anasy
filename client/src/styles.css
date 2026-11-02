@@ -5329,7 +5329,7 @@ img { display: block; max-width: 100%; height: auto; }
 
 
 /* ==========================================================================
-   CSS-Powered Speech Balloon Tooltips (Дәл скриншоттағыдай ховер подсказкалар)
+   CSS-Powered Speech Balloon Tooltips (Жақсартылған тұрақты подсказкалар)
    ========================================================================== */
 .ui-tooltip {
   position: relative;
@@ -5343,8 +5343,8 @@ img { display: block; max-width: 100%; height: auto; }
   content: attr(data-tooltip);
   position: absolute;
   bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
+  left: 0;
+  transform: translateY(4px);
   background: #f7f7f8;
   color: #1a1a1c;
   padding: 7px 14px;
@@ -5352,7 +5352,9 @@ img { display: block; max-width: 100%; height: auto; }
   font-size: 13px;
   font-weight: 500;
   line-height: 1.35;
-  white-space: nowrap;
+  white-space: normal;
+  width: max-content;
+  max-width: 280px;
   border-radius: 9px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.12);
   pointer-events: none;
@@ -5367,8 +5369,8 @@ img { display: block; max-width: 100%; height: auto; }
   content: "";
   position: absolute;
   bottom: calc(100% + 4px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
+  left: 24px;
+  transform: translateY(4px);
   width: 0;
   height: 0;
   border-left: 6px solid transparent;
@@ -5388,27 +5390,27 @@ img { display: block; max-width: 100%; height: auto; }
 .ui-tooltip:focus-visible::before {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
 /* Bottom placement variant */
 .ui-tooltip-bottom::after {
   bottom: auto;
   top: calc(100% + 10px);
-  transform: translateX(-50%) translateY(-4px);
+  transform: translateY(-4px);
 }
 .ui-tooltip-bottom::before {
   bottom: auto;
   top: calc(100% + 4px);
   border-top: none;
   border-bottom: 6px solid #f7f7f8;
-  transform: translateX(-50%) translateY(-4px);
+  transform: translateY(-4px);
 }
 .ui-tooltip-bottom:hover::after,
 .ui-tooltip-bottom:focus-visible::after,
 .ui-tooltip-bottom:hover::before,
 .ui-tooltip-bottom:focus-visible::before {
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
 /* Dark mode support */
@@ -5452,9 +5454,9 @@ img { display: block; max-width: 100%; height: auto; }
 .name-ref-card {
   position: absolute;
   bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  width: min(320px, 86vw);
+  left: 0;
+  transform: translateY(6px);
+  width: min(300px, 86vw);
   padding: 14px 16px;
   background: #20070d;
   color: #fff8f6;
@@ -5477,7 +5479,7 @@ img { display: block; max-width: 100%; height: auto; }
 .name-ref-hoverable:focus-visible .name-ref-card {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
 .ref-card-header {
