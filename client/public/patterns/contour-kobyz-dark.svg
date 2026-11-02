@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 480" fill="none">
+<svg preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 480" fill="none">
   <!-- 18-19th century Traditional Kazakh Kyl-Kobyz Contour (Dark Gold Theme) -->
   <g stroke="#c29b38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
     <path d="M100 24 C85 24, 70 34, 70 50 C70 66, 85 76, 100 76 C115 76, 126 64, 126 50 C126 38, 116 30, 106 30 C96 30, 90 38, 92 46"/>
@@ -30,3 +30,4 @@
     <circle cx="114" cy="140" r="3" fill="#c29b38" fill-opacity="0.6"/>
   </g>
 </svg>
+

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 520 160" fill="none">
+  <!-- 18-19th century Traditional Kazakh Two-string Dombra Contour (Horizontal / Диагональға бейімделген) -->
+  <g stroke="#a34836" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Pegbox (Құлақ басы - сол жақта) -->
+    <path d="M12 72 v16 h38 v-16 z"/>
+    <path d="M22 60 v12 M22 88 v12"/>
+    <circle cx="22" cy="58" r="3.5" fill="#a34836"/>
+    <circle cx="22" cy="102" r="3.5" fill="#a34836"/>
+    <path d="M38 60 v12 M38 88 v12"/>
+    <circle cx="38" cy="58" r="3.5" fill="#a34836"/>
+    <circle cx="38" cy="102" r="3.5" fill="#a34836"/>
+    <circle cx="12" cy="80" r="3.5" fill="#a34836"/>
+
+    <!-- Slender Neck (Мойны) with Frets (Пернелері) -->
+    <path d="M50 74 L260 72 M50 86 L260 88"/>
+    <line x1="75" y1="74" x2="75" y2="86" stroke-width="1.2"/>
+    <line x1="105" y1="73.5" x2="105" y2="86.5" stroke-width="1.2"/>
+    <line x1="135" y1="73" x2="135" y2="87" stroke-width="1.2"/>
+    <line x1="165" y1="73" x2="165" y2="87" stroke-width="1.2"/>
+    <line x1="195" y1="72.5" x2="195" y2="87.5" stroke-width="1.2"/>
+    <line x1="225" y1="72" x2="225" y2="88" stroke-width="1.2"/>
+
+    <!-- Resonator Pear-shaped Body (Шанағы - оң жақта) -->
+    <path d="M260 72 C285 58, 330 34, 385 30 C450 24, 505 48, 508 80 C505 112, 450 136, 385 130 C330 126, 285 102, 260 88 Z" stroke-width="3"/>
+    <path d="M380 44 C435 40, 488 58, 492 80 C488 102, 435 120, 380 116" stroke-width="1.4" stroke-dasharray="4 4" opacity="0.6"/>
+
+    <!-- Sound hole (Түймесі) -->
+    <circle cx="360" cy="80" r="11" stroke-width="2"/>
+    <circle cx="360" cy="80" r="3" fill="#a34836"/>
+    <circle cx="336" cy="80" r="2" fill="#a34836"/>
+    <circle cx="384" cy="80" r="2" fill="#a34836"/>
+    <circle cx="360" cy="68" r="2" fill="#a34836"/>
+    <circle cx="360" cy="92" r="2" fill="#a34836"/>
+
+    <!-- Bridge (Тиек) & Tailpiece (Түймеше) -->
+    <path d="M435 68 v24 h4 v-24 z" fill="#a34836" fill-opacity="0.3"/>
+    <path d="M496 74 v12 h10 v-12 z"/>
+
+    <!-- Strings (Қос ішек) -->
+    <line x1="50" y1="78" x2="496" y2="78" stroke-width="1.2"/>
+    <line x1="50" y1="82" x2="496" y2="82" stroke-width="1.2"/>
+  </g>
+</svg>

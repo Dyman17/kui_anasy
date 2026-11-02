@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 480" fill="none">
+<svg preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 480" fill="none">
   <!-- 18-19th century Traditional Kazakh Kyl-Kobyz Contour -->
   <g stroke="#a34836" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
     <!-- Curved Headstock (Басы) with ancient spiral horn curl (Қошқар мүйіз) -->
@@ -42,3 +42,4 @@
     <circle cx="114" cy="140" r="3" fill="#a34836" fill-opacity="0.6"/>
   </g>
 </svg>
+

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 480 200" fill="none">
+  <!-- 18-19th century Traditional Kazakh Kyl-Kobyz Contour (Horizontal Dark Gold) -->
+  <g stroke="#c29b38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M24 100 C24 85, 34 70, 50 70 C66 70, 76 85, 76 100 C76 115, 64 126, 50 126 C38 126, 30 116, 30 106 C30 96, 38 90, 46 92"/>
+    <circle cx="52" cy="100" r="7" stroke-width="1.8"/>
+
+    <line x1="50" y1="62" x2="50" y2="74" stroke-width="2.5"/>
+    <circle cx="50" cy="58" r="4" fill="#c29b38"/>
+    <line x1="50" y1="124" x2="50" y2="136" stroke-width="2.5"/>
+    <circle cx="50" cy="140" r="4" fill="#c29b38"/>
+
+    <path d="M76 88 L190 86 M76 112 L190 114"/>
+    <path d="M110 96 C140 96, 140 104, 110 104" stroke-width="1.2"/>
+
+    <path d="M190 86 C200 60, 225 36, 270 36 C315 36, 330 65, 340 80 M190 114 C200 140, 225 164, 270 164 C315 164, 330 135, 340 120" stroke-width="2.8"/>
+    <path d="M340 80 C346 72, 356 68, 370 68 M340 120 C346 128, 356 132, 370 132"/>
+
+    <path d="M370 68 C420 68, 460 80, 462 100 C460 120, 420 132, 370 132" stroke-width="2.8"/>
+    <ellipse cx="370" cy="100" rx="14" ry="32" stroke-width="1.5" stroke-dasharray="3 4"/>
+
+    <path d="M405 86 C395 94, 395 106, 405 114" stroke-width="2.5"/>
+    <line x1="52" y1="95" x2="455" y2="95" stroke-width="1.8"/>
+    <line x1="52" y1="105" x2="455" y2="105" stroke-width="2.4"/>
+  </g>
+</svg>
