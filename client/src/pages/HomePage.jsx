@@ -65,7 +65,7 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
             <span className="hero-kicker">ТҰЛҒА · {feature.eyebrow || '1861 — 1955'}</span>
             <h2>{feature.title}</h2>
             <p><TextWithTooltips text={feature.body} /></p>
-            <Tooltip text="321+ тұлғаның толық антологиясы мен өмірбаянына өту">
+            <Tooltip text={t.peopleCatalogTip}>
               <button className="underlined-link" onClick={() => onNavigate('people')}>
                 Тұлғалар каталогы <RiCompass3Line size={16} />
               </button>

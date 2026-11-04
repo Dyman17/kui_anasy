@@ -4,8 +4,8 @@ import { ContentBlock, SectionMotif } from '../components/ContentBlock';
 import { Callout } from '../components/Callout';
 import { PARENT_SECTIONS } from '../constants';
 
-export function StandardPage({ page, onNavigate, query, allPages = [], isEditor = false, t, navLabels }) {
-  const relevantBlocks = (page.blocks || []).filter((block) => !query || `${block.title} ${block.body}`.toLowerCase().includes(query.toLowerCase()));
+export function StandardPage({ page, onNavigate, allPages = [], isEditor = false, t, navLabels }) {
+  const relevantBlocks = page.blocks || [];
   const parentCategory = PARENT_SECTIONS.find((p) => p.slug === page.parent_slug);
   const themeSlug = page.parent_slug || page.slug;
   const subpages = allPages.filter((p) => p.parent_slug === page.slug && (isEditor || !p.status || p.status === 'published'));
@@ -43,7 +43,7 @@ export function StandardPage({ page, onNavigate, query, allPages = [], isEditor 
         {relevantBlocks.map((block, index) => <ContentBlock key={block.id || index} block={block} index={index} pageSlug={themeSlug} />)}
         {relevantBlocks.length === 0 && <p className="empty-search">{t.notFound}</p>}
 
-        {subpages.length > 0 && !query && (
+        {subpages.length > 0 && (
           <div className="subpages-container">
             <div className="section-topline">
               <div>

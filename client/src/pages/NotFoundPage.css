@@ -1,0 +1,7 @@
+.not-found-page {
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  min-height: 50vh;
+}
+.not-found-page h1 { margin: 0 0 var(--spacing-md); }
+.not-found-page p { max-width: 56ch; margin: 0 0 var(--spacing-lg); color: var(--text-muted); }

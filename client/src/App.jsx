@@ -12,7 +12,6 @@ import {
   RiShieldKeyholeLine,
 } from 'react-icons/ri';
 import {
-  INITIAL_SLUG,
   NAV_ORDER,
   NAV_LABELS_MAP,
   UI_TRANSLATIONS,
@@ -33,16 +32,34 @@ import Header from './components/Header';
 import { BrandMark } from './components/BrandMark';
 import { HomePage } from './pages/HomePage';
 import { StandardPage } from './pages/StandardPage';
-import { AppleTvMediaGallery } from './components/AppleTvMediaGallery';
 import { AdminPanel } from './admin/AdminPanel';
-import { AuthView } from './admin/AuthView';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { useRoute, navigate as routerNavigate, buildHref } from './app/router';
+import { useDocumentMeta } from './app/useDocumentMeta';
+
+const LANGS = ['kk', 'ru', 'en'];
+const VOLUME_SLUGS = ['library-vol-1', 'library-vol-2', 'library-vol-3'];
+
+function readStored(key, fallback, allowed) {
+  try {
+    const value = localStorage.getItem(key);
+    return value && (!allowed || allowed.includes(value)) ? value : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeStored(key, value) {
+  try { localStorage.setItem(key, value); } catch { /* storage unavailable */ }
+}
 
 function App() {
   const [pages, setPages] = useState([]);
-  const [activeSlug, setActiveSlug] = useState(INITIAL_SLUG);
-  const [adminOpen, setAdminOpen] = useState(window.location.hash.startsWith('#admin'));
-  const [lang, setLang] = useState(() => localStorage.getItem('kui-lang') || 'kk');
-  const [theme, setTheme] = useState(() => localStorage.getItem('kui-theme') || 'light');
+  const route = useRoute();
+  const activeSlug = route.slug;
+  const adminOpen = route.admin;
+  const [lang, setLang] = useState(() => route.lang || readStored('kui-lang', 'kk', LANGS));
+  const [theme, setTheme] = useState(() => readStored('kui-theme', 'light', ['light', 'dark']));
 
   const [sessionUser, setSessionUser] = useState(() => {
     try {
@@ -52,7 +69,6 @@ function App() {
       return null;
     }
   });
-  const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [loadError, setLoadError] = useState('');
@@ -60,7 +76,7 @@ function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('kui-theme', theme);
+    writeStored('kui-theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
@@ -69,11 +85,31 @@ function App() {
 
   const handleLangChange = (newLang) => {
     setLang(newLang);
-    localStorage.setItem('kui-lang', newLang);
+    writeStored('kui-lang', newLang);
+    // Keep an explicit language prefix in the URL in sync with the switcher.
+    if (route.lang && !route.admin) routerNavigate(route.slug, newLang);
   };
 
-  const t = UI_TRANSLATIONS[lang] || UI_TRANSLATIONS.kk;
-  const navLabels = NAV_LABELS_MAP[lang] || NAV_LABELS_MAP.kk;
+  const handleToggleSearch = (open) => {
+    setSearchOpen(open);
+    if (!open) setQuery('');
+  };
+
+  // A language prefix in the URL wins over the stored preference.
+  useEffect(() => {
+    if (route.lang && route.lang !== lang) {
+      setLang(route.lang);
+      writeStored('kui-lang', route.lang);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route.lang]);
+
+  // Back/Forward and link navigation land at the top of the page.
+  const firstRoute = useRef(true);
+  useEffect(() => {
+    if (firstRoute.current) { firstRoute.current = false; return; }
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [route.slug, route.admin]);
 
   useEffect(() => {
     getPages()
@@ -82,27 +118,13 @@ function App() {
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    const handleHash = () => {
-      const h = window.location.hash;
-      setAdminOpen(h.startsWith('#admin'));
-      if (h && !h.startsWith('#admin')) {
-        const clean = h.replace(/^#\/?/, '');
-        if (clean) setActiveSlug(clean);
-      }
-    };
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
-
   const handleSetSessionUser = (user) => {
     if (!user && sessionUser?.token) logoutSession(sessionUser.token);
     setSessionUser(user);
     if (user) {
-      sessionStorage.setItem('kui-auth-session', JSON.stringify(user));
+      try { sessionStorage.setItem('kui-auth-session', JSON.stringify(user)); } catch { /* storage unavailable */ }
     } else {
-      sessionStorage.removeItem('kui-auth-session');
+      try { sessionStorage.removeItem('kui-auth-session'); } catch { /* storage unavailable */ }
     }
   };
 
@@ -128,15 +150,25 @@ function App() {
       .filter((page) => `${page.title} ${page.description} ${(page.blocks || []).map((block) => `${block.title} ${block.body}`).join(' ')}`.toLocaleLowerCase().includes(needle));
   }, [pages, query, sessionUser]);
 
-  const activePage = pages.find((page) => page.slug === activeSlug) || pages[0];
-  const navigate = (slug) => {
-    setActiveSlug(slug);
-    setMenuOpen(false);
-    if (!window.location.hash.startsWith('#admin')) {
-      window.location.hash = slug === 'home' ? '' : `#${slug}`;
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const activePage = pages.find((page) => page.slug === activeSlug) || null;
+  const navigate = (slug) => routerNavigate(slug, route.lang);
+
+  const t = UI_TRANSLATIONS[lang] || UI_TRANSLATIONS.kk;
+  const navLabels = NAV_LABELS_MAP[lang] || NAV_LABELS_MAP.kk;
+
+  let metaTitle = t.siteTitle ? `${t.siteTitle} — ${t.brandSubtitle}` : '';
+  let metaSuffix = '';
+  if (adminOpen) {
+    metaTitle = t.adminPanel;
+    metaSuffix = t.siteTitle;
+  } else if (activePage && activePage.slug !== 'home') {
+    metaTitle = navLabels[activePage.slug] || activePage.title;
+    metaSuffix = t.siteTitle;
+  } else if (!activePage && !loading && !loadError) {
+    metaTitle = t.notFoundTitle;
+    metaSuffix = t.siteTitle;
+  }
+  useDocumentMeta({ title: metaTitle, suffix: metaSuffix, lang });
 
   if (loading) {
     return <div className="loading-screen"><BrandMark /><p>Жүктелуде…</p></div>;
@@ -188,15 +220,18 @@ function App() {
           onSessionUserChange={handleSetSessionUser}
           onNavigate={navigate}
           searchOpen={searchOpen}
-          onToggleSearch={setSearchOpen}
+          onToggleSearch={handleToggleSearch}
           query={query}
           onQueryChange={setQuery}
           searchResults={searchResults}
           t={t}
         />
 
-      {activePage && (
-        <main>
+      <main>
+        {!activePage ? (
+          <NotFoundPage onNavigate={navigate} t={t} />
+        ) : (
+          <>
           {activePage.slug === 'home' ? (
             <HomePage page={activePage} onNavigate={navigate} t={t} navLabels={navLabels} lang={lang} />
           ) : activePage.slug === 'projects-muragerler' ? (
@@ -211,22 +246,23 @@ function App() {
             <CanonPage type="zhyrau" onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
           ) : activePage.slug === 'people-anshi' ? (
             <CanonPage type="anshi" onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
-          ) : activePage.slug.startsWith('library-vol-') ? (
+          ) : VOLUME_SLUGS.includes(activePage.slug) ? (
             <LibraryVolumePage volumeSlug={activePage.slug} onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
           ) : activePage.slug === 'about-leadership' ? (
             <LeadershipPage onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
           ) : activePage.slug === 'about-charter' ? (
             <CharterPage onNavigate={navigate} lang={lang} t={t} navLabels={navLabels} />
           ) : (
-            <StandardPage page={activePage} onNavigate={navigate} query={query} allPages={pages} isEditor={!!sessionUser} t={t} navLabels={navLabels} />
+            <StandardPage page={activePage} onNavigate={navigate} allPages={pages} isEditor={!!sessionUser} t={t} navLabels={navLabels} />
           )}
-        </main>
-      )}
+          </>
+        )}
+      </main>
 
       <footer className="site-footer">
         <div className="footer-main">
           <div className="footer-brand">
-            <a className="brand" href="#" onClick={(event) => { event.preventDefault(); navigate('home'); }}>
+            <a className="brand" href={buildHref('home', route.lang)} onClick={(event) => { event.preventDefault(); navigate('home'); }}>
               <BrandMark />
               <span className="brand-copy"><strong>Күй анасы</strong></span>
             </a>

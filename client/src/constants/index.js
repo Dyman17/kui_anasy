@@ -107,6 +107,10 @@ export const UI_TRANSLATIONS = {
     muragerlerSlogan: '«Мұраны сақта, жаңғырт, дамыт!»',
     muragerlerDesc: '«Күй анасы» жеке қоры жанындағы өскелең ұрпақты ұлттық музыка өнеріне баулу және жас дарындарды жан-жақты қолдау бастамасы.',
     muragerlerBtn: 'Үйірме туралы толық білу',
+    notFoundTitle: 'Бет табылмады',
+    notFoundText: 'Сұралған мекенжай бойынша бет жоқ. Сілтеме ескірген немесе қате терілген болуы мүмкін.',
+    siteTitle: 'Күй анасы',
+    peopleCatalogTip: 'Тұлғалар антологиясына өту',
   },
   ru: {
     brandSubtitle: 'Цифровая энциклопедия казахской музыки',
@@ -141,6 +145,10 @@ export const UI_TRANSLATIONS = {
     muragerlerSlogan: '«Сохраняй, возрождай, развивай наследие!»',
     muragerlerDesc: 'Молодежная инициатива при фонде «Күй анасы» по приобщению подрастающего поколения к традиционной музыке и всесторонней поддержке юных талантов.',
     muragerlerBtn: 'Подробнее о клубе',
+    notFoundTitle: 'Страница не найдена',
+    notFoundText: 'По этому адресу страницы нет. Возможно, ссылка устарела или набрана с ошибкой.',
+    siteTitle: 'Күй анасы',
+    peopleCatalogTip: 'Перейти к антологии деятелей',
   },
   en: {
     brandSubtitle: 'Digital Encyclopedia of Kazakh Music',
@@ -175,6 +183,10 @@ export const UI_TRANSLATIONS = {
     muragerlerSlogan: '"Preserve, Revive, Develop the Heritage!"',
     muragerlerDesc: 'A youth initiative by the "Kui Anasy" Foundation to engage the younger generation in traditional Kazakh music and support emerging talents.',
     muragerlerBtn: 'Learn More About the Club',
+    peopleCatalogTip: 'Go to the anthology of notable people',
+    notFoundTitle: 'Page not found',
+    notFoundText: 'There is no page at this address. The link may be outdated or mistyped.',
+    siteTitle: 'Kui Anasy',
   },
 };
 

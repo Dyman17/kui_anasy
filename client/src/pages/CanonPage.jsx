@@ -3,8 +3,6 @@ import {
   PiSparkleDuotone,
   PiMagnifyingGlassDuotone,
   PiMusicNotesDuotone,
-  PiPlayCircleDuotone,
-  PiPauseCircleDuotone,
   PiUserDuotone,
   PiMapPinDuotone,
   PiBookOpenDuotone,
@@ -21,7 +19,6 @@ export default function CanonPage({ type = 'kuyshi', onNavigate, lang = 'kk', t,
 
   const [activeSchool, setActiveSchool] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [playingId, setPlayingId] = useState(null);
   const [selectedMaster, setSelectedMaster] = useState(null);
 
   const filteredMasters = useMemo(() => {
@@ -54,10 +51,6 @@ export default function CanonPage({ type = 'kuyshi', onNavigate, lang = 'kk', t,
     }, 350);
     return () => clearTimeout(timer);
   }, [mastersList]);
-
-  const togglePlay = (id) => {
-    setPlayingId(playingId === id ? null : id);
-  };
 
   return (
     <div className="dedicated-subpage canon-subpage">
@@ -113,9 +106,8 @@ export default function CanonPage({ type = 'kuyshi', onNavigate, lang = 'kk', t,
         {/* 3. Masters Grid */}
         <div className="canon-masters-grid">
           {filteredMasters.map((m) => {
-            const isPlaying = playingId === m.id;
             return (
-              <div key={m.id} id={`canon-master-${m.id}`} className={`canon-master-card ${isPlaying ? 'playing' : ''}`}>
+              <div key={m.id} id={`canon-master-${m.id}`} className="canon-master-card">
                 <div className="master-avatar-wrap">
                   <img src={m.img} alt={m.name} />
                   <span className="master-school-tag">{m.schoolName}</span>
@@ -142,29 +134,12 @@ export default function CanonPage({ type = 'kuyshi', onNavigate, lang = 'kk', t,
 
                   <div className="master-actions">
                     <button
-                      className={`play-sample-btn ${isPlaying ? 'active' : ''}`}
-                      onClick={() => togglePlay(m.id)}
-                    >
-                      {isPlaying ? <PiPauseCircleDuotone size={20} /> : <PiPlayCircleDuotone size={20} />}
-                      <span>{isPlaying ? 'Тоқтату' : 'Үлгі тыңдау'}</span>
-                    </button>
-                    <button
                       className="details-btn"
                       onClick={() => setSelectedMaster(m)}
                     >
                       <span>Толығырақ</span>
                     </button>
                   </div>
-
-                  {isPlaying && (
-                    <div className="playing-indicator">
-                      <span className="wave-bar" />
-                      <span className="wave-bar" />
-                      <span className="wave-bar" />
-                      <span className="wave-bar" />
-                      <small>Аудио жазба ойнатылуда...</small>
-                    </div>
-                  )}
                 </div>
               </div>
             );

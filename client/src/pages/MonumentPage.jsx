@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   PiSparkleDuotone,
   PiMusicNotesDuotone,
-  PiPlayCircleDuotone,
-  PiPauseCircleDuotone,
   PiBookOpenDuotone,
   PiEyeDuotone,
   PiCalendarBlankDuotone,
@@ -155,11 +153,6 @@ const CONTENT = {
 
 export default function MonumentPage({ onNavigate, lang = 'kk', t, navLabels = {} }) {
   const c = CONTENT[lang] || CONTENT.kk;
-  const [playingIndex, setPlayingIndex] = useState(null);
-
-  const togglePlay = (idx) => {
-    setPlayingIndex(playingIndex === idx ? null : idx);
-  };
 
   return (
     <div className="dedicated-subpage monument-subpage">
@@ -214,31 +207,13 @@ export default function MonumentPage({ onNavigate, lang = 'kk', t, navLabels = {
 
         <div className="kuis-grid">
           {c.kuis.map((kui, idx) => {
-            const isPlaying = playingIndex === idx;
             return (
-              <div key={idx} className={`kui-track-card ${isPlaying ? 'playing' : ''}`}>
+              <div key={idx} className="kui-track-card">
                 <div className="kui-card-top">
                   <span className="kui-tempo-badge">{kui.tempo}</span>
-                  <button
-                    className="kui-play-btn"
-                    onClick={() => togglePlay(idx)}
-                    title={isPlaying ? 'Тоқтату' : 'Тыңдау'}
-                  >
-                    {isPlaying ? <PiPauseCircleDuotone size={34} /> : <PiPlayCircleDuotone size={34} />}
-                  </button>
                 </div>
                 <h3>{kui.title}</h3>
                 <p>{kui.story}</p>
-                {isPlaying && (
-                  <div className="kui-player-visualizer">
-                    <span className="visualizer-bar" />
-                    <span className="visualizer-bar" />
-                    <span className="visualizer-bar" />
-                    <span className="visualizer-bar" />
-                    <span className="visualizer-bar" />
-                    <small>{lang === 'kk' ? 'Күй орындалуда...' : 'Воспроизведение кюя...'}</small>
-                  </div>
-                )}
               </div>
             );
           })}
