@@ -22,6 +22,7 @@ import { TextWithTooltips, Tooltip } from '../components/ReferenceTooltip';
 import { HeroImageRotator } from '../components/HeroImageRotator';
 import { AppleTvMediaGallery } from '../components/AppleTvMediaGallery';
 import { Callout } from '../components/Callout';
+import { HeritageMap } from '../components/HeritageMap';
 import { PROJECT_LEADERS, MURAGERLER_FEATURES, ALLEY_GALLERY } from '../constants';
 
 export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
@@ -73,6 +74,9 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
           <span className="featured-person-pattern" aria-hidden="true" />
         </section>
       )}
+
+      {/* Күй мектептерінің интерактивті тарихи картасы */}
+      <HeritageMap lang={lang} onNavigate={onNavigate} />
 
       {stats && (
         <section className="archive-stats content-width">

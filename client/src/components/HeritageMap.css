@@ -1,0 +1,424 @@
+/* ==========================================================================
+   HeritageMap — interactive historical map of küi regions
+   Uses only shared tokens from styles.css :root / [data-theme="dark"].
+   ========================================================================== */
+
+.heritage-map {
+  position: relative;
+  margin-block: 72px;
+  padding-top: 36px;
+  min-width: 0;
+}
+
+/* Thin divider with a gold rhombus at its centre */
+.heritage-map::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dark) 50%, transparent);
+}
+
+.heritage-map::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  background: var(--accent-gold);
+  transform: rotate(45deg);
+}
+
+.hm-head {
+  max-width: 640px;
+  margin-bottom: 28px;
+}
+
+.hm-head h2 {
+  margin: 8px 0 10px;
+  color: var(--text-primary);
+  font-family: var(--font-title);
+  font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+  line-height: 1.15;
+}
+
+.hm-lead {
+  margin: 0;
+  color: var(--text-muted);
+  font: 400 15px/1.6 var(--font-body);
+}
+
+.hm-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+/* ---------- Map stage ---------- */
+
+.hm-stage {
+  min-width: 0;
+  border: 1px solid var(--border-gold);
+  border-radius: 4px;
+  background: var(--bg-surface);
+  padding: 12px;
+}
+
+.hm-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1000 / 560;
+  overflow: hidden;
+}
+
+.hm-land {
+  fill: var(--paper-shade);
+  opacity: 0.55;
+}
+
+.hm-land-hatch {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.hm-hatch-line {
+  stroke: var(--gold-dark);
+  stroke-width: 1;
+}
+
+.hm-border {
+  fill: none;
+  stroke: var(--gold-dark);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.hm-marker {
+  cursor: pointer;
+  outline: none;
+}
+
+.hm-hit {
+  fill: transparent;
+}
+
+.hm-focus-ring {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 2.5;
+}
+
+.hm-rhombus {
+  fill: var(--accent-gold);
+  stroke: var(--forest);
+  stroke-width: 1.5;
+  transition: fill 0.25s ease;
+}
+
+.hm-marker.no-data .hm-rhombus {
+  fill: var(--bg-surface);
+  stroke: var(--gold-dark);
+  stroke-width: 2;
+}
+
+.hm-label {
+  fill: var(--text-primary);
+  font: 600 15px var(--font-body);
+  paint-order: stroke;
+  stroke: var(--bg-surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  /* The label is part of the click target, so users do not have to hit the small rhombus. */
+  pointer-events: visiblePainted;
+}
+
+.hm-marker:hover .hm-rhombus,
+.hm-marker.active .hm-rhombus {
+  fill: var(--forest);
+  stroke: var(--gold);
+}
+
+[data-theme="dark"] .hm-marker:hover .hm-rhombus,
+[data-theme="dark"] .hm-marker.active .hm-rhombus {
+  fill: var(--gold-light);
+  stroke: var(--forest-deep);
+}
+
+.hm-marker:focus-visible .hm-focus-ring {
+  stroke: var(--text-primary);
+}
+
+.hm-note {
+  margin: 8px 2px 0;
+  color: var(--text-muted);
+  font: 400 12px/1.4 var(--font-body);
+}
+
+/* ---------- Panel ---------- */
+
+.hm-panel {
+  min-width: 0;
+}
+
+.hm-panel-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.hm-panel-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  line-height: 1.25;
+  outline: none;
+}
+
+.hm-panel-title:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
+.hm-diamond {
+  margin-right: 8px;
+  color: var(--accent-gold);
+  font-size: 0.7em;
+  vertical-align: 0.15em;
+}
+
+.hm-reset {
+  padding: 8px 14px;
+  border: 1px solid var(--gold-dark);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text-primary);
+  font: 600 13px/1.2 var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.hm-reset:hover {
+  background: var(--forest);
+  color: var(--parchment);
+}
+
+.hm-prompt,
+.hm-empty {
+  margin: 16px 0;
+  color: var(--text-muted);
+  font: 400 14.5px/1.6 var(--font-body);
+}
+
+.hm-empty {
+  padding: 14px 16px;
+  border-left: 2px solid var(--gold-dark);
+  background: var(--bg-surface);
+  font-family: var(--font-quote);
+  font-style: italic;
+}
+
+.hm-cards {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.hm-card {
+  position: relative;
+  padding: 16px 16px 14px;
+  border: 1px solid var(--border-light);
+  border-top: 2px solid var(--gold-dark);
+  border-radius: 3px;
+  background: var(--bg-surface);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.hm-card-name {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(0.98rem, 4.2vw, 1.15rem);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.hm-card-years {
+  margin: 4px 0 10px;
+  color: var(--accent-gold);
+  font: 600 13.5px/1.4 var(--font-body);
+  letter-spacing: 0.04em;
+}
+
+.hm-card-meta {
+  margin: 0 0 4px;
+  color: var(--text-primary);
+  font: 400 13.5px/1.5 var(--font-body);
+}
+
+.hm-card-meta > span {
+  color: var(--text-muted);
+}
+
+.hm-card-region {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.hm-card-kuis {
+  margin: 10px 0 12px;
+  font: 400 13.5px/1.5 var(--font-body);
+  color: var(--text-muted);
+}
+
+.hm-card-kuis ul {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+
+.hm-card-kuis li {
+  color: var(--text-primary);
+}
+
+.hm-card-kuis li::before {
+  content: "◆";
+  margin-right: 6px;
+  color: var(--accent-gold);
+  font-size: 0.6em;
+  vertical-align: 0.2em;
+}
+
+.hm-card-link {
+  padding: 0 0 2px;
+  border: 0;
+  border-bottom: 1px solid var(--gold-dark);
+  background: none;
+  color: var(--text-primary);
+  font: 600 13.5px/1.3 var(--font-body);
+  cursor: pointer;
+}
+
+.hm-card-link:hover {
+  color: var(--accent-gold);
+}
+
+.hm-reset:focus-visible,
+.hm-card-link:focus-visible,
+.hm-region-btn:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Region list (plain buttons) ---------- */
+
+.hm-region-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.hm-region-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text-primary);
+  font: 500 13.5px/1.3 var(--font-body);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.hm-region-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.hm-region-count {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.hm-region-btn:hover {
+  border-color: var(--gold-dark);
+}
+
+.hm-region-btn.active {
+  border-color: var(--gold-dark);
+  background: var(--bg-surface);
+  box-shadow: inset 2px 0 0 var(--gold-dark);
+}
+
+.hm-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .hm-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .heritage-map {
+    margin-block: 48px;
+    padding-top: 28px;
+  }
+
+  .hm-stage {
+    padding: 6px;
+  }
+
+  /* Labels are unreadable at full view on phones — the region list carries them. */
+  .hm-label {
+    display: none;
+  }
+
+  .hm-layout.is-zoomed .hm-marker.active .hm-label {
+    display: inline;
+  }
+
+  .hm-region-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-rhombus,
+  .hm-reset,
+  .hm-region-btn {
+    transition: none;
+  }
+}
