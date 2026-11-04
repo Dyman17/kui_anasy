@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ALLEY_GALLERY } from '../constants';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { HERO_SLIDES } from '../constants';
 
 export function HeroImageRotator({ lang = 'kk' }) {
   const slides = HERO_SLIDES[lang] || HERO_SLIDES.kk;

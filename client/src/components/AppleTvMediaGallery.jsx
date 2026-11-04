@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TbPanoramaHorizontal, TbChevronLeft, TbChevronRight } from 'react-icons/tb';
+import { RiPlayCircleLine } from 'react-icons/ri';
 
 export function AppleTvMediaGallery({ items, onNavigate, t }) {
   const [activeIndex, setActiveIndex] = useState(0);

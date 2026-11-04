@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import {
   FilePlus2, Trash2, ArrowUp, ArrowDown, Download, RotateCcw,
-  ShieldCheck, UserCheck, Eye, Pencil, Save, Plus
+  ShieldCheck, UserCheck, Eye, Pencil, Save, Plus,
+  Users, ArrowLeft, Check, FolderOpen
 } from 'lucide-react';
 import {
   createPage, savePage, getAdminAccounts,
   approveEditorAccount, deleteEditorAccount, bulkApprovePages, resetLocalPages
 } from '../api';
-import { BLOCK_TYPES, PARENT_SECTIONS } from '../constants';
+import { BLOCK_TYPES, PARENT_SECTIONS, UI_TRANSLATIONS } from '../constants';
 import { ConstructorQRPreview } from '../components/ConstructorQRPreview';
+import { StandardPage } from '../pages/StandardPage';
+import { AuthView } from './AuthView';
 import { ItemsEditor } from './ItemsEditor';
+import { createEmptyPage, createBlock, moveBlock, toSlug } from './adminUtils';
 
 export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, onExit, navLabels }) {
   const [route, setRoute] = useState(window.location.hash || '#admin');

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 100" width="48" height="100">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F0D78C"/>
+      <stop offset="50%" stop-color="#D7B45F"/>
+      <stop offset="100%" stop-color="#A9853C"/>
+    </linearGradient>
+    <style>
+      .orn-bold { fill: none; stroke: url(#goldGrad); stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+      .orn-med { fill: none; stroke: #D7B45F; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .orn-thin { fill: none; stroke: #A9853C; stroke-width: 1.2; stroke-linecap: round; }
+      .orn-fill { fill: url(#goldGrad); }
+      .orn-accent { fill: #F0D78C; }
+    </style>
+  </defs>
+
+  <!-- Left & right outer framing boundaries -->
+  <line x1="2" y1="0" x2="2" y2="100" class="orn-med" opacity="0.65"/>
+  <line x1="46" y1="0" x2="46" y2="100" class="orn-med" opacity="0.65"/>
+  <line x1="6" y1="0" x2="6" y2="100" class="orn-thin" stroke-dasharray="3 4" opacity="0.45"/>
+  <line x1="42" y1="0" x2="42" y2="100" class="orn-thin" stroke-dasharray="3 4" opacity="0.45"/>
+
+  <!-- Vertical spine -->
+  <line x1="24" y1="0" x2="24" y2="100" class="orn-thin" stroke-dasharray="4 4" opacity="0.35"/>
+
+  <!-- Seamless junction nodes at y=0 and y=100 -->
+  <circle cx="24" cy="0" r="3.5" class="orn-accent" opacity="0.85"/>
+  <circle cx="24" cy="100" r="3.5" class="orn-accent" opacity="0.85"/>
+  <path d="M24 0 L24 12 C19 16 12 14 10 9" class="orn-med" opacity="0.75"/>
+  <path d="M24 0 L24 12 C29 16 36 14 38 9" class="orn-med" opacity="0.75"/>
+  <path d="M24 100 L24 88 C19 84 12 86 10 91" class="orn-med" opacity="0.75"/>
+  <path d="M24 100 L24 88 C29 84 36 86 38 91" class="orn-med" opacity="0.75"/>
+
+  <!-- Central Tumar (Sacred Diamond) -->
+  <polygon points="24,34 38,50 24,66 10,50" stroke="#D7B45F" stroke-width="2.4" fill="#D7B45F" fill-opacity="0.22"/>
+  <circle cx="24" cy="50" r="4.2" class="orn-accent" opacity="0.95"/>
+  <polygon points="24,44 28,50 24,56 20,50" class="orn-fill" opacity="0.75"/>
+
+  <!-- Upper Kazakh Qoshqar Muyiz (Ram's horn curls) -->
+  <path d="M24 34 C19 20 9 17 9 27 C9 34 17 35 18 29.5 C18.7 26 15 24 12.5 26" class="orn-bold" opacity="0.95"/>
+  <path d="M24 34 C29 20 39 17 39 27 C39 34 31 35 30 29.5 C29.3 26 33 24 35.5 26" class="orn-bold" opacity="0.95"/>
+
+  <!-- Lower Kazakh Qoshqar Muyiz (Inverted Ram's horn curls) -->
+  <path d="M24 66 C19 80 9 83 9 73 C9 66 17 65 18 70.5 C18.7 74 15 76 12.5 74" class="orn-bold" opacity="0.95"/>
+  <path d="M24 66 C29 80 39 83 39 73 C39 66 31 65 30 70.5 C29.3 74 33 76 35.5 74" class="orn-bold" opacity="0.95"/>
+
+  <!-- Accent diamonds in upper/lower crest -->
+  <polygon points="24,19 27.5,23 24,27 20.5,23" class="orn-accent" opacity="0.8"/>
+  <polygon points="24,73 27.5,77 24,81 20.5,77" class="orn-accent" opacity="0.8"/>
+</svg>
+

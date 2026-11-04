@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowRight } from 'lucide-react';
 
 export function Callout({ onNavigate, t }) {
   return (
@@ -11,7 +12,3 @@ export function Callout({ onNavigate, t }) {
     </section>
   );
 }
-
-// -------------------------------------------------------------
-// ADMIN PANEL COMPONENT WITH 2 ROLES & ADVANCED APPROVAL WORKFLOW
-// -------------------------------------------------------------

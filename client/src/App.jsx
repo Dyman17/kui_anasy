@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   PiSunDuotone,
   PiMoonStarsDuotone,
+  PiBookmarksDuotone,
+  PiGearDuotone,
 } from 'react-icons/pi';
 import {
   RiSearch2Line,
@@ -26,6 +28,7 @@ import MuragerlerPage from './pages/MuragerlerPage';
 import { LeadershipPage, CharterPage } from './pages/AboutDedicatedPages';
 
 // Modularized Views & Components
+import OrnamentRail from './components/OrnamentRail';
 import { HomePage } from './pages/HomePage';
 import { StandardPage } from './pages/StandardPage';
 import { AppleTvMediaGallery } from './components/AppleTvMediaGallery';
@@ -161,16 +164,13 @@ function App() {
   }
 
   return (
-    <div className="site-shell">
-      {/* Vintage Paper Texture Overlay */}
-      <div className="vintage-parchment-overlay" aria-hidden="true" />
+    <>
+      {/* Kazakh National Ornament Rail (64px desktop / 28px mobile) */}
+      <OrnamentRail />
 
-      {/* Authentic Kazakh Vertical Ornamental Flanks on Underlay */}
-      <div className="shell-vertical-ornament ornament-left" aria-hidden="true" />
-      <div className="shell-vertical-ornament ornament-right" aria-hidden="true" />
-
-      {/* Cultural Heritage Contours (18-19th c. Dombra, Kobyz & Torsyk) on Underlay */}
-      <div className="shell-cultural-contours" aria-hidden="true" />
+      <div className="site-shell">
+        {/* Cultural Heritage Contours on Underlay */}
+        <div className="shell-cultural-contours" aria-hidden="true" />
 
       <header className="site-header">
         <a className="brand" href="#" onClick={(event) => { event.preventDefault(); navigate('home'); }}>
@@ -188,6 +188,14 @@ function App() {
               {navLabels[page.slug] || page.title}
             </button>
           ))}
+          <div className="mobile-nav-lang-switcher">
+            <span className="mobile-nav-lang-label">Тіл / Язык:</span>
+            <div className="lang-switcher">
+              <button className={`lang-btn ${lang === 'kk' ? 'active' : ''}`} onClick={() => handleLangChange('kk')}>ҚАЗ</button>
+              <button className={`lang-btn ${lang === 'ru' ? 'active' : ''}`} onClick={() => handleLangChange('ru')}>РУС</button>
+              <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => handleLangChange('en')}>ENG</button>
+            </div>
+          </div>
         </nav>
 
         <div className="header-actions">
@@ -288,6 +296,7 @@ function App() {
         </div>
       </footer>
     </div>
+    </>
   );
 }
 

@@ -8,6 +8,8 @@ import {
   PiMusicNotesPlusDuotone,
   PiChalkboardTeacherDuotone,
   PiCompassDuotone,
+  PiUsersDuotone,
+  PiWaveformDuotone,
 } from 'react-icons/pi';
 import {
   RiCompass3Line,
@@ -18,7 +20,9 @@ import {
 } from 'react-icons/ri';
 import { TextWithTooltips, Tooltip } from '../components/ReferenceTooltip';
 import { HeroImageRotator } from '../components/HeroImageRotator';
-import { PROJECT_LEADERS, MURAGERLER_FEATURES } from '../constants';
+import { AppleTvMediaGallery } from '../components/AppleTvMediaGallery';
+import { Callout } from '../components/Callout';
+import { PROJECT_LEADERS, MURAGERLER_FEATURES, ALLEY_GALLERY } from '../constants';
 
 export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
   const blocks = page.blocks || [];

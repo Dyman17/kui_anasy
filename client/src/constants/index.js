@@ -358,6 +358,18 @@ export const ALLEY_GALLERY = [
   },
 ];
 
+export const HERO_SLIDES = {
+  kk: ALLEY_GALLERY.slice(0, 5),
+  ru: ALLEY_GALLERY.slice(0, 5).map((item) => ({
+    ...item,
+    subtitle: item.targetSlug === 'projects-monument' ? 'Монумент Дины Нурпеисовой' : 'Аллея Кюйши в Астане',
+  })),
+  en: ALLEY_GALLERY.slice(0, 5).map((item) => ({
+    ...item,
+    subtitle: item.targetSlug === 'projects-monument' ? 'Dina Nurpeisova Monument' : 'Kuyshiler Alley in Astana',
+  })),
+};
+
 export const PARENT_SECTIONS = [
   { slug: 'people', title: 'Тұлғалар (күйшілер, жыраулар, әншілер)' },
   { slug: 'heritage', title: 'Музыкалық мұра (күйлер, әндер, сарындар)' },

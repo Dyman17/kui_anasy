@@ -2,6 +2,7 @@ import React from 'react';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { ContentBlock, SectionMotif } from '../components/ContentBlock';
 import { Callout } from '../components/Callout';
+import { PARENT_SECTIONS } from '../constants';
 
 export function StandardPage({ page, onNavigate, query, allPages = [], isEditor = false, t, navLabels }) {
   const relevantBlocks = (page.blocks || []).filter((block) => !query || `${block.title} ${block.body}`.toLowerCase().includes(query.toLowerCase()));

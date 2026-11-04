@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ShieldCheck, UserCheck, LockKeyhole, ArrowRight } from 'lucide-react';
-import { loginEditor, registerEditor } from '../api';
+import { ShieldCheck, UserCheck, LockKeyhole, ArrowRight, ArrowLeft, Check } from 'lucide-react';
+import { loginEditor, registerEditor, verifySuperAdmin } from '../api';
 
 export function AuthView({ onLoginSuccess, onExit }) {
   const [roleMode, setRoleMode] = useState('super');
@@ -160,40 +160,4 @@ export function AuthView({ onLoginSuccess, onExit }) {
       </div>
     </div>
   );
-}
-
-function moveBlock(draft, updateDraft, index, direction) {
-  const blocks = [...draft.blocks];
-  const [block] = blocks.splice(index, 1);
-  blocks.splice(index + direction, 0, block);
-  updateDraft('blocks', blocks);
-}
-
-function createEmptyPage(position) {
-  return {
-    slug: '',
-    title: '',
-    description: '',
-    position,
-    parent_slug: 'people',
-    lang: 'kk',
-    status: 'pending',
-    change_summary: '',
-    blocks: [],
-  };
-}
-
-function createBlock(type) {
-  const defaults = {
-    heading: { title: 'Жаңа бөлім', body: '' },
-    feature: { eyebrow: '', title: 'Ерекше тақырып', body: '' },
-    quote: { title: 'Дереккөз', body: 'Дәйексөз мәтіні' },
-    image: { title: '', body: 'Суретке түсіндірме', link: '' },
-    list: { title: 'Тізім', body: '', items: [{ text: 'Жаңа тармақ' }] },
-    stats: { title: 'Сандар', body: '', items: [{ value: '0', label: 'Көрсеткіш' }] },
-    cards: { title: 'Карточкалар', body: '', items: [{ title: 'Карточка атауы', meta: 'Санат', description: 'Қысқаша түсіндірме' }] },
-    callout: { eyebrow: 'НАЗАР АУДАРЫҢЫЗ', title: 'Екпінді блок', body: '', link: '', linkLabel: 'Толығырақ' },
-    qr: { title: 'Сілтемені QR арқылы ашыңыз', body: '', link: '' },
-  };
-  return { id: crypto.randomUUID(), type, ...(defaults[type] || { title: '', body: '' }) };
 }

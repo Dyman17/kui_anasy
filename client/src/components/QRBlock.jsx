@@ -46,8 +46,8 @@ export function QRBlock({ block }) {
           <a href={block.link} target="_blank" rel="noreferrer" className="qr-link-url">
             {block.link} <ArrowUpRight size={14} />
           </a>
-          <button type="button" className="qr-copy-btn" onClick={handleCopy}>
-            {copied ? <PiCheckBold size={13} /> : <PiCopyDuotone size={13} />}
+          <button type="button" className="qr-copy-btn" onClick={handleCopy} aria-label={copied ? 'Көшірілді!' : 'Көшіру'}>
+            {copied ? <Check size={13} /> : <Copy size={13} />}
             <span>{copied ? 'Көшірілді!' : 'Көшіру'}</span>
           </button>
         </div>
