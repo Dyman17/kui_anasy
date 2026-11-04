@@ -29,6 +29,7 @@ import { LeadershipPage, CharterPage } from './pages/AboutDedicatedPages';
 
 // Modularized Views & Components
 import OrnamentRail from './components/OrnamentRail';
+import Header from './components/Header';
 import { HomePage } from './pages/HomePage';
 import { StandardPage } from './pages/StandardPage';
 import { AppleTvMediaGallery } from './components/AppleTvMediaGallery';
@@ -172,70 +173,26 @@ function App() {
         {/* Cultural Heritage Contours on Underlay */}
         <div className="shell-cultural-contours" aria-hidden="true" />
 
-      <header className="site-header">
-        <a className="brand" href="#" onClick={(event) => { event.preventDefault(); navigate('home'); }}>
-          <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
-          <span className="brand-copy"><strong>Күй анасы</strong></span>
-        </a>
-
-        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Мәзір">
-          {menuOpen ? <RiCloseLine size={24} /> : <RiMenu4Line size={24} />}
-        </button>
-
-        <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`}>
-          {navPages.map((page) => (
-            <button key={page.slug} className={page.slug === activePage?.slug ? 'nav-link active' : 'nav-link'} onClick={() => navigate(page.slug)}>
-              {navLabels[page.slug] || page.title}
-            </button>
-          ))}
-          <div className="mobile-nav-lang-switcher">
-            <span className="mobile-nav-lang-label">Тіл / Язык:</span>
-            <div className="lang-switcher">
-              <button className={`lang-btn ${lang === 'kk' ? 'active' : ''}`} onClick={() => handleLangChange('kk')}>ҚАЗ</button>
-              <button className={`lang-btn ${lang === 'ru' ? 'active' : ''}`} onClick={() => handleLangChange('ru')}>РУС</button>
-              <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => handleLangChange('en')}>ENG</button>
-            </div>
-          </div>
-        </nav>
-
-        <div className="header-actions">
-          <div className="header-extra-controls">
-            {/* Trilingual switcher */}
-            <div className="lang-switcher">
-              <button className={`lang-btn ${lang === 'kk' ? 'active' : ''}`} onClick={() => handleLangChange('kk')}>ҚАЗ</button>
-              <button className={`lang-btn ${lang === 'ru' ? 'active' : ''}`} onClick={() => handleLangChange('ru')}>РУС</button>
-              <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => handleLangChange('en')}>ENG</button>
-            </div>
-
-            {/* Dark / Light theme toggle */}
-            <button className="theme-toggle-btn" onClick={toggleTheme} title={theme === 'dark' ? 'Жарық тақырып' : 'Қараңғы тақырып'}>
-              {theme === 'dark' ? <PiSunDuotone size={19} /> : <PiMoonStarsDuotone size={19} />}
-            </button>
-          </div>
-
-          <button className="icon-button" aria-label="Іздеу" onClick={() => setSearchOpen(!searchOpen)}><RiSearch2Line size={18} /></button>
-        </div>
-      </header>
-
-      {searchOpen && (
-        <section className="search-wrap">
-          <div className="search-bar">
-            <RiSearch2Line size={18} />
-            <input type="search" placeholder={t.searchPlaceholder} value={query} onChange={(event) => setQuery(event.target.value)} autoFocus />
-            {query && <button className="icon-button" onClick={() => setQuery('')}><RiCloseLine size={18} /></button>}
-          </div>
-          {query.trim() && (
-            <div className="search-results">
-              {searchResults.length ? searchResults.map((page) => (
-                <button key={page.slug} onClick={() => { navigate(page.slug); setSearchOpen(false); setQuery(''); }}>
-                  <strong>{page.title}</strong>
-                  <span>{navLabels[page.parent_slug] || navLabels[page.slug] || 'Парақша'}</span>
-                </button>
-              )) : <p>{t.notFound}</p>}
-            </div>
-          )}
-        </section>
-      )}
+        {/* Phase 3: Museum / Editorial Header and Navigation System */}
+        <Header
+          navPages={navPages}
+          activeSlug={activeSlug}
+          activePage={activePage}
+          navLabels={navLabels}
+          lang={lang}
+          onLangChange={handleLangChange}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          sessionUser={sessionUser}
+          onSessionUserChange={handleSetSessionUser}
+          onNavigate={navigate}
+          searchOpen={searchOpen}
+          onToggleSearch={setSearchOpen}
+          query={query}
+          onQueryChange={setQuery}
+          searchResults={searchResults}
+          t={t}
+        />
 
       {activePage && (
         <main>

@@ -11,7 +11,7 @@ export const BLOCK_TYPES = [
   ['callout', 'Екпінді блок'],
   ['qr', 'QR сілтеме'],
 ];
-export const NAV_ORDER = ['home', 'people', 'heritage', 'projects', 'about', 'library'];
+export const NAV_ORDER = ['home', 'people', 'heritage', 'projects', 'library', 'about'];
 
 export const NAV_LABELS_MAP = {
   kk: {
