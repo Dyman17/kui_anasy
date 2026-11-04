@@ -17,7 +17,7 @@ import {
   NAV_LABELS_MAP,
   UI_TRANSLATIONS,
 } from './constants';
-import { getPages } from './api';
+import { getPages, logoutSession } from './api';
 
 // Dedicated Sub-Pages
 import MonumentPage from './pages/MonumentPage';
@@ -30,6 +30,7 @@ import { LeadershipPage, CharterPage } from './pages/AboutDedicatedPages';
 // Modularized Views & Components
 import OrnamentRail from './components/OrnamentRail';
 import Header from './components/Header';
+import { BrandMark } from './components/BrandMark';
 import { HomePage } from './pages/HomePage';
 import { StandardPage } from './pages/StandardPage';
 import { AppleTvMediaGallery } from './components/AppleTvMediaGallery';
@@ -96,6 +97,7 @@ function App() {
   }, []);
 
   const handleSetSessionUser = (user) => {
+    if (!user && sessionUser?.token) logoutSession(sessionUser.token);
     setSessionUser(user);
     if (user) {
       sessionStorage.setItem('kui-auth-session', JSON.stringify(user));
@@ -137,13 +139,13 @@ function App() {
   };
 
   if (loading) {
-    return <div className="loading-screen"><span className="brand-mark"><i /><i /><i /></span><p>Жүктелуде…</p></div>;
+    return <div className="loading-screen"><BrandMark /><p>Жүктелуде…</p></div>;
   }
 
   if (loadError) {
     return (
       <div className="loading-screen error-screen">
-        <span className="brand-mark"><i /><i /><i /></span>
+        <BrandMark />
         <h1>Сайтпен байланыс жоқ</h1>
         <p>{loadError}</p>
         <p className="setup-hint">Алдымен серверде PostgreSQL дерекқорын қосып, <code>npm run dev</code> пәрменін орындаңыз.</p>
@@ -154,7 +156,6 @@ function App() {
   if (adminOpen) {
     return (
       <AdminPanel
-        pages={sortedPages}
         sessionUser={sessionUser}
         onSessionUserChange={handleSetSessionUser}
         onPagesChange={setPages}
@@ -226,7 +227,7 @@ function App() {
         <div className="footer-main">
           <div className="footer-brand">
             <a className="brand" href="#" onClick={(event) => { event.preventDefault(); navigate('home'); }}>
-              <span className="brand-mark"><i /><i /><i /></span>
+              <BrandMark />
               <span className="brand-copy"><strong>Күй анасы</strong></span>
             </a>
             <p>Қазақтың ұлттық музыкалық мұрасын сақтау, зерттеу және келер ұрпаққа жеткізуге арналған цифрлық бастама.</p>

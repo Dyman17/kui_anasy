@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { BrandMark } from './BrandMark';
 import {
   RiSearch2Line,
   RiCloseLine,
@@ -134,9 +135,7 @@ export default function Header({
           }}
           aria-label="Күй анасы — Басты бетке өту"
         >
-          <span className="brand-mark" aria-hidden="true">
-            <i /><i /><i />
-          </span>
+          <BrandMark />
           <span className="brand-copy">
             <strong>Күй анасы</strong>
             <small>ЦИФРЛЫҚ ЭНЦИКЛОПЕДИЯ</small>
@@ -379,9 +378,7 @@ export default function Header({
                 handleNavClick('home');
               }}
             >
-              <span className="brand-mark" aria-hidden="true">
-                <i /><i /><i />
-              </span>
+              <BrandMark />
               <span className="brand-copy">
                 <strong>Күй анасы</strong>
               </span>

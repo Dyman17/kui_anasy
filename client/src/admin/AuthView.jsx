@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldCheck, UserCheck, LockKeyhole, ArrowRight, ArrowLeft, Check } from 'lucide-react';
-import { loginEditor, registerEditor, verifySuperAdmin } from '../api';
+import { API_ENABLED, loginEditor, loginSuperAdmin, registerEditor } from '../api';
+import { BrandMark } from '../components/BrandMark';
 
 export function AuthView({ onLoginSuccess, onExit }) {
   const [roleMode, setRoleMode] = useState('super');
@@ -9,10 +10,11 @@ export function AuthView({ onLoginSuccess, onExit }) {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(API_ENABLED ? '' : 'Сервер (API) қосылмаған. Әкімші панеліне кіру үшін VITE_API_URL баптауы қажет.');
   const [notice, setNotice] = useState('');
+  const [busy, setBusy] = useState(false);
 
-  const handleSuperSubmit = (e) => {
+  const handleSuperSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setNotice('');
@@ -20,47 +22,46 @@ export function AuthView({ onLoginSuccess, onExit }) {
       setError('Бас әкімшінің құпия кілтін енгізіңіз.');
       return;
     }
-    if (verifySuperAdmin(superToken)) {
-      onLoginSuccess({
-        role: 'SUPER_ADMIN',
-        fullName: 'Бас әкімші',
-        token: superToken.trim(),
-      });
-    } else {
-      setError('Құпия кілт қате. Қайта тексеріп көріңіз.');
+    setBusy(true);
+    try {
+      onLoginSuccess(await loginSuperAdmin(superToken));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
     }
   };
 
-  const handleEditorSubmit = (e) => {
+  const handleEditorSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setNotice('');
 
-    if (editorMode === 'login') {
-      try {
-        const account = loginEditor({ username, password });
-        onLoginSuccess({
-          role: 'EDITOR',
-          id: account.id,
-          fullName: account.fullName,
-          username: account.username,
-        });
-      } catch (err) {
-        setError(err.message);
-      }
-    } else {
-      if (!fullName.trim() || !username.trim() || !password.trim()) {
+    if (editorMode === 'register') {
+      if (!fullName.trim() || !username.trim() || !password) {
         setError('Барлық өрістерді толтырыңыз.');
         return;
       }
-      try {
-        registerEditor({ fullName, username, password });
+      if (password.length < 8) {
+        setError('Құпиясөз кемінде 8 таңба болуы керек.');
+        return;
+      }
+    }
+
+    setBusy(true);
+    try {
+      if (editorMode === 'login') {
+        onLoginSuccess(await loginEditor({ username, password }));
+      } else {
+        await registerEditor({ fullName, username, password });
         setNotice('Өтінішіңіз сәтті қабылданды! Бас әкімші мақұлдағаннан кейін жүйеге кіре аласыз.');
         setEditorMode('login');
         setPassword('');
-      } catch (err) {
-        setError(err.message);
       }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -68,7 +69,7 @@ export function AuthView({ onLoginSuccess, onExit }) {
     <div className="admin-shell">
       <header className="admin-topbar">
         <div className="brand">
-          <span className="brand-mark">К</span>
+          <BrandMark />
           <span className="brand-copy"><strong>Күй анасы</strong><small>КОНСТРУКТОРҒА КІРУ</small></span>
         </div>
         <button className="admin-exit" onClick={onExit} style={{ marginLeft: 'auto' }}>
@@ -107,7 +108,7 @@ export function AuthView({ onLoginSuccess, onExit }) {
             <p style={{ margin: '4px 0 0', fontSize: '12px', color: 'var(--muted)' }}>
               Бас әкімші құпия кілті қауіпсіздік параметрлерінде (Environment variable) сақталады. Барлық өкілеттікке ие.
             </p>
-            <button type="submit" className="button button-dark">Кіру</button>
+            <button type="submit" className="button button-dark" disabled={busy || !API_ENABLED}>{busy ? 'Тексерілуде…' : 'Кіру'}</button>
           </form>
         ) : (
           <form className="auth-form" onSubmit={handleEditorSubmit}>
@@ -130,6 +131,7 @@ export function AuthView({ onLoginSuccess, onExit }) {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="aidos"
+                autoComplete="username"
                 required
               />
             </label>
@@ -140,12 +142,14 @@ export function AuthView({ onLoginSuccess, onExit }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
+                autoComplete={editorMode === 'login' ? 'current-password' : 'new-password'}
+                minLength={editorMode === 'register' ? 8 : undefined}
                 required
               />
             </label>
 
-            <button type="submit" className="button button-dark">
-              {editorMode === 'login' ? 'Кіру' : 'Тіркелуге өтініш беру'}
+            <button type="submit" className="button button-dark" disabled={busy || !API_ENABLED}>
+              {busy ? 'Тексерілуде…' : editorMode === 'login' ? 'Кіру' : 'Тіркелуге өтініш беру'}
             </button>
 
             <div className="auth-switch-mode">

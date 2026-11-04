@@ -1,36 +1,98 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  FilePlus2, Trash2, ArrowUp, ArrowDown, Download, RotateCcw,
-  ShieldCheck, UserCheck, Eye, Pencil, Save, Plus,
-  Users, ArrowLeft, Check, FolderOpen
+  FilePlus2, Trash2, ArrowUp, ArrowDown, ShieldCheck, UserCheck, Eye, Pencil, Save, Plus,
+  Users, ArrowLeft, Check, FolderOpen, X, History,
 } from 'lucide-react';
 import {
-  createPage, savePage, getAdminAccounts,
-  approveEditorAccount, deleteEditorAccount, bulkApprovePages, resetLocalPages
+  createPage, savePage, getAdminPages, getPages, approvePages, rejectPage,
+  getEditors, approveEditor, deleteEditor, getSessionUser,
 } from '../api';
 import { BLOCK_TYPES, PARENT_SECTIONS, UI_TRANSLATIONS } from '../constants';
 import { ConstructorQRPreview } from '../components/ConstructorQRPreview';
+import { BrandMark } from '../components/BrandMark';
 import { StandardPage } from '../pages/StandardPage';
 import { AuthView } from './AuthView';
 import { ItemsEditor } from './ItemsEditor';
+import { AuditLogView } from './AuditLogView';
 import { createEmptyPage, createBlock, moveBlock, toSlug } from './adminUtils';
 
-export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesChange, onExit, navLabels }) {
+/** For editing, an editor's unapproved draft takes precedence over the published version. */
+function withDraft(page) {
+  if (!page?.pending_draft) return page;
+  return { ...page, ...page.pending_draft };
+}
+
+/**
+ * Pages whose public view is still rendered by dedicated JSX (App.jsx), so CMS edits are not visible yet.
+ * Temporary: removed page by page as their content moves into CMS blocks (plan stage C).
+ */
+const CODE_RENDERED_SLUGS = new Set([
+  'home', 'projects-muragerler', 'projects-alley', 'projects-monument',
+  'people-kuyshi', 'people-zhyrau', 'people-anshi', 'about-leadership', 'about-charter',
+]);
+const isCodeRendered = (slug) => CODE_RENDERED_SLUGS.has(slug) || slug.startsWith('library-vol-');
+
+function needsReview(page) {
+  return page.status === 'pending' || !!page.pending_draft;
+}
+
+export function AdminPanel({ sessionUser, onSessionUserChange, onPagesChange, onExit, navLabels }) {
   const [route, setRoute] = useState(window.location.hash || '#admin');
-  const [draft, setDraft] = useState(() => createEmptyPage(pages.filter((p) => p.is_custom).length));
+  const [adminPages, setAdminPages] = useState([]);
+  const [draft, setDraft] = useState(() => createEmptyPage(0));
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [saving, setSaving] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [selectedSlugs, setSelectedSlugs] = useState([]);
   const [statusFilter, setStatusFilter] = useState('all');
-  const [accounts, setAccounts] = useState(() => getAdminAccounts());
+  const [accounts, setAccounts] = useState([]);
+  /** A notice to show after the next route change (e.g. after creating a page). */
+  const flashNotice = useRef('');
 
+  const token = sessionUser?.token;
   const isSuperAdmin = sessionUser?.role === 'SUPER_ADMIN';
-  const customPages = pages.filter((page) => page.is_custom);
-  const editingSlug = route.startsWith('#admin/edit/') ? route.slice('#admin/edit/'.length) : '';
-  const activePage = customPages.find((page) => page.slug === editingSlug);
+  const editablePages = adminPages;
+  const editingSlug = route.startsWith('#admin/edit/') ? decodeURIComponent(route.slice('#admin/edit/'.length)) : '';
+  const activePage = editablePages.find((page) => page.slug === editingSlug);
   const pendingAccounts = accounts.filter((a) => a.status === 'pending');
+
+  /** A 401 means the server session is gone: drop the local session and show the login form. */
+  const handleApiError = useCallback((apiError) => {
+    if (apiError?.status === 401) {
+      onSessionUserChange(null);
+      return;
+    }
+    setError(apiError.message);
+  }, [onSessionUserChange]);
+
+  const refreshPages = useCallback(async () => {
+    if (!token) return;
+    try {
+      setAdminPages(await getAdminPages(token));
+      onPagesChange(await getPages());
+    } catch (apiError) {
+      handleApiError(apiError);
+    }
+  }, [token, onPagesChange, handleApiError]);
+
+  const refreshAccounts = useCallback(async () => {
+    if (!token || !isSuperAdmin) return;
+    try {
+      setAccounts(await getEditors(token));
+    } catch (apiError) {
+      handleApiError(apiError);
+    }
+  }, [token, isSuperAdmin, handleApiError]);
+
+  useEffect(() => {
+    if (!token) return;
+    getSessionUser(token).catch(handleApiError);
+    refreshPages();
+    refreshAccounts();
+    // Reload only when the session changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   useEffect(() => {
     const handleHash = () => setRoute(window.location.hash || '#admin');
@@ -39,13 +101,19 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
   }, []);
 
   useEffect(() => {
-    if (route === '#admin') setDraft(createEmptyPage(customPages.length));
-    else if (activePage) setDraft(structuredClone(activePage));
+    if (route === '#admin') setDraft(createEmptyPage(editablePages.length));
+    else if (activePage) setDraft(structuredClone(withDraft(activePage)));
     else setDraft(null);
     setPreviewOpen(false);
     setError('');
-    setNotice('');
-  }, [route, activePage?.slug]);
+    // Notices survive a reload of the same page so that "sent for review" stays visible.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route, activePage?.slug, activePage?.updated_at, activePage?.pending_at]);
+
+  useEffect(() => {
+    setNotice(flashNotice.current);
+    flashNotice.current = '';
+  }, [route]);
 
   const updateDraft = (key, value) => setDraft((current) => ({ ...current, [key]: value }));
   const updateBlock = (id, key, value) => setDraft((current) => ({
@@ -72,99 +140,93 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
     }
     setSaving(true);
     try {
-      const now = new Date().toISOString();
-      const isPublishing = isSuperAdmin;
+      // Authorship, status and approval fields are assigned by the server.
       const payload = {
-        ...draft,
         slug,
         title: draft.title.trim(),
+        description: draft.description || '',
+        position: Number.isInteger(draft.position) ? draft.position : editablePages.length,
         parent_slug: draft.parent_slug || 'people',
-        lang: draft.lang || 'kk',
-        status: isPublishing ? 'published' : 'pending',
-        created_by: draft.created_by || (isSuperAdmin ? 'Бас әкімші' : sessionUser?.fullName || 'Редактор'),
-        created_at: draft.created_at || now,
-        approved_by: isPublishing ? 'Бас әкімші' : draft.approved_by || '',
-        approved_at: isPublishing ? now : draft.approved_at || '',
         change_summary: draft.change_summary?.trim() || (draft.slug ? 'Мәтін мен модульдер жаңартылды' : 'Жаңадан жасалған бет'),
+        blocks: draft.blocks,
       };
 
       if (draft.slug) {
-        const saved = await savePage(payload, sessionUser?.token);
-        onPagesChange((current) => current.map((p) => p.slug === saved.slug ? saved : p));
-        setDraft(saved);
-        setNotice(isPublishing ? 'Бет сәтті бекітілді және жарияланды.' : 'Өзгерістер Бас әкімшінің мақұлдауына жіберілді.');
+        await savePage(payload, token);
+        await refreshPages();
+        setNotice(isSuperAdmin
+          ? 'Бет сәтті бекітілді және жарияланды.'
+          : 'Өзгерістер Бас әкімшінің мақұлдауына жіберілді. Оқырмандар әзірге бұрынғы нұсқаны көреді.');
       } else {
-        const saved = await createPage({ ...payload, position: customPages.length }, sessionUser?.token);
-        onPagesChange((current) => [...current, saved]);
+        const saved = await createPage(payload, token);
+        await refreshPages();
+        flashNotice.current = isSuperAdmin
+          ? 'Жаңа бет жасалып, бірден жарияланды.'
+          : 'Жаңа бет Бас әкімшінің қарауына жіберілді. Бекітілгенге дейін сайтта көрінбейді.';
         window.location.hash = `#admin/edit/${encodeURIComponent(saved.slug)}`;
-        setNotice(isPublishing ? 'Жаңа бет жасалып, бірден жарияланды.' : 'Жаңа бет Бас әкімшінің қарауына жіберілді.');
       }
     } catch (saveError) {
-      setError(saveError.message);
+      handleApiError(saveError);
     } finally {
       setSaving(false);
     }
   };
 
-  const handleSingleApprove = async (pageSlug) => {
-    const target = customPages.find((p) => p.slug === pageSlug);
-    if (!target) return;
-    const now = new Date().toISOString();
-    const approved = {
-      ...target,
-      status: 'published',
-      approved_by: 'Бас әкімші',
-      approved_at: now,
-    };
+  const handleApprove = async (slugs) => {
+    if (!slugs.length) return;
+    setError('');
     try {
-      await savePage(approved, sessionUser?.token);
-      onPagesChange((current) => current.map((p) => p.slug === pageSlug ? approved : p));
-      setNotice(`«${target.title}» беті сәтті бекітіліп, жарияланды.`);
-    } catch (e) {
-      setError(e.message);
+      const approved = await approvePages(slugs, token);
+      await refreshPages();
+      setSelectedSlugs([]);
+      setNotice(approved.length === 1
+        ? `«${approved[0].title}» беті бекітіліп, жарияланды.`
+        : `Таңдалған ${approved.length} бет бір уақытта бекітіліп, жарияланды.`);
+    } catch (apiError) {
+      handleApiError(apiError);
     }
   };
 
-  const handleBulkApprove = () => {
-    if (selectedSlugs.length === 0) return;
-    const updated = bulkApprovePages(selectedSlugs, 'Бас әкімші');
-    onPagesChange(updated);
-    setNotice(`Таңдалған ${selectedSlugs.length} бет бір уақытта бекітіліп, жарияланды!`);
-    setSelectedSlugs([]);
+  const handleReject = async (page) => {
+    const reason = window.prompt(`«${page.title}» — қабылдамау себебі (журналға жазылады):`, '');
+    if (reason === null) return;
+    setError('');
+    try {
+      await rejectPage(page.slug, reason, token);
+      await refreshPages();
+      setNotice(`«${page.title}» бойынша өзгерістер қабылданбады.`);
+    } catch (apiError) {
+      handleApiError(apiError);
+    }
   };
 
   const toggleSelectPage = (slug) => {
     setSelectedSlugs((prev) => prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]);
   };
 
-  const handleSelectAll = (filteredList) => {
-    if (selectedSlugs.length === filteredList.length) setSelectedSlugs([]);
-    else setSelectedSlugs(filteredList.map((p) => p.slug));
+  const handleSelectAll = (list) => {
+    if (selectedSlugs.length === list.length) setSelectedSlugs([]);
+    else setSelectedSlugs(list.map((p) => p.slug));
   };
 
-  const handleResetAll = () => {
-    if (window.confirm('Барлық сақталған өзгерістер өшіріліп, бастапқы деректер қайтарылады. Жалғастырасыз ба?')) {
-      const reset = resetLocalPages();
-      onPagesChange(reset);
-      setNotice('Деректер бастапқы қалпына келтірілді.');
-      setTimeout(() => {
-        window.location.hash = '';
-        window.location.reload();
-      }, 200);
+  const handleApproveAccount = async (acc) => {
+    try {
+      await approveEditor(acc.id, token);
+      await refreshAccounts();
+      setNotice(`${acc.full_name} аккаунтына рұқсат берілді.`);
+    } catch (apiError) {
+      handleApiError(apiError);
     }
   };
 
-  const handleApproveAccount = (accId) => {
-    const updated = approveEditorAccount(accId);
-    setAccounts(getAdminAccounts());
-    setNotice(`${updated.fullName} аккаунтына рұқсат берілді.`);
-  };
-
-  const handleDeleteAccount = (accId) => {
-    if (window.confirm('Бұл редактордың аккаунтын өшіруді растайсыз ба?')) {
-      const updated = deleteEditorAccount(accId);
-      setAccounts(updated);
+  const handleDeleteAccount = async (acc) => {
+    if (!window.confirm(`${acc.full_name} редакторының аккаунтын өшіруді растайсыз ба?`)) return;
+    try {
+      await deleteEditor(acc.id, token);
+      await refreshAccounts();
       setNotice('Аккаунт өшірілді.');
+    } catch (apiError) {
+      handleApiError(apiError);
     }
   };
 
@@ -172,9 +234,9 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
     return <AuthView onLoginSuccess={onSessionUserChange} onExit={onExit} />;
   }
 
-  const filteredPages = customPages.filter((p) => {
-    if (statusFilter === 'pending') return p.status === 'pending';
-    if (statusFilter === 'published') return p.status === 'published';
+  const filteredPages = editablePages.filter((p) => {
+    if (statusFilter === 'pending') return needsReview(p);
+    if (statusFilter === 'published') return p.status === 'published' && !p.pending_draft;
     return true;
   });
 
@@ -182,15 +244,20 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
     <div className="admin-shell">
       <header className="admin-topbar">
         <a className="brand" href="#" onClick={(event) => { event.preventDefault(); onExit(); }}>
-          <span className="brand-mark">К</span>
+          <BrandMark />
           <span className="brand-copy"><strong>Күй анасы</strong><small>КОНСТРУКТОР</small></span>
         </a>
         <nav className="constructor-nav" aria-label="Конструктор">
           <button className={route === '#admin' || route.startsWith('#admin/edit/') ? 'active' : ''} onClick={() => { window.location.hash = '#admin'; }}>Жаңа бет</button>
-          <button className={route === '#admin/pages' ? 'active' : ''} onClick={() => { window.location.hash = '#admin/pages'; }}>Менің беттерім <span>{customPages.length}</span></button>
+          <button className={route === '#admin/pages' ? 'active' : ''} onClick={() => { window.location.hash = '#admin/pages'; }}>Беттер <span>{editablePages.length}</span></button>
           {isSuperAdmin && (
             <button className={route === '#admin/users' ? 'active' : ''} onClick={() => { window.location.hash = '#admin/users'; }}>
               <Users size={15} /> Әкімшілер {pendingAccounts.length > 0 && <span>{pendingAccounts.length}</span>}
+            </button>
+          )}
+          {isSuperAdmin && (
+            <button className={route === '#admin/audit' ? 'active' : ''} onClick={() => { window.location.hash = '#admin/audit'; }}>
+              <History size={15} /> Журнал
             </button>
           )}
         </nav>
@@ -206,7 +273,9 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
       </header>
 
       {/* VIEW: USERS MANAGEMENT (Super Admin only) */}
-      {route === '#admin/users' && isSuperAdmin ? (
+      {route === '#admin/audit' && isSuperAdmin ? (
+        <AuditLogView token={token} onApiError={handleApiError} />
+      ) : route === '#admin/users' && isSuperAdmin ? (
         <main className="pages-manager">
           <div className="pages-manager-heading">
             <div>
@@ -215,24 +284,32 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
               <p>Сайтқа тіркелген редакторларға рұқсат беру немесе өшіру.</p>
             </div>
           </div>
+          {error && <div className="editor-alert error-alert">{error}</div>}
           {notice && <div className="editor-alert success-alert"><Check size={16} /> {notice}</div>}
+          {accounts.length === 0 && (
+            <div className="pages-empty">
+              <Users size={34} />
+              <h2>Тіркелген редакторлар жоқ</h2>
+              <p>Редактор «Кіру → Редактор → Тіркелу» арқылы өтініш бере алады.</p>
+            </div>
+          )}
           <div className="page-library">
             {accounts.map((acc) => (
               <div key={acc.id} className="account-card">
                 <div className="account-info">
-                  <h3>{acc.fullName}</h3>
-                  <p>Логин: <strong>{acc.username}</strong> · Тіркелген күні: {new Date(acc.registeredAt).toLocaleDateString()}</p>
+                  <h3>{acc.full_name}</h3>
+                  <p>Логин: <strong>{acc.username}</strong> · Тіркелген күні: {new Date(acc.created_at).toLocaleDateString()}</p>
                 </div>
                 <div className="account-actions">
                   {acc.status === 'pending' ? (
                     <>
                       <span className="page-status-badge badge-pending">Мақұлдауды күтуде</span>
-                      <button className="button button-dark" onClick={() => handleApproveAccount(acc.id)}><Check size={15} /> Рұқсат беру</button>
+                      <button className="button button-dark" onClick={() => handleApproveAccount(acc)}><Check size={15} /> Рұқсат беру</button>
                     </>
                   ) : (
                     <span className="page-status-badge badge-published">Рұқсат берілген</span>
                   )}
-                  <button className="button button-outline" onClick={() => handleDeleteAccount(acc.id)} title="Өшіру"><Trash2 size={15} /></button>
+                  <button className="button button-outline" onClick={() => handleDeleteAccount(acc)} title="Өшіру"><Trash2 size={15} /></button>
                 </div>
               </div>
             ))}
@@ -243,16 +320,11 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
         <main className="pages-manager">
           <div className="pages-manager-heading">
             <div>
-              <span className="block-kicker">КОНСТРУКТОРДА ЖАСАЛҒАН</span>
-              <h1>Менің беттерім</h1>
+              <span className="block-kicker">САЙТ БЕТТЕРІ</span>
+              <h1>Беттер</h1>
               <p>Бетті таңдап өңдеңіз, мақұлдаңыз немесе сақтаңыз.</p>
             </div>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {isSuperAdmin && (
-                <button className="button button-outline" type="button" title="Сбросить все изменения" onClick={handleResetAll}>
-                  <RotateCcw size={16} /> Бастапқы қалпына келтіру
-                </button>
-              )}
               <button className="button button-dark" onClick={() => { window.location.hash = '#admin'; }}>
                 <FilePlus2 size={17} /> Жаңа бет жасау
               </button>
@@ -271,13 +343,13 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
           {/* Filter and Bulk Action Toolbar */}
           <div className="page-filter-tabs">
             <button className={statusFilter === 'all' ? 'active' : ''} onClick={() => setStatusFilter('all')}>
-              Барлығы ({customPages.length})
+              Барлығы ({editablePages.length})
             </button>
             <button className={statusFilter === 'pending' ? 'active' : ''} onClick={() => setStatusFilter('pending')}>
-              Қаралуда ({customPages.filter((p) => p.status === 'pending').length})
+              Қаралуда ({editablePages.filter(needsReview).length})
             </button>
             <button className={statusFilter === 'published' ? 'active' : ''} onClick={() => setStatusFilter('published')}>
-              Жарияланғандар ({customPages.filter((p) => p.status === 'published').length})
+              Жарияланғандар ({editablePages.filter((p) => p.status === 'published' && !p.pending_draft).length})
             </button>
           </div>
 
@@ -295,7 +367,7 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
               <button
                 className="button button-dark"
                 disabled={selectedSlugs.length === 0}
-                onClick={handleBulkApprove}
+                onClick={() => handleApprove(selectedSlugs)}
               >
                 <Check size={16} /> Таңдалғандарды бірге бекіту ({selectedSlugs.length})
               </button>
@@ -319,16 +391,26 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '4px' }}>
                         <span className="page-library-tag">{navLabels[page.parent_slug] || page.parent_slug || 'Тұлғалар'}</span>
-                        <span className={`page-status-badge ${page.status === 'pending' ? 'badge-pending' : 'badge-published'}`}>
-                          {page.status === 'pending' ? 'Қаралуда (Күтуде)' : 'Жарияланған'}
+                        <span className={`page-status-badge ${needsReview(page) || page.status === 'rejected' ? 'badge-pending' : 'badge-published'}`}>
+                          {page.status === 'pending' ? 'Қаралуда (Күтуде)'
+                            : page.status === 'rejected' ? 'Қабылданбады'
+                            : page.pending_draft ? 'Жарияланған · өзгерістер қаралуда' : 'Жарияланған'}
                         </span>
                         <span className="page-library-slug">/{page.slug}</span>
                       </div>
                       <h2>{page.title}</h2>
+                      {isCodeRendered(page.slug) && (
+                        <p className="editor-status-notice">
+                          Бұл бет әзірге код арқылы көрсетіледі: мұндағы өзгерістер сайтта көрінбейді. Мазмұнды CMS-ке көшіру жұмысы жүріп жатыр.
+                        </p>
+                      )}
                       <p>{page.description || 'Қысқаша сипаттамасы жоқ.'}</p>
 
                       <div className="page-audit-box">
-                        <span>👤 <strong>Авторы:</strong> {page.created_by || 'Бас әкімші'} {page.created_at ? `(${new Date(page.created_at).toLocaleString()})` : ''}</span>
+                        <span>👤 <strong>Авторы:</strong> {page.created_by || 'Бас әкімші'}</span>
+                        {page.pending_draft && (
+                          <span>✏️ <strong>Жаңа нұсқа:</strong> {page.pending_by} ({new Date(page.pending_at).toLocaleString()}) — {page.pending_draft.change_summary}</span>
+                        )}
                         {page.change_summary && <span>📝 <strong>Өзгерістер:</strong> {page.change_summary}</span>}
                         {page.approved_at && (
                           <span>✅ <strong>Бекіткен:</strong> {page.approved_by || 'Бас әкімші'} ({new Date(page.approved_at).toLocaleString()})</span>
@@ -338,10 +420,15 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
                   </div>
 
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-                    {isSuperAdmin && page.status === 'pending' && (
-                      <button className="button button-dark" onClick={() => handleSingleApprove(page.slug)} title="Бұл бетті бекітіп, жариялау">
-                        <Check size={15} /> Бекіту
-                      </button>
+                    {isSuperAdmin && needsReview(page) && (
+                      <>
+                        <button className="button button-dark" onClick={() => handleApprove([page.slug])} title="Бұл бетті бекітіп, жариялау">
+                          <Check size={15} /> Бекіту
+                        </button>
+                        <button className="button button-outline" onClick={() => handleReject(page)} title="Өзгерістерді қабылдамау">
+                          <X size={15} /> Қабылдамау
+                        </button>
+                      </>
                     )}
                     <button className="button button-outline" onClick={() => { window.location.hash = `#admin/edit/${encodeURIComponent(page.slug)}`; }}>
                       <Pencil size={15} /> Өңдеу
@@ -421,17 +508,6 @@ export function AdminPanel({ pages, sessionUser, onSessionUserChange, onPagesCha
                       </select>
                     </label>
 
-                    <label>
-                      Тілдік нұсқасы (Тіл таңдау)
-                      <select
-                        value={draft.lang || 'kk'}
-                        onChange={(event) => updateDraft('lang', event.target.value)}
-                      >
-                        <option value="kk">Қазақ тілінде (Негізгі)</option>
-                        <option value="ru">Русский язык</option>
-                        <option value="en">English version</option>
-                      </select>
-                    </label>
                   </div>
 
                   <label>Бет атауы<input value={draft.title} onChange={(event) => updateDraft('title', event.target.value)} placeholder="Мысалы: Ақан сері" /></label>

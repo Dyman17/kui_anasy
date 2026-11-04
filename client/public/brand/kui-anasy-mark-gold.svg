@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Күй анасы қоры" fill="none" stroke="#D7B45F">
+  <title>Күй анасы қоры</title>
+  <defs>
+    <mask id="ka-body-knockout" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
+      <rect width="200" height="200" fill="#fff"/>
+      <path d="M100 110 C119 116 132 135 131 156 C130 174 117 186 100 189 C83 186 70 174 69 156 C68 135 81 116 100 110 Z" fill="#000"/>
+      <rect x="94" y="40" width="12" height="76" fill="#000"/>
+    </mask>
+    <mask id="ka-head-holes" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
+      <rect width="200" height="200" fill="#fff"/>
+      <circle cx="100" cy="25" r="2.2" fill="#000"/>
+      <circle cx="100" cy="33" r="2.2" fill="#000"/>
+    </mask>
+  </defs>
+  <circle cx="100" cy="100" r="96" stroke-width="4.5"/>
+  <circle cx="100" cy="100" r="89" stroke-width="1.4"/>
+  <g mask="url(#ka-body-knockout)" stroke-width="5.2" stroke-linecap="butt">
+    <path d="M82 64 A22 106 0 0 0 104 170"/>
+    <path d="M118 64 A22 106 0 0 1 96 170"/>
+    <path d="M70 54 A40 116 0 0 0 110 170"/>
+    <path d="M130 54 A40 116 0 0 1 90 170"/>
+    <path d="M58 48 A58 122 0 0 0 116 170"/>
+    <path d="M142 48 A58 122 0 0 1 84 170"/>
+    <path d="M46 52 A76 118 0 0 0 122 170"/>
+    <path d="M154 52 A76 118 0 0 1 78 170"/>
+  </g>
+  <g stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M46 112 C30 128 26 156 46 168 C58 175 70 164 64 155 C59 148 50 151 52 158"/>
+    <path d="M154 112 C170 128 174 156 154 168 C142 175 130 164 136 155 C141 148 150 151 148 158"/>
+  </g>
+  <path d="M100 14 C107 21 108 33 102.6 43 L97.4 43 C92 33 93 21 100 14 Z" fill="#D7B45F" stroke="none" mask="url(#ka-head-holes)"/>
+  <path d="M98 43 V116 M102 43 V116" stroke-width="2.2"/>
+  <g stroke-width="1.6"><path d="M97.5 56 H102.5"/><path d="M97.5 66 H102.5"/><path d="M97.5 76 H102.5"/><path d="M97.5 86 H102.5"/><path d="M97.5 96 H102.5"/></g>
+  <path d="M100 114 C116 119 128 136 127 156 C126 172 115 183 100 186 C85 183 74 172 73 156 C72 136 84 119 100 114 Z" stroke-width="4.4" stroke-linejoin="round"/>
+  <circle cx="100" cy="137" r="7.5" stroke-width="2.6"/>
+  <path d="M100 130 V144" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M100 160 V178 M100 166 C96 158 87 157 86 165 C85 171 92 172 93 167 M100 166 C104 158 113 157 114 165 C115 171 108 172 107 167" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
