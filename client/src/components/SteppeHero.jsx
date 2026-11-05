@@ -6,28 +6,29 @@ import { scrollToElement } from '../app/smoothScroll';
 /*
  * Home hero «Дала кеші» (owner's design, 05.11.2026).
  *
- * Media slot on the right. Today it holds a DRAFT image (the dombra photo already in the
- * project). The owner will supply a generated short video of an elder with a dombra;
- * when it arrives, put the files in /public/media/ and switch HERO_MEDIA to:
- *   { type: 'video', src: '/media/hero-elder.mp4', poster: '/media/hero-elder.jpg', alt: '…' }
- * The video is decorative: muted, looping, never autoplayed for reduced-motion users.
- *
- * Background: HERO_BACKGROUND is null until the steppe-at-sunset image is supplied;
- * the CSS draws a palette-based sky in the meantime. Set it to e.g.
- * '/images/hero-steppe-sunset.jpg' once the file exists.
+ * HERO_MEDIA is the full-bleed scene behind the copy: a generated still of an elder with a dombra
+ * (artwork, not a real person: see the «Көркем бейне» caption). The owner's future short clip of the
+ * same scene replaces it by switching to:
+ *   { type: 'video', src: '/media/hero-elder.mp4', poster: '/images/hero-elder-1376.webp', ... }
+ * The video is muted and looping, plays over its poster, and never autoplays under prefers-reduced-motion.
+ * HERO_BACKGROUND is the steppe-sunset colour field shown under the scene while it loads (and as a fallback).
  */
-// Draft still: front view of the dombra, cropped and compressed from dombra-real.png (kept untouched).
-// While `draft` is true the image is decorative (alt=""): the owner decides the final asset and its alt.
 const HERO_MEDIA = {
   type: 'image',
-  src: '/images/dombra-front.webp',
-  width: 420,
-  height: 1592,
-  alt: { kk: 'Домбыра', ru: 'Домбра', en: 'Dombra' },
-  draft: true,
+  src: '/images/hero-elder-1376.webp',
+  srcMobile: '/images/hero-elder-768.webp',
+  width: 1376,
+  height: 768,
+  widthMobile: 768,
+  heightMobile: 669,
+  // Decorative scene: the caption below states what it is, so no alt text is needed.
+  alt: '',
 };
 
-const HERO_BACKGROUND = null;
+const HERO_BACKGROUND = '/images/banner-steppe-1376.webp';
+const EAGLE_SRC = '/images/eagle-400.webp';
+
+const ART_CAPTION = { kk: 'Көркем бейне', ru: 'Художественный образ', en: 'Artistic image' };
 
 const COPY = {
   kk: {
@@ -86,7 +87,6 @@ function scrollToId(id, fallbackToNext = false) {
 export function SteppeHero({ lang = 'kk', mapTargetId, dinaTargetId }) {
   const copy = COPY[lang] || COPY.kk;
   const reducedMotion = usePrefersReducedMotion();
-  const mediaAlt = HERO_MEDIA.alt?.[lang] || HERO_MEDIA.alt?.kk || '';
 
   return (
     <section
@@ -95,11 +95,35 @@ export function SteppeHero({ lang = 'kk', mapTargetId, dinaTargetId }) {
       style={HERO_BACKGROUND ? { '--hero-photo': `url("${HERO_BACKGROUND}")` } : undefined}
       data-has-photo={HERO_BACKGROUND ? 'true' : 'false'}
     >
-      <div className="steppe-hero-sky" aria-hidden="true">
-        <span className="steppe-hero-sun" />
-        <span className="steppe-hero-horizon" />
+      <div className="steppe-hero-scene" aria-hidden="true">
+        {HERO_MEDIA.type === 'video' ? (
+          <video
+            className="steppe-hero-media"
+            src={HERO_MEDIA.src}
+            poster={HERO_MEDIA.poster}
+            muted
+            loop
+            playsInline
+            autoPlay={!reducedMotion}
+            preload="metadata"
+          />
+        ) : (
+          <picture>
+            <source media="(max-width: 960px)" srcSet={HERO_MEDIA.srcMobile} width={HERO_MEDIA.widthMobile} height={HERO_MEDIA.heightMobile} />
+            <img
+              className="steppe-hero-media"
+              src={HERO_MEDIA.src}
+              alt=""
+              width={HERO_MEDIA.width}
+              height={HERO_MEDIA.height}
+              decoding="async"
+              fetchpriority="high"
+            />
+          </picture>
+        )}
+        <img className="steppe-hero-eagle" src={EAGLE_SRC} alt="" width="400" height="204" decoding="async" />
+        <span className="steppe-hero-art">{ART_CAPTION[lang] || ART_CAPTION.kk}</span>
       </div>
-      <span className="steppe-hero-year" aria-hidden="true">1861</span>
 
       <div className="steppe-hero-inner">
         <div className="steppe-hero-copy">
@@ -120,36 +144,6 @@ export function SteppeHero({ lang = 'kk', mapTargetId, dinaTargetId }) {
             )}
           </div>
         </div>
-
-        <figure
-          className={`steppe-hero-media steppe-hero-media-${HERO_MEDIA.type}`}
-          data-draft={HERO_MEDIA.draft ? 'true' : undefined}
-          aria-hidden={HERO_MEDIA.draft ? 'true' : undefined}
-        >
-          {HERO_MEDIA.type === 'video' ? (
-            <video
-              src={HERO_MEDIA.src}
-              poster={HERO_MEDIA.poster}
-              muted
-              loop
-              playsInline
-              autoPlay={!reducedMotion}
-              preload="metadata"
-              aria-label={mediaAlt}
-            />
-          ) : (
-            <span className="steppe-hero-dombra">
-              <img
-                src={HERO_MEDIA.src}
-                alt={HERO_MEDIA.draft ? '' : mediaAlt}
-                width={HERO_MEDIA.width}
-                height={HERO_MEDIA.height}
-                decoding="async"
-                fetchpriority="high"
-              />
-            </span>
-          )}
-        </figure>
       </div>
     </section>
   );

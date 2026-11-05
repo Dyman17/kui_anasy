@@ -127,9 +127,6 @@ export default function LibraryVolumePage({ volumeSlug = 'library-vol-1', onNavi
     <div className="dedicated-subpage volume-subpage">
       {/* 1. Page Banner */}
       <section className="page-banner page-banner-library">
-        <div className="page-banner-image">
-          <img src={vol.img} alt={vol.title} />
-        </div>
         <div className="content-width page-banner-inner">
           <span className="block-kicker banner-parent-kicker">{navLabels['library'] || 'Цифрлық кітапхана'}</span>
           <span className="volume-number-pill">{vol.volNumber}</span>

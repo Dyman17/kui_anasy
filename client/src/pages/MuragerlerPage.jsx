@@ -454,9 +454,6 @@ export default function MuragerlerPage({ onNavigate, lang = 'kk', t, navLabels =
     <div className="dedicated-subpage muragerler-subpage">
       {/* 1. Page Banner */}
       <section className="page-banner page-banner-projects">
-        <div className="page-banner-image">
-          <img src="/images/kuyshiler-alley.jpg" alt="«Мұрагерлер» жастар үйірмесі" />
-        </div>
         <div className="content-width page-banner-inner">
           <span className="block-kicker banner-parent-kicker">
             {navLabels['projects'] || 'Жобалар'}

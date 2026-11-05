@@ -230,9 +230,6 @@ export default function AlleyPage({ onNavigate, lang = 'kk', t, navLabels = {} }
     <div className="dedicated-subpage alley-subpage">
       {/* 1. Page Banner */}
       <section className="page-banner page-banner-projects">
-        <div className="page-banner-image">
-          <img src="/images/alley-arch-main.jpg" alt="Күйшілер аллеясы" />
-        </div>
         <div className="content-width page-banner-inner">
           <span className="block-kicker banner-parent-kicker">{navLabels['projects'] || 'Жобалар'}</span>
           <h1>{c.title}</h1>

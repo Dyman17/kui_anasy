@@ -21,21 +21,8 @@
   display: flex;
   align-items: center;
   min-height: 0;
-  background: var(--forest-deep);
+  background: var(--forest-deep) url("/images/banner-steppe-1376.webp") center 60% / cover no-repeat;
   border-bottom: 1px solid var(--border-gold);
-}
-
-.page-banner-image {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-}
-
-.page-banner-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 35%;
 }
 
 .page-banner::before {
@@ -215,7 +202,3 @@
   color: var(--gold-dark);
 }
 
-/* Founder portrait banner: keep the head out of the bottom crop */
-.page-banner-about .page-banner-image img {
-  object-position: center 8%;
-}

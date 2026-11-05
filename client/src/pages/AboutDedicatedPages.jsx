@@ -14,9 +14,6 @@ export function LeadershipPage({ onNavigate, lang = 'kk', t, navLabels = {} }) {
   return (
     <div className="dedicated-subpage about-subpage">
       <section className="page-banner page-banner-about">
-        <div className="page-banner-image">
-          <img src="/images/tolegen-kuanyshev-founder.jpg" alt="Қор басшылығы" />
-        </div>
         <div className="content-width page-banner-inner">
           <span className="block-kicker banner-parent-kicker">{navLabels['about'] || 'Қор туралы'}</span>
           <h1>Қор басшылығы мен ғылыми кеңес</h1>
@@ -96,9 +93,6 @@ export function CharterPage({ onNavigate, lang = 'kk', t, navLabels = {} }) {
   return (
     <div className="dedicated-subpage about-subpage">
       <section className="page-banner page-banner-about">
-        <div className="page-banner-image">
-          <img src="/images/dina-monument.jpg" alt="Қор Жарғысы" />
-        </div>
         <div className="content-width page-banner-inner">
           <span className="block-kicker banner-parent-kicker">{navLabels['about'] || 'Қор туралы'}</span>
           <h1>Қордың құрылымы мен жарғылық міндеттері</h1>

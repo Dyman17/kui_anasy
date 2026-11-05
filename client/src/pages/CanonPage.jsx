@@ -67,9 +67,6 @@ export default function CanonPage({ type = 'kuyshi', onNavigate, lang = 'kk', t,
     <div className="dedicated-subpage canon-subpage">
       {/* 1. Page Banner */}
       <section className="page-banner page-banner-people">
-        <div className="page-banner-image">
-          <img src="/images/dina-monument.jpg" alt={c.title} />
-        </div>
         <div className="content-width page-banner-inner">
           <span className="block-kicker banner-parent-kicker">{navLabels['people'] || 'Тұлғалар'}</span>
           <h1>{c.title}</h1>
