@@ -1,7 +1,40 @@
+/* 404: left aligned on the shared axis, one gold button, faint outlined numeral behind (decorative). */
 .not-found-page {
-  padding-top: var(--spacing-xl);
-  padding-bottom: var(--spacing-xl);
-  min-height: 50vh;
+  position: relative;
+  isolation: isolate;
+  min-height: 60svh;
+  margin-top: var(--section-space-s);
+  padding-block: var(--section-space-m);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 }
-.not-found-page h1 { margin: 0 0 var(--spacing-md); }
-.not-found-page p { max-width: 56ch; margin: 0 0 var(--spacing-lg); color: var(--text-muted); }
+
+.not-found-page::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  content: "404";
+  color: transparent;
+  font: 400 clamp(120px, 22vw, 320px)/0.8 var(--font-display);
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--gold) 14%, transparent);
+  pointer-events: none;
+}
+
+.not-found-page h1 {
+  margin: 12px 0 var(--spacing-md);
+  color: var(--gold-light);
+  font: 400 var(--text-h1)/1.15 var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.not-found-page p {
+  max-width: 30em;
+  margin: 0 0 var(--spacing-lg);
+  color: var(--ink);
+  font: 400 var(--text-lead)/1.55 var(--font-display);
+}

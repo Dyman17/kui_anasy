@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client';
 import Lenis from 'lenis';
 import App from './App.jsx';
 import './styles.css';
+// Page-level styles of the dark heritage redesign load after the legacy sheet so they win on equal specificity.
+import './PageChrome.css';
+import './HomeSections.css';
+import './Pages.css';
 
 const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import QRCode from 'qrcode';
 
 export function ConstructorQRPreview({ link }) {
   const [dataUrl, setDataUrl] = useState('');
   useEffect(() => {
     if (link) {
-      QRCode.toDataURL(link, { width: 120, margin: 1 }).then(setDataUrl).catch(() => {});
+      import('qrcode').then(({ default: QRCode }) => QRCode.toDataURL(link, { width: 120, margin: 1 })).then(setDataUrl).catch(() => {});
     }
   }, [link]);
   if (!dataUrl) return null;

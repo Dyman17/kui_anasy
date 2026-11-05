@@ -1,61 +1,66 @@
 ---
 name: kui-anasy-design
-description: Strict design code and visual architecture rules for the «Күй анасы» digital heritage project.
+description: Project visual direction for «Күй анасы» — the client-approved book-cover palette (forest green, antique gold, parchment), typography status (move to one main family), page character, imagery and cultural-content rules. Use together with visual-direction and design-system for any UI work in this repository.
 ---
 
-# Күй анасы — Design System & Engineering Rules
+# «Күй анасы» — project design direction
 
-Бұл скилл жобаның [client/README.md](../../client/README.md) дизайн-гайдына толықтай бағынады. Кез келген агент немесе әзірлеуші осы ережелерді қатаң сақтауға міндетті.
+Status: updated 05.11.2026 to match the code and the client's confirmed direction. Where `client/README.md` disagrees (its palette and font tables describe an older terracotta/plum system), **this skill and the `:root` tokens in `client/src/styles.css` win**. Updating `client/README.md` is a separate task.
 
----
+## Audience and tone
+Readers of all ages interested in Kazakh music and culture, many on phones, many arriving by QR code at the Kuyshiler alley and monuments; older readers are a core group. Tone: documentary, calm, ceremonial, contemporary — a museum catalogue and a concert programme, not a startup page.
 
-## 1. Қатаң тыйымдар (Strict Prohibitions)
+## Colour (client-approved: «Ұлы дала әуені» book cover)
+Reference image: `client/public/images/uly-dala-aueni-cover.jpg`.
 
-1. **Ешқандай сыртқы қаріптер мен CDN қосуға болмайды:**
-   - Барлық қаріптер тек `client/fonts/` ішіндегі жергілікті файлдардан немесе `client/src/styles.css` `:root` айнымалыларынан алынады.
-   - Сырттан `@import url(...)` немесе жаңа `<link href="...fonts.googleapis...">` қосуға қатаң тыйым салынады.
-2. **Палитраны ерікті өзгертуге болмайды:**
-   - Негізгі 5 түс:
-     - `--paper`: `#f2eae9` (негізгі қағаз өңі)
-     - `--paper-light`: `#fff8f6` (ашық панельдер)
-     - `--plum`: `#33000e` (қою қарақат / сүйекті түс)
-     - `--terra`: `#a14e3a` (күйік қыш / терракот)
-     - `--line` / `--paper-shade`: `#cfcac8` (сұрғылт жібек сызықтар)
-3. **Шаблондық «ИИ / AI SaaS» стиліне тыйым:**
-   - Күлгін-көк (purple/blue) градиенттерге жол жоқ.
-   - 3 бірдей карточкадан тұратын стандартты сеткаларға жол жоқ.
-   - Барлық жерге бірдей алып дөңгелектеулер (`border-radius: 9999px`) қоюға болмайды.
-   - Арзан жылтыр «шыны» (excessive glassmorphism) тыйым салынады.
-4. **Кездейсоқ ою-өрнектер мен пергаментке тыйым:**
-   - Беттің шетінде қатып тұратын статикалық оюлар өшірілген (қайта қосуға болмайды).
-   - Подложкада тек 18–19 ғ. мәдени жәдігерлерінің векторлық контурлары (`contour-dombra.svg`, `contour-kobyz.svg`, `contour-torsyk.svg`) терракот реңкінде және 50% мөлдірлікпен (`opacity: 0.5 – 0.55`) қолданылады.
-5. **Мақұлданбаған сыртқы кітапханалар (npm dependencies) қосуға тыйым:**
-   - Қажетті құралдар бар: React, Vite, react-icons (Pi, Ri, Tb), Lucide, qrcode.
+| Role | Token | Value |
+|---|---|---|
+| Deep surface / header in dark areas | `--forest-deep` | `#0B1C15` |
+| Primary brand green | `--forest` | `#10291F` |
+| Raised green surface | `--forest-light` | `#1D4030` |
+| Accent gold | `--gold` | `#D7B45F` |
+| Highlight gold | `--gold-light` | `#F0D78C` |
+| Lines, badges, gold text on light | `--gold-dark` | `#A9853C` |
+| Light canvas | `--parchment` | `#F2EBDD` |
+| Surface | `--paper` | `#E8DFC9` |
+| Ink | `--ink` | `#26372D` |
+| Muted ink | `--ink-muted` | `#536458` |
 
----
+- Use semantic aliases in components (`--bg-canvas`, `--bg-surface`, `--text-primary`, `--text-muted`, `--accent-gold`, `--line`).
+- `--terra`, `--plum`, `--wine` are legacy aliases mapped onto the green/gold palette; do not use them in new code.
+- Two themes exist (`data-theme="light" | "dark"` on `<html>`); every new surface must be checked in both.
+- Gold is an accent: headings marks, rules, focus, key actions. Never gold body text on parchment below 4.5:1 — use `--gold-dark` or ink.
+- No purple/blue, no decorative gradients beyond the existing photo-shading overlays.
 
-## 2. Типографика және қазақ кириллицасы
+## Typography
+- **Client requirement:** one main typeface that carries the brand, readable in long articles, with full Kazakh support. The current site still loads several families (Medeo Sans for body, KTF Jermilov, Nauryz Red Keds, Playfair Display, Alistair Signature, Capture It and others via `--font-*` tokens).
+- **Proposed, pending client approval:** Literata (variable, OFL; specimen `docs/font-specimen.png`). Until approved: **do not add any new family** and do not spread the secondary display families to new components. New UI uses `--font-body` and existing display tokens only.
+- Fonts load only from `client/fonts/`; no Google Fonts or CDNs.
+- Kazakh glyphs ә ғ қ ң ө ұ ү һ і (both cases) must render; check uppercase specifically before using `text-transform: uppercase`.
+- Person names in headings: `white-space: nowrap`; size them with `clamp()` so the longest name fits at 320 px.
+- Body ≥ 16 px desktop, ≥ 15 px mobile; measure 55–75 characters.
 
-- **Дисплей тақырыптары (`--font-display`):** Montserrat (700 Bold, кернинг анық).
-- **Негізгі мәтін (`--font-body`):** Open Sans, Roboto (қазақтың Ә, Ғ, Қ, Ң, Ө, Ұ, Ү, Һ, І әріптері 100% сызатсыз, анық шығуы тиіс).
-- **Академиялық акценттер (`--font-editorial`):** Roslindale Text, Playfair Display.
-- **Адам есімдері:** Тақырыптарда (`featured-person-copy h2`, `leader-name`) `white-space: nowrap` міндетті, есім мен тектің ортасынан үзіліп екінші қатарға түсуіне жол берілмейді.
+## Composition and page character
+- Editorial and uneven: one dominant image or title per screen, staggered story blocks, catalogue-like lists. Avoid equal card grids and numbered rows as defaults.
+- **Home:** strong Kazakh headline, documentary photography, the heritage map (`client/src/components/HeritageMap.jsx`), clear routes into people, music, library.
+- **People:** biographical emphasis — name, confirmed dates, region/school, sources. No invented portraits.
+- **Library:** real covers, calm catalogue reading.
+- **Monument / alley:** photography first; content works on a phone in daylight (contrast, large type).
+- **Admin:** functional and legible; same tokens, no decorative treatment.
 
----
+## Imagery, patterns, cultural content
+- Use supplied photographs and archival scans with credits; no stock substitutes.
+- Instrument contour patterns (`client/public/patterns/contour-*.svg`) are contemporary graphics, used at low contrast behind open areas, never at full strength under body text. They are not claims about traditional symbolism.
+- `client/public/images/dombra-player-illustration.png` is an illustration, not a portrait of a named person.
+- Static ornament frames on page edges, faux parchment textures and random ornament packs are not used.
 
-## 3. Мобильді бейімділік және масштаб (Mobile QA)
+## Hard rules
+No invented facts or numbers (route content to `content-guard`); no fake buttons or players; no new npm dependencies; Kazakh text never broken; check both themes and 320–1280 px.
 
-- Экран ені 375–390px (iPhone, Samsung) аралығында мәтіндер жиекке соғылмауы керек.
-- Статистика блогында (`.archive-stats`): барлық 4 көрсеткіш (101, 110, 110, 321+) бір жолға сияды, сөздер әріптеп бөлінбейді.
-- Всплывающие подсказкалар (Tooltips): экран жиегінен шығып кетпеуі үшін `left: 0` туралануы және таза CSS негізінде жұмыс істеуі шарт.
-
----
-
-## 4. Чеклист (Қабылдау алдында тексеру)
-
-- [ ] `npm --prefix client run build` қатесіз өтеді ме?
-- [ ] Консольде сыртқы жүктеу (CORS/CDN) қателері жоқ па?
-- [ ] Қазақ әріптері бұзылмаған ба?
-- [ ] Тарихи тұлғаларға арналған анықтамалық подсказкалар hover кезінде дұрыс ашыла ма?
-- [ ] Жаңа контентке міндетті түрде нақты архивтік дереккөз көрсетілген бе?
-
+## Acceptance checklist
+- [ ] `npm run build` passes.
+- [ ] No console errors; no external font/CDN requests.
+- [ ] Kazakh glyphs correct in every new text style; names unbroken.
+- [ ] Light and dark themes checked.
+- [ ] 320 / 375 / 768 / 1280 px checked.
+- [ ] New content has a source.

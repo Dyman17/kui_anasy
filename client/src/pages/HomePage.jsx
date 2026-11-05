@@ -1,25 +1,6 @@
 import React from 'react';
-import {
-  PiCrownDuotone,
-  PiGraduationCapDuotone,
-  PiPaletteDuotone,
-  PiSparkleDuotone,
-  PiStudentDuotone,
-  PiMusicNotesPlusDuotone,
-  PiChalkboardTeacherDuotone,
-  PiCompassDuotone,
-  PiUsersDuotone,
-  PiWaveformDuotone,
-} from 'react-icons/pi';
-import {
-  RiCompass3Line,
-  RiInformationLine,
-  RiBookmarkLine,
-  RiArrowRightUpLine,
-  RiArrowRightLine,
-} from 'react-icons/ri';
 import { TextWithTooltips, Tooltip } from '../components/ReferenceTooltip';
-import { HeroImageRotator } from '../components/HeroImageRotator';
+import { SteppeHero } from '../components/SteppeHero';
 import { AppleTvMediaGallery } from '../components/AppleTvMediaGallery';
 import { Callout } from '../components/Callout';
 import { HeritageMap } from '../components/HeritageMap';
@@ -34,24 +15,11 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
 
   return (
     <div className="homepage-wrapper">
-      <section className="archive-hero content-width">
-        <div className="archive-hero-copy">
-          <p className="hero-kicker">{t.heroKicker}</p>
-          <h1>{t.heroTitle}<br /><em>{t.heroTitleEm}</em></h1>
-          <p>{page.description}</p>
-          <p className="hero-english">Kazakh music, its people and living traditions.</p>
-          <div className="hero-actions">
-            <button className="button button-dark" onClick={() => onNavigate('people')}>{t.peopleBtn} <PiUsersDuotone size={18} /></button>
-            <button className="text-button" onClick={() => onNavigate('heritage')}>{t.heritageBtn} <PiWaveformDuotone size={18} /></button>
-          </div>
-        </div>
-
-        <HeroImageRotator lang={lang} />
-      </section>
+      <SteppeHero lang={lang} mapTargetId="heritage-map" dinaTargetId={feature ? 'dina-nurpeisova' : undefined} />
 
       {/* Дина Нұрпейісова блогы */}
       {feature && (
-        <section className="featured-person">
+        <section className="featured-person" id="dina-nurpeisova">
           <figure className="featured-person-image">
             <img src="/images/dina-monument.jpg" alt="Дина Нұрпейісова ескерткіші" />
             <figcaption>
@@ -67,7 +35,7 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
             <p><TextWithTooltips text={feature.body} /></p>
             <Tooltip text={t.peopleCatalogTip}>
               <button className="underlined-link" onClick={() => onNavigate('people')}>
-                Тұлғалар каталогы <RiCompass3Line size={16} />
+                Тұлғалар каталогы
               </button>
             </Tooltip>
           </div>
@@ -97,7 +65,7 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
             <p><TextWithTooltips text={intro.body} /></p>
             <Tooltip text="«Күй анасы» қоры, ғылыми кеңесі мен жоба бастамашылары">
               <button className="underlined-link" onClick={() => onNavigate('about')}>
-                {t.aboutFund} <RiInformationLine size={16} />
+                {t.aboutFund}
               </button>
             </Tooltip>
           </div>
@@ -120,7 +88,7 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
             <h2>{latest.title}</h2>
             <Tooltip text="3 томдық академиялық басылымдар мен күй партитуралары">
               <button className="underlined-link" onClick={() => onNavigate('library')}>
-                {t.libraryBtn} <RiBookmarkLine size={16} />
+                {t.libraryBtn}
               </button>
             </Tooltip>
           </div>
@@ -133,7 +101,6 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
                   <strong>{item.title}</strong>
                   <span className="discover-description">{item.description}</span>
                 </span>
-                <RiArrowRightUpLine size={22} />
               </button>
             ))}
           </div>
@@ -164,9 +131,6 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
 
               <div className="leader-body">
                 <span className="leader-pill-badge">
-                  {leader.id === 'tolegen-kuanyshev' && <PiCrownDuotone size={13} style={{ marginRight: 6, verticalAlign: '-1px' }} />}
-                  {leader.id === 'erzat-zhetibayev' && <PiGraduationCapDuotone size={13} style={{ marginRight: 6, verticalAlign: '-1px' }} />}
-                  {leader.id === 'zhalyn-bauyrzhan' && <PiPaletteDuotone size={13} style={{ marginRight: 6, verticalAlign: '-1px' }} />}
                   <span>{leader.badge}</span>
                 </span>
                 <h3 className="leader-name">{leader.name}</h3>
@@ -193,10 +157,7 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
       <section className="muragerler-section">
         <div className="muragerler-card">
           <div className="muragerler-header">
-            <span className="muragerler-slogan-pill">
-              <PiSparkleDuotone size={16} className="muragerler-slogan-icon" />
-              <span>{t.muragerlerSlogan || '«Мұраны сақта, жаңғырт, дамыт!»'}</span>
-            </span>
+            <span className="muragerler-slogan-pill">{t.muragerlerSlogan || '«Мұраны сақта, жаңғырт, дамыт!»'}</span>
             <span className="block-kicker">{t.muragerlerKicker || 'ЖАСТАР БАСТАМАСЫ · МӘДЕНИ САБАҚТАСТЫҚ'}</span>
             <h2 className="muragerler-title">{t.muragerlerTitle || '«Мұрагерлер» жастар үйірмесі'}</h2>
             <p className="muragerler-desc">{t.muragerlerDesc || '«Күй анасы» жеке қоры жанындағы өскелең ұрпақты ұлттық музыка өнеріне баулу және жас дарындарды жан-жақты қолдау бастамасы.'}</p>
@@ -205,21 +166,14 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
               onClick={() => onNavigate('projects-muragerler')}
             >
               <span>{t.muragerlerBtn || 'Үйірме туралы толық білу'}</span>
-              <RiArrowRightLine size={18} />
             </button>
           </div>
 
           <div className="muragerler-features-grid">
             {(MURAGERLER_FEATURES[lang] || MURAGERLER_FEATURES.kk).map((feature, idx) => (
               <div key={idx} className="muragerler-feature-box">
-                <div className="muragerler-feature-icon-orb">
-                  {idx === 0 && <PiStudentDuotone size={23} />}
-                  {idx === 1 && <PiMusicNotesPlusDuotone size={23} />}
-                  {idx === 2 && <PiChalkboardTeacherDuotone size={23} />}
-                  {idx === 3 && <PiCompassDuotone size={23} />}
-                </div>
                 <div className="muragerler-feature-copy">
-                  <h4>{feature.title}</h4>
+                  <h3>{feature.title}</h3>
                   <p>{feature.desc}</p>
                 </div>
               </div>

@@ -14,7 +14,6 @@ export function StandardPage({ page, onNavigate, allPages = [], isEditor = false
     <>
       <section className={`page-banner page-banner-${themeSlug}`} data-section={themeSlug}>
         <SectionMotif slug={themeSlug} />
-        <div className="page-banner-image"><img src={getSectionImage(themeSlug)} alt="" /></div>
         <div className="content-width page-banner-inner">
           {page.parent_slug && (
             <span className="block-kicker banner-parent-kicker">
@@ -72,13 +71,3 @@ export function StandardPage({ page, onNavigate, allPages = [], isEditor = false
   );
 }
 
-function getSectionImage(slug) {
-  const images = {
-    people: '/images/dina-monument.jpg',
-    heritage: '/images/dombra-player-illustration.png',
-    library: '/images/book-kui-alemi.jpg',
-    projects: '/images/kuyshiler-alley.jpg',
-    about: '/images/dina-monument.jpg',
-  };
-  return images[slug] || '/images/kuyshiler-alley.jpg';
-}

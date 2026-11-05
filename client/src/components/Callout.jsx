@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
 
 export function Callout({ onNavigate, t }) {
   return (
@@ -7,7 +6,7 @@ export function Callout({ onNavigate, t }) {
       <div className="callout-content">
         <h2>{t?.calloutTitle || 'Қазақ музыкасының үш томдық жинағы.'}</h2>
         <p>{t?.calloutDesc || 'Күй өнері, жыраулық дәстүр мен әншілік мектептер туралы зерттеу материалдары.'}</p>
-        <button className="button button-dark" onClick={() => onNavigate('library')}>{t?.calloutBtn || 'Кітапхананы қарау'} <ArrowRight size={16} /></button>
+        <button className="button button-dark" onClick={() => onNavigate('library')}>{t?.calloutBtn || 'Кітапхананы қарау'}</button>
       </div>
     </section>
   );

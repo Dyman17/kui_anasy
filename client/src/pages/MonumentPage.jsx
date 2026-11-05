@@ -158,9 +158,6 @@ export default function MonumentPage({ onNavigate, lang = 'kk', t, navLabels = {
     <div className="dedicated-subpage monument-subpage">
       {/* 1. Page Banner */}
       <section className="page-banner page-banner-projects">
-        <div className="page-banner-image">
-          <img src="/images/dina-monument.jpg" alt="Дина Нұрпейісованың монументі" />
-        </div>
         <div className="content-width page-banner-inner">
           <span className="block-kicker banner-parent-kicker">{navLabels['projects'] || 'Жобалар'}</span>
           <h1>{c.title}</h1>
