@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import QRCode from 'qrcode';
 import { ArrowUpRight, Copy, Check } from 'lucide-react';
 
 export function QRBlock({ block }) {
@@ -8,11 +7,12 @@ export function QRBlock({ block }) {
 
   useEffect(() => {
     if (block.link && block.link.trim()) {
-      QRCode.toDataURL(block.link.trim(), {
-        width: 256,
-        margin: 2,
-        color: { dark: '#1f1610', light: '#ffffff' },
-      })
+      import('qrcode')
+        .then(({ default: QRCode }) => QRCode.toDataURL(block.link.trim(), {
+          width: 256,
+          margin: 2,
+          color: { dark: '#1f1610', light: '#ffffff' },
+        }))
         .then(setDataUrl)
         .catch(() => {});
     } else {

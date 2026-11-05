@@ -214,7 +214,7 @@ export function HeritageMap({ lang = 'kk', onNavigate }) {
   const activeMasters = active ? mastersByRegion[active.id] : [];
 
   return (
-    <section className="heritage-map content-width" aria-labelledby="heritage-map-title">
+    <section className="heritage-map content-width" id="heritage-map" aria-labelledby="heritage-map-title">
       <header className="hm-head">
         <span className="block-kicker">{L.kicker}</span>
         <h2 id="heritage-map-title">{L.title}</h2>

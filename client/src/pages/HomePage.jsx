@@ -8,8 +8,6 @@ import {
   PiMusicNotesPlusDuotone,
   PiChalkboardTeacherDuotone,
   PiCompassDuotone,
-  PiUsersDuotone,
-  PiWaveformDuotone,
 } from 'react-icons/pi';
 import {
   RiCompass3Line,
@@ -19,7 +17,7 @@ import {
   RiArrowRightLine,
 } from 'react-icons/ri';
 import { TextWithTooltips, Tooltip } from '../components/ReferenceTooltip';
-import { HeroImageRotator } from '../components/HeroImageRotator';
+import { SteppeHero } from '../components/SteppeHero';
 import { AppleTvMediaGallery } from '../components/AppleTvMediaGallery';
 import { Callout } from '../components/Callout';
 import { HeritageMap } from '../components/HeritageMap';
@@ -34,24 +32,11 @@ export function HomePage({ page, onNavigate, t, navLabels, lang = 'kk' }) {
 
   return (
     <div className="homepage-wrapper">
-      <section className="archive-hero content-width">
-        <div className="archive-hero-copy">
-          <p className="hero-kicker">{t.heroKicker}</p>
-          <h1>{t.heroTitle}<br /><em>{t.heroTitleEm}</em></h1>
-          <p>{page.description}</p>
-          <p className="hero-english">Kazakh music, its people and living traditions.</p>
-          <div className="hero-actions">
-            <button className="button button-dark" onClick={() => onNavigate('people')}>{t.peopleBtn} <PiUsersDuotone size={18} /></button>
-            <button className="text-button" onClick={() => onNavigate('heritage')}>{t.heritageBtn} <PiWaveformDuotone size={18} /></button>
-          </div>
-        </div>
-
-        <HeroImageRotator lang={lang} />
-      </section>
+      <SteppeHero lang={lang} mapTargetId="heritage-map" dinaTargetId={feature ? 'dina-nurpeisova' : undefined} />
 
       {/* Дина Нұрпейісова блогы */}
       {feature && (
-        <section className="featured-person">
+        <section className="featured-person" id="dina-nurpeisova">
           <figure className="featured-person-image">
             <img src="/images/dina-monument.jpg" alt="Дина Нұрпейісова ескерткіші" />
             <figcaption>

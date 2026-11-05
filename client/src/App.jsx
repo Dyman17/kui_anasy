@@ -1,17 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  PiSunDuotone,
-  PiMoonStarsDuotone,
-  PiBookmarksDuotone,
-  PiGearDuotone,
-} from 'react-icons/pi';
-import {
-  RiSearch2Line,
-  RiCloseLine,
-  RiMenu4Line,
-  RiShieldKeyholeLine,
-} from 'react-icons/ri';
-import {
   NAV_ORDER,
   NAV_LABELS_MAP,
   UI_TRANSLATIONS,
@@ -29,6 +17,7 @@ import { LeadershipPage, CharterPage } from './pages/AboutDedicatedPages';
 // Modularized Views & Components
 import OrnamentRail from './components/OrnamentRail';
 import Header from './components/Header';
+import { Footer } from './components/Footer';
 import { BrandMark } from './components/BrandMark';
 import { HomePage } from './pages/HomePage';
 import { StandardPage } from './pages/StandardPage';
@@ -38,6 +27,7 @@ import { useRoute, navigate as routerNavigate, buildHref } from './app/router';
 import { useDocumentMeta } from './app/useDocumentMeta';
 
 const LANGS = ['kk', 'ru', 'en'];
+const SKIP_LABELS = { kk: 'Негізгі мазмұнға өту', ru: 'Перейти к содержанию', en: 'Skip to content' };
 const VOLUME_SLUGS = ['library-vol-1', 'library-vol-2', 'library-vol-3'];
 
 function readStored(key, fallback, allowed) {
@@ -59,7 +49,6 @@ function App() {
   const activeSlug = route.slug;
   const adminOpen = route.admin;
   const [lang, setLang] = useState(() => route.lang || readStored('kui-lang', 'kk', LANGS));
-  const [theme, setTheme] = useState(() => readStored('kui-theme', 'light', ['light', 'dark']));
 
   const [sessionUser, setSessionUser] = useState(() => {
     try {
@@ -74,14 +63,11 @@ function App() {
   const [loadError, setLoadError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  // The site has a single dark «Түнгі дала» look (owner decision, 05.11.2026).
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    writeStored('kui-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
+    document.documentElement.setAttribute('data-theme', 'dark');
+    try { localStorage.removeItem('kui-theme'); } catch { /* storage unavailable */ }
+  }, []);
 
   const handleLangChange = (newLang) => {
     setLang(newLang);
@@ -199,14 +185,17 @@ function App() {
 
   return (
     <>
-      {/* Kazakh National Ornament Rail (64px desktop / 28px mobile) */}
+      {/* Kazakh national ornament rail (24px desktop / 16px mobile) */}
       <OrnamentRail />
 
       <div className="site-shell">
-        {/* Cultural Heritage Contours on Underlay */}
-        <div className="shell-cultural-contours" aria-hidden="true" />
-
-        {/* Phase 3: Museum / Editorial Header and Navigation System */}
+        <a
+          className="skip-link"
+          href="#main-content"
+          onClick={(e) => { e.preventDefault(); document.getElementById('main-content')?.focus(); }}
+        >
+          {SKIP_LABELS[lang] || SKIP_LABELS.kk}
+        </a>
         <Header
           navPages={navPages}
           activeSlug={activeSlug}
@@ -214,8 +203,7 @@ function App() {
           navLabels={navLabels}
           lang={lang}
           onLangChange={handleLangChange}
-          theme={theme}
-          onToggleTheme={toggleTheme}
+          hrefFor={(slug) => buildHref(slug, route.lang)}
           sessionUser={sessionUser}
           onSessionUserChange={handleSetSessionUser}
           onNavigate={navigate}
@@ -227,7 +215,7 @@ function App() {
           t={t}
         />
 
-      <main>
+      <main id="main-content" tabIndex={-1}>
         {!activePage ? (
           <NotFoundPage onNavigate={navigate} t={t} />
         ) : (
@@ -259,42 +247,18 @@ function App() {
         )}
       </main>
 
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div className="footer-brand">
-            <a className="brand" href={buildHref('home', route.lang)} onClick={(event) => { event.preventDefault(); navigate('home'); }}>
-              <BrandMark />
-              <span className="brand-copy"><strong>Күй анасы</strong></span>
-            </a>
-            <p>Қазақтың ұлттық музыкалық мұрасын сақтау, зерттеу және келер ұрпаққа жеткізуге арналған цифрлық бастама.</p>
-          </div>
-          <div>
-            <span className="footer-heading"><PiBookmarksDuotone size={15} style={{ marginRight: 6, verticalAlign: '-2px' }} />Бөлімдер</span>
-            <div className="footer-links">
-              {navPages.filter((page) => page.slug !== 'home').slice(0, 4).map((page) => (
-                <button key={page.slug} onClick={() => navigate(page.slug)}>
-                  {navLabels[page.slug] || page.title}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div>
-            <span className="footer-heading"><PiGearDuotone size={15} style={{ marginRight: 6, verticalAlign: '-2px' }} />Басқару</span>
-            <p>Энциклопедия мазмұнын басқару және жаңа парақшалар енгізу.</p>
-            <a href="#admin">{t.adminPanel} <RiShieldKeyholeLine size={15} style={{ marginLeft: 6, verticalAlign: '-2px' }} /></a>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <span>{t.footerCopy}</span>
-          <span>{t.footerDesc}</span>
-        </div>
-      </footer>
+      <Footer
+        navPages={navPages}
+        navLabels={navLabels}
+        lang={lang}
+        hrefFor={(slug) => buildHref(slug, route.lang)}
+        onNavigate={navigate}
+        t={t}
+      />
     </div>
     </>
   );
 }
-
-
 
 
 export default App;
