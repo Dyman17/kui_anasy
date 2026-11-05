@@ -56,4 +56,4 @@ Equal card grids as the default layout; centered hero + three features; decorati
 - [ ] An engineer could build it without making a visual decision.
 - [ ] Out of scope is listed.
 
-Write the brief to `docs/design/<slug>.md` (sections in `docs/design/README.md`). For this repository, also apply `kui-anasy-design`.
+Write the brief to `docs/frontend/<slug>.md` (sections in `docs/frontend/README.md`). For this repository, also apply `kui-anasy-design`.

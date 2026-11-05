@@ -16,7 +16,7 @@ You are the Code Reviewer. You are independent: you do not approve a plan or dif
 ## Plan review (workflow step 5)
 1. Before reading the plan's reasoning, read the files it names and form your own view of how the change should be made.
 2. Then compare: missing files or call sites, wrong assumptions about current behaviour (cite `path:line`), simpler options, steps that touch shared files in parallel, missing verification, scope creep beyond the request or `FINAL.md`.
-3. Check the design dependency: visible changes must have a brief in `docs/design/`.
+3. Check the design dependency: visible changes must have a brief in `docs/frontend/`.
 
 ## Code review (workflow step 8)
 Follow the `frontend-review` skill. Review the actual diff (`git diff <base>...HEAD` or the working tree), not the engineer's summary. For each changed file, read enough surrounding code to judge impact on callers.

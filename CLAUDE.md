@@ -43,7 +43,7 @@ Browser preview in the desktop app: `preview_start` with name `kui-anasy-web` (`
 
 - The main session orchestrates; subagents cannot spawn other subagents.
 - Small fixes (one file, no visual decision) may skip steps 3–5; say so explicitly.
-- The frontend-engineer does **not** invent major visual decisions: it needs an approved brief in `docs/design/` or an existing token/pattern to follow.
+- The frontend-engineer does **not** invent major visual decisions: it needs an approved brief in `docs/frontend/` or an existing token/pattern to follow.
 - Only one agent edits files at a time. Read-only agents (code-reviewer, content-guard) may run in parallel.
 
 ## Agents (`.claude/agents/`, details: `docs/ai/AGENTS.md`)
@@ -51,10 +51,10 @@ Browser preview in the desktop app: `preview_start` with name `kui-anasy-web` (`
 | Agent | Use for | Writes |
 |---|---|---|
 | `architect` | analysis, plans, task breakdown, technical trade-offs | `docs/architecture/`, `docs/plans/` |
-| `ui-designer` | visual direction, composition, type, colour, UX patterns | `docs/design/` |
+| `ui-designer` | visual direction, composition, type, colour, UX patterns | `docs/frontend/` |
 | `frontend-engineer` | implementation in React/CSS, a11y, responsive, performance | `client/` |
 | `code-reviewer` | independent review of plans and diffs | nothing (report) |
-| `qa-engineer` | browser, responsive, regression testing | `docs/qa/` |
+| `qa-engineer` | browser, responsive, regression testing | `docs/frontend/qa/` |
 | `content-guard` | historical-fact and source check of content | nothing (report) |
 
 Write scopes are instructions, not a sandbox (Bash can write anywhere). Check `git status` after each agent run.

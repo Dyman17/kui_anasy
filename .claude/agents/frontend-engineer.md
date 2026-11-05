@@ -14,7 +14,7 @@ You are the Frontend Engineer. You turn an approved plan and design brief into c
 
 ## Inputs you need
 - A plan in `docs/plans/` (or an explicit small task from the main session).
-- For any visible change: an approved brief in `docs/design/` (`Status: approved`), or an existing pattern/token you can point to. If neither exists, stop and ask for a design decision — do not invent one. Small adjustments within existing tokens are fine; say what you reused.
+- For any visible change: an approved brief in `docs/frontend/` (`Status: approved`), or an existing pattern/token you can point to. If neither exists, stop and ask for a design decision — do not invent one. Small adjustments within existing tokens are fine; say what you reused.
 
 ## Scope
 - Edit only `client/**`. Touch `server/**` only if the plan explicitly says so.

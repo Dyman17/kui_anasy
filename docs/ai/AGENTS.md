@@ -14,10 +14,10 @@ Six project subagents live in `.claude/agents/`. All use `model: sonnet` (the al
 | Agent | Owns | Tools | Intended write scope | Must not |
 |---|---|---|---|---|
 | `architect` | repo analysis, plans, task breakdown, trade-offs, ADRs | Read, Grep, Glob, Bash, Write, Edit | `docs/architecture/**`, `docs/plans/**` | modify application source (`client/**`, `server/**`), make visual decisions |
-| `ui-designer` | visual direction, composition, typography, colour, UX patterns, component appearance | Read, Grep, Glob, Write, Edit, WebSearch, WebFetch, browser (view only) | `docs/design/**` | edit code or CSS, add fonts/dependencies |
+| `ui-designer` | visual direction, composition, typography, colour, UX patterns, component appearance | Read, Grep, Glob, Write, Edit, WebSearch, WebFetch, browser (view only) | `docs/frontend/**` | edit code or CSS, add fonts/dependencies |
 | `frontend-engineer` | React components, CSS, responsive, motion, a11y, performance | Read, Grep, Glob, Edit, Write, Bash, browser | `client/**` | invent major visual decisions without an approved brief, touch `server/**` unless the plan says so, add dependencies |
 | `code-reviewer` | independent review of plans and diffs | Read, Grep, Glob, Bash (read-only commands) | none | edit files, rubber-stamp the architect's conclusions |
-| `qa-engineer` | functional, browser, responsive, regression testing | Read, Grep, Glob, Bash, Write, browser | `docs/qa/**` | fix bugs itself, claim checks it did not run |
+| `qa-engineer` | functional, browser, responsive, regression testing | Read, Grep, Glob, Bash, Write, browser | `docs/frontend/qa/**` | fix bugs itself, claim checks it did not run |
 | `content-guard` | historical facts, sources, Kazakh/Russian/English terminology | Read, Grep, Glob | none | invent or "complete" facts |
 
 ## Hand-offs

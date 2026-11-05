@@ -9,10 +9,10 @@ The main session coordinates. The architect produces the plan the main session f
 | 1 | Research | main session or `architect` | findings in the plan's "Context" section | files and current behaviour actually read, not assumed |
 | 2 | Requirements | main session with the owner | acceptance criteria in the plan | every criterion is testable; out-of-scope listed (contract §8.3) |
 | 3 | Architecture plan | `architect` | `docs/plans/<YYYY-MM-DD>-<slug>.md` | files to touch, steps, risks, verification per step |
-| 4 | UI/UX direction | `ui-designer` | `docs/design/<slug>.md` | follows `visual-direction` skill; uses existing tokens or names new ones |
+| 4 | UI/UX direction | `ui-designer` | `docs/frontend/<slug>.md` | follows `visual-direction` skill; uses existing tokens or names new ones |
 | 5 | Independent plan review | `code-reviewer` | review notes (chat or appended to the plan) | reviewer forms its own view from the code, then compares with the plan |
 | 6 | Implementation | `frontend-engineer` | code diff in `client/**` | `npm run build` passes; only planned files changed |
-| 7 | Browser verification | `qa-engineer` | `docs/qa/<YYYY-MM-DD>-<slug>.md` | follows `visual-testing` skill; screenshots or page reads as evidence |
+| 7 | Browser verification | `qa-engineer` | `docs/frontend/qa/<YYYY-MM-DD>-<slug>.md` | follows `visual-testing` skill; screenshots or page reads as evidence |
 | 8 | Code review | `code-reviewer` | findings ranked P0–P3 | no open P0/P1 |
 | 9 | Regression testing | `qa-engineer` | appended to the QA report | key routes still work: home, a standard page, a dedicated page, `#admin` login screen, 404 |
 | 10 | Final report | main session | message to the owner | what changed, what was verified and how, what was not verified |

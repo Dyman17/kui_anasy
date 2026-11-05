@@ -2,7 +2,7 @@
 
 Environment: built-in browser (desktop app), Vite dev server on 5173, branch `feat/dark-heritage-redesign`, uncommitted work.
 API running: **yes** (not "likely not" as assumed). `GET http://localhost:4000/api/pages` returned 200 with 17 pages, so the site rendered CMS pages from the API, not the built-in defaults. Nothing was submitted and no login was attempted (`#admin` login screen only viewed).
-Scope: Phases 1-2 of `docs/design/DARK_HERITAGE_REDESIGN.md` (dark shell, header, QR popover, account medallion, footer, home hero). Not tested with a screen reader. Page-level `npm run build` not part of this task.
+Scope: Phases 1-2 of `docs/frontend/DARK_HERITAGE_REDESIGN.md` (dark shell, header, QR popover, account medallion, footer, home hero). Not tested with a screen reader. Page-level `npm run build` not part of this task.
 
 Matrix (header fit / overflow / Kazakh glyphs / names and headings unbroken; lang = kk, ru, en each):
 1920 ✔ | 1440 ✔ | 1280 ✔ | 1100 ✔ | 961 ✔ | 768 ✔ | 375 ✔ | 320 ✔

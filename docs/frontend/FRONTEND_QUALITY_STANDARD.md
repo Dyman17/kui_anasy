@@ -4,7 +4,7 @@ Status: draft
 
 This document is the acceptance standard for any design concept (including Google Stitch output) and for the implementation. It is a checklist with thresholds, not a style guide. It does not choose the look; the direction lives in `.claude/skills/kui-anasy-design/SKILL.md` and the client brief in `FINAL.md` §3.
 
-It references, and does not repeat, the project skills: `visual-direction`, `design-system`, `responsive-design`, `motion-design`, `accessibility`, `frontend-review`, `visual-testing`. Evidence for the problems it prevents is in `docs/design/FRONTEND_AUDIT.md`; the platform limits are in `docs/design/BACKEND_CAPABILITIES.md`.
+It references, and does not repeat, the project skills: `visual-direction`, `design-system`, `responsive-design`, `motion-design`, `accessibility`, `frontend-review`, `visual-testing`. Evidence for the problems it prevents is in `docs/frontend/FRONTEND_AUDIT.md`; the platform limits are in `docs/frontend/BACKEND_CAPABILITIES.md`.
 
 Labels: **Recommendation** marks a threshold I propose and the owner may change. Everything else is either a rule already given by the client, the contract, WCAG 2.2 AA or a project skill. Numbers marked "baseline" come from the audit (Verified there); numbers I could not measure are marked "unmeasured".
 
@@ -430,7 +430,7 @@ Use for Google Stitch or any other concept. Score only from the screens and any 
 
 ## 16. Implementation definition of done
 
-A change is done when every box is ticked with evidence (`visual-testing` report in `docs/qa/`). "Not run" is written as such.
+A change is done when every box is ticked with evidence (`visual-testing` report in `docs/frontend/qa/`). "Not run" is written as such.
 
 - [ ] `npm run build` passes; no console errors on the routes in R.
 - [ ] Network: zero third-party requests, zero TTF/OTF, no failed requests (PERF-10, PERF-04).

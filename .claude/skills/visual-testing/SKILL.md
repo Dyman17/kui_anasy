@@ -27,7 +27,7 @@ Evidence or it didn't happen. A check you could not run is reported as "not run"
 ## What to look for visually
 Overlaps and clipping; inconsistent spacing between sibling blocks; text over images without enough contrast; missing Kazakh glyphs (boxes or fallback-font letters inside words); misaligned grid edges; focus ring invisible on dark surfaces; layout shift when images load.
 
-## Report (to `docs/qa/<YYYY-MM-DD>-<slug>.md`)
+## Report (to `docs/frontend/qa/<YYYY-MM-DD>-<slug>.md`)
 ```
 # QA — <slug> — <date>
 Environment: built-in browser (desktop app) | not verified in a browser; API running: yes/no

@@ -8,10 +8,10 @@ Labels on every claim: **Verified** (read in a file or on a web page I opened, w
 
 ## 0. How to read this file
 
-- Inputs read: `docs/design/FRONTEND_AUDIT.md`, `docs/design/BACKEND_CAPABILITIES.md`, `FINAL.md`, `docs/design/README.md`, the skills `kui-anasy-design` and `visual-direction` (given in the task), the `:root` tokens in `client/src/styles.css`, `client/src/constants/index.js` (nav labels), `client/src/constants/kuishiData.js` (names), and the list of files in `client/public`.
+- Inputs read: `docs/frontend/FRONTEND_AUDIT.md`, `docs/frontend/BACKEND_CAPABILITIES.md`, `FINAL.md`, `docs/frontend/README.md`, the skills `kui-anasy-design` and `visual-direction` (given in the task), the `:root` tokens in `client/src/styles.css`, `client/src/constants/index.js` (nav labels), `client/src/constants/kuishiData.js` (names), and the list of files in `client/public`.
 - **I did not re-open the live site.** The audit of the same day already describes it, with screenshots. Every statement about the current UI below is taken from that audit. The browser viewport was not touched.
 - I did not render any font. Font statements come from Fontsource language-coverage pages (see section 2). Per-glyph checks (especially Һ/һ) are still to do for every candidate.
-- `docs/design/FRONTEND_QUALITY_STANDARD.md` is being written in parallel and did not exist when I listed `docs/design/`. This file points to it by path only.
+- `docs/frontend/FRONTEND_QUALITY_STANDARD.md` is being written in parallel and did not exist when I listed `docs/frontend/`. This file points to it by path only.
 - Kazakh interface strings that I propose (marked "proposed copy") are placeholders for layout. A Kazakh-speaking editor must approve them. Names, dates and regions quoted from `kuishiData.js` are used only to show layout; the code comment in that file says facts need an archival source, so they stay unconfirmed until the client confirms them.
 
 ## 1. Shared ground (applies to all four directions)
@@ -552,10 +552,10 @@ Sources: https://blog.google/innovation-and-ai/models-and-research/google-labs/s
 ### 7.3 Recommended evaluation workflow
 
 1. **Generate each direction from the same brief.** Give Stitch the same facts for all four: the palette hex values, the real Kazakh strings, the list of real images, the "no portrait, no audio, no counters" rules, and the direction's prompt (sections A.14 to D.14). Ask for 3 variations per direction. Record the tool, mode, date and prompt next to each result, because limits and models change. Do not feed it facts that are not in the code.
-2. **Compare against `docs/design/FRONTEND_QUALITY_STANDARD.md`** (being written in parallel; read it before this step and reconcile any difference in thresholds with it, since it governs). Check at minimum: contrast per surface (4.5:1 body; the gold rules in section 1.3), body size 18 px, touch targets 44 to 56 px, names unbroken at 320 px, the nine Kazakh letters in the font used, no invented content, both themes, reduced motion, and one-column block fit. Reject any frame that invents a portrait, player, counter or form.
+2. **Compare against `docs/frontend/FRONTEND_QUALITY_STANDARD.md`** (being written in parallel; read it before this step and reconcile any difference in thresholds with it, since it governs). Check at minimum: contrast per surface (4.5:1 body; the gold rules in section 1.3), body size 18 px, touch targets 44 to 56 px, names unbroken at 320 px, the nine Kazakh letters in the font used, no invented content, both themes, reduced motion, and one-column block fit. Reject any frame that invents a portrait, player, counter or form.
 3. **Shortlist.** Keep at most two directions, or one base plus one borrowed template. Build only the base for the shortlist as a real component frame at 375 and 1280 px (Figma, or a Claude artifact) using the 10 real block types and real Kazakh text, including a very long name and a missing-image case.
 4. **Client review.** Show the shortlist on a phone, in daylight if possible (outside, or by maximum brightness), to an older reader as well as the foundation staff. Ask three concrete questions: is it the same culture as the book cover; can you read the stele page standing; does the font feel right (Literata versus the direction's own family).
-5. **Translate the winner into tokens and briefs.** Convert the choice into: a token set in `:root` (roles only, see `design-system` skill), one type scale, the header and menu brief, and per-template briefs (home, canon list, person, volume, stele page) in `docs/design/`, each starting `Status: draft` until the owner approves. Only then does the `frontend-engineer` build. Exported Stitch HTML is never merged.
+5. **Translate the winner into tokens and briefs.** Convert the choice into: a token set in `:root` (roles only, see `design-system` skill), one type scale, the header and menu brief, and per-template briefs (home, canon list, person, volume, stele page) in `docs/frontend/`, each starting `Status: draft` until the owner approves. Only then does the `frontend-engineer` build. Exported Stitch HTML is never merged.
 
 ## 8. Recommendation (labelled; the decision is the owner's)
 
@@ -586,7 +586,7 @@ Trade-offs the owner should weigh:
 7. Can each stele get its own CMS page with a slug now, so a QR can point to it (D, and any direction's QR use)? Who authors those pages?
 8. Which Kazakh interface strings in this file (marked "proposed copy") are approved?
 9. Does the client accept the Stitch outputs as a conversation aid only?
-10. After reading `docs/design/FRONTEND_QUALITY_STANDARD.md`, do any thresholds in section 1.3 need to change?
+10. After reading `docs/frontend/FRONTEND_QUALITY_STANDARD.md`, do any thresholds in section 1.3 need to change?
 
 ## 10. Out of scope
 

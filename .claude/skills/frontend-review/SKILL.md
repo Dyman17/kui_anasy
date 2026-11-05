@@ -9,7 +9,7 @@ Review the code, not the description. Every finding needs a location and a concr
 
 ## Procedure
 1. **Establish the diff.** `git status`, `git diff --stat`, then `git diff` (or `git diff <base>...HEAD`). List files changed; flag any outside the plan's scope.
-2. **Understand intent.** Read the plan (`docs/plans/`) and brief (`docs/design/`). Note acceptance criteria.
+2. **Understand intent.** Read the plan (`docs/plans/`) and brief (`docs/frontend/`). Note acceptance criteria.
 3. **Read around the change.** For each changed function/component, find its callers (`grep -rn "ComponentName" client/src`). Behaviour change for a caller = potential regression.
 4. **Build.** `npm run build` — a failure is P0.
 5. **Walk the checklist below.**
