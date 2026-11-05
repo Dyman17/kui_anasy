@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useFocusTrap } from '../components/useFocusTrap';
 import {
   PiSparkleDuotone,
   PiBookOpenDuotone,
@@ -113,6 +114,14 @@ export default function LibraryVolumePage({ volumeSlug = 'library-vol-1', onNavi
   const vol = VOLUMES_DATA[volumeSlug] || VOLUMES_DATA['library-vol-1'];
   const [readerOpen, setReaderOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const readerRef = useRef(null);
+  useFocusTrap(readerRef, readerOpen, { initialFocus: '.reader-close-btn' });
+  useEffect(() => {
+    if (!readerOpen) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') setReaderOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [readerOpen]);
 
   return (
     <div className="dedicated-subpage volume-subpage">
@@ -218,13 +227,13 @@ export default function LibraryVolumePage({ volumeSlug = 'library-vol-1', onNavi
       {/* 4. Digital Reader Modal */}
       {readerOpen && (
         <div className="reader-modal-backdrop" onClick={() => setReaderOpen(false)}>
-          <div className="reader-modal-window" onClick={(e) => e.stopPropagation()}>
+          <div className="reader-modal-window" ref={readerRef} role="dialog" aria-modal="true" aria-labelledby="reader-title" onClick={(e) => e.stopPropagation()}>
             <div className="reader-toolbar">
               <div className="reader-info">
                 <PiBookOpenDuotone size={18} />
-                <span>{vol.title} · Бет {currentPage + 1} / {vol.samplePages.length}</span>
+                <span id="reader-title">{vol.title} · Бет {currentPage + 1} / {vol.samplePages.length}</span>
               </div>
-              <button className="reader-close-btn" onClick={() => setReaderOpen(false)}>✕</button>
+              <button className="reader-close-btn" onClick={() => setReaderOpen(false)} aria-label={t.closeLabel}>✕</button>
             </div>
 
             <div className="reader-book-spread">

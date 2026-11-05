@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrandMark } from './BrandMark';
 import './SteppeHero.css';
+import { scrollToElement } from '../app/smoothScroll';
 
 /*
  * Home hero «Дала кеші» (owner's design, 05.11.2026).
@@ -76,7 +77,7 @@ function scrollToId(id, fallbackToNext = false) {
   if (!target && fallbackToNext) target = document.querySelector('.steppe-hero')?.nextElementSibling;
   if (!target) return;
   const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+  scrollToElement(target, { reduced });
   const focusTarget = target.querySelector('h2') || target;
   if (!focusTarget.hasAttribute('tabindex')) focusTarget.setAttribute('tabindex', '-1');
   focusTarget.focus({ preventScroll: true });

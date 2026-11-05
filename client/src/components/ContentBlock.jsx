@@ -13,7 +13,7 @@ export function ContentBlock({ block, index, pageSlug }) {
   if (block.type === 'quote') {
     return (
       <figure className="editorial-quote">
-        <p>«{block.body}»</p>
+        <p>{/^\s*[«"“]/.test(block.body || '') ? block.body : `«${block.body}»`}</p>
         <cite>{block.title}</cite>
       </figure>
     );
@@ -39,7 +39,9 @@ export function ContentBlock({ block, index, pageSlug }) {
         <div className="mini-card-grid">
           {(block.items || []).map((card, cardIndex) => (
             <article className="mini-card" key={card.title || cardIndex}>
-              <div className="mini-card-image"><img src={card.image || ['/images/book-kui-alemi.jpg', '/images/book-gasyrlar-uni.jpg', '/images/book-uly-dala-aueni.jpg'][cardIndex % 3]} alt="" /></div>
+              {(pageSlug === 'library' || (card.image && !/\/book-/.test(card.image))) && (
+                <div className="mini-card-image"><img src={card.image || ['/images/book-kui-alemi.jpg', '/images/book-gasyrlar-uni.jpg', '/images/book-uly-dala-aueni.jpg'][cardIndex % 3]} alt="" /></div>
+              )}
               <span>{card.meta}</span>
               <h3>{card.title}</h3>
               <p>{card.description}</p>

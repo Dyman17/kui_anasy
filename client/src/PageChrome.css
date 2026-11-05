@@ -1,0 +1,221 @@
+/* ==========================================================================
+   Shared page chrome (docs/design/DARK_HERITAGE_REDESIGN.md 4.5): page banner, breadcrumb,
+   section top line, callout band, kickers. Replaces the nine per-section banner variants.
+   ========================================================================== */
+
+/* Kickers: display caps, one per section */
+.hero-kicker,
+.block-kicker {
+  margin: 0;
+  color: var(--gold);
+  font: 400 var(--text-nav)/1.4 var(--font-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ----- Page banner: full-bleed band, photo under a solid scrim ----- */
+.page-banner {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 0;
+  background: var(--forest-deep);
+  border-bottom: 1px solid var(--border-gold);
+}
+
+.page-banner-image {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.page-banner-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.page-banner::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 92%, transparent) 0%, color-mix(in srgb, var(--forest-deep) 86%, transparent) 60%, color-mix(in srgb, var(--forest-deep) 70%, transparent) 100%);
+}
+
+.section-motif {
+  display: none;
+}
+
+.page-banner-inner {
+  position: relative;
+  padding-block: var(--section-space-s);
+}
+
+.page-banner-inner > .block-kicker {
+  margin-bottom: 12px;
+}
+
+.page-banner h1 {
+  max-width: 22em;
+  margin: 0 0 16px;
+  color: var(--gold-light);
+  font: 400 var(--text-h1)/1.15 var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.page-banner-inner > p {
+  max-width: 34em;
+  margin: 0;
+  color: var(--ink);
+  font: 400 var(--text-lead)/1.55 var(--font-display);
+}
+
+/* ----- Breadcrumb ----- */
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-top: 20px;
+  color: var(--ink-muted);
+  font: 400 var(--text-caption)/1.5 var(--font-body);
+}
+
+.breadcrumb button {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.breadcrumb button:hover {
+  color: var(--gold-light);
+}
+
+.breadcrumb > span:not(:last-child) {
+  color: var(--gold-dark);
+}
+
+.breadcrumb > span:last-child {
+  color: var(--ink);
+}
+
+/* ----- Section top line ----- */
+.section-topline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--spacing-md) var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.section-topline h2 {
+  margin: 0;
+  color: var(--ink);
+  font: 400 var(--text-h2)/1.2 var(--font-display);
+}
+
+.section-topline-centered {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* ----- Text links ----- */
+.text-button,
+.underlined-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+  font: 400 var(--text-ui)/1.4 var(--font-body);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.text-button:hover,
+.underlined-link:hover {
+  color: var(--gold-light);
+}
+
+/* ----- Callout band ----- */
+.callout {
+  margin-top: var(--section-space-l);
+  padding-block: var(--section-space-m);
+  background: var(--forest-deep);
+  border-block: 1px solid var(--border-gold);
+}
+
+.callout-content {
+  width: min(var(--container), 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+
+.callout h2 {
+  max-width: 24em;
+  margin: 0 0 16px;
+  color: var(--ink);
+  font: 400 var(--text-h2)/1.2 var(--font-display);
+}
+
+.callout p {
+  max-width: 34em;
+  margin: 0 0 var(--spacing-lg);
+  color: var(--ink);
+  font: 400 var(--text-lead)/1.55 var(--font-display);
+}
+
+@media (max-width: 480px) {
+  .page-banner h1 {
+    letter-spacing: 0.05em;
+  }
+  .callout .button {
+    width: 100%;
+  }
+}
+
+/* Banner eyebrow(s): block-level spacing; the volume number sits after a separator */
+.banner-parent-kicker {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--gold);
+}
+
+.volume-number-pill {
+  display: inline-block;
+  margin: 0 0 12px;
+  color: var(--gold-light);
+  font: 400 var(--text-nav)/1.4 var(--font-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.volume-number-pill::before {
+  content: "/";
+  margin: 0 12px;
+  color: var(--gold-dark);
+}
+
+/* Founder portrait banner: keep the head out of the bottom crop */
+.page-banner-about .page-banner-image img {
+  object-position: center 8%;
+}

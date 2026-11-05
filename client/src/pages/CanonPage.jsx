@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { useFocusTrap } from '../components/useFocusTrap';
 import {
   PiSparkleDuotone,
   PiMagnifyingGlassDuotone,
@@ -33,6 +34,16 @@ export default function CanonPage({ type = 'kuyshi', onNavigate, lang = 'kk', t,
       return matchSchool && matchQuery;
     });
   }, [mastersList, activeSchool, searchQuery]);
+
+  const modalRef = useRef(null);
+  useFocusTrap(modalRef, !!selectedMaster, { initialFocus: '.modal-close-btn' });
+
+  useEffect(() => {
+    if (!selectedMaster) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') setSelectedMaster(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selectedMaster]);
 
   // Arriving from the heritage map: open the requested master's card.
   useEffect(() => {
@@ -159,13 +170,13 @@ export default function CanonPage({ type = 'kuyshi', onNavigate, lang = 'kk', t,
       {/* Detail Modal */}
       {selectedMaster && (
         <div className="master-modal-backdrop" onClick={() => setSelectedMaster(null)}>
-          <div className="master-modal-card" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close-btn" onClick={() => setSelectedMaster(null)}>✕</button>
+          <div className="master-modal-card" ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="canon-modal-title" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => setSelectedMaster(null)} aria-label={t.closeLabel}>✕</button>
             <div className="modal-header">
               <img src={selectedMaster.img} alt={selectedMaster.name} />
               <div>
                 <span className="block-kicker">{selectedMaster.schoolName}</span>
-                <h2>{selectedMaster.name}</h2>
+                <h2 id="canon-modal-title">{selectedMaster.name}</h2>
                 <span className="modal-dates">{selectedMaster.dates} · {selectedMaster.region}</span>
               </div>
             </div>

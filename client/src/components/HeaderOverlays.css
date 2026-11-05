@@ -21,7 +21,7 @@
   align-items: flex-start;
   justify-content: center;
   padding: 16px;
-  background: rgba(11, 28, 21, 0.86);
+  background: color-mix(in srgb, var(--forest-deep) 86%, transparent);
   animation: overlayIn 200ms var(--ease-out);
 }
 
